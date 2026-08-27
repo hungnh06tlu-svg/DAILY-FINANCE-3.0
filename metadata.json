@@ -1,0 +1,6 @@
+{
+  "name": "Daily Finance 2.5",
+  "description": "Commercial personal and family financial management platform built with AI assistance, offline-first reliability, and Material 3 Expressive UI.",
+  "requestFramePermissions": ["microphone", "camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
