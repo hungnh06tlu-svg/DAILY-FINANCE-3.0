@@ -32,3 +32,4 @@ export * from './GetAnalyticsStateUseCase';
 export * from './GetWidgetStateUseCase';
 export * from './GetVoiceAssistantStateUseCase';
 export * from './GetBackupAndHealthStateUseCase';
+export * from './TransactionValidationUseCase';

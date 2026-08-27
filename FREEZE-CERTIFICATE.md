@@ -6,12 +6,23 @@
 **Core Invariants:** One Financial Truth • Deterministic Processing • No Double Counting  
 
 ## Summary:
-- Total Components Audited: 45+
-- Components Frozen: 45+
+- Total Components Audited: 52+
+- Components Frozen: 52+
 - Components Stable (certified & frozen): 100%
-- Total Tests Passing: 1,180 / 1,180 (100%)
+- Total Tests Passing: 1,227 / 1,227 (100%)
 
 ## Frozen Components:
+
+### Invariant & Validation Layer (`src/domain/` & `src/usecases/`):
+✅ `src/domain/InvariantEngine.ts` — FROZEN (Canonical business invariants INV-001 through INV-015, single source of truth, money conservation)  
+✅ `src/usecases/TransactionValidationUseCase.ts` — FROZEN (Validation pipeline enforcing invariants per transaction type)  
+
+### Database & Sync Layer (`src/repositories/` & `src/domain/`):
+✅ `src/repositories/contracts.ts` — FROZEN (Canonical Repository interfaces with filtering, batching, and sync operations)  
+✅ `src/repositories/local/LocalTransactionRepository.ts` — FROZEN (Offline-first local storage, soft-delete, restore, querying, bulk upsert)  
+✅ `src/domain/SyncEngine.ts` — FROZEN (Delta-sync engine, outbox mutation queue, token tracking, bidirectional synchronization)  
+✅ `src/domain/ConflictResolver.ts` — FROZEN (Multi-strategy conflict resolution: Last-Write-Wins, Client-Wins, Server-Wins, Manual Merge, Creative CRDT merge)  
+✅ `src/repositories/implementations.ts` — FROZEN (Local repository implementations adhering to DataSource abstraction)  
 
 ### Domain Layer (`src/domain/`):
 ✅ `CanonicalFinancialModel.ts` — FROZEN (Canonical Types, Money, SpaceIsolationGuard, TransactionLifecycleGuard)  
@@ -49,10 +60,12 @@
 - Domain & UseCase Tests (`src/tests/domain.test.ts`): 791/791 passed
 - Financial Truth Suite (`src/tests/d2_financial_truth.test.ts`): 319/319 passed
 - Financial Methods Suite (`src/tests/d2_003_methods_engine.test.ts`): 37/37 passed
+- D3 Financial Invariants Suite (`src/tests/d3_invariants.test.ts`): 26/26 passed
+- D4 Database & Sync Suite (`src/tests/d4_sync.test.ts`): 21/21 passed
 - UI Smoke Tests (`src/tests/d2_003_ui_smoke.test.ts`): 10/10 passed
 - Canonical Model Tests (`src/tests/d1_financial_model.test.ts`): 17/17 passed
 - G5 Complexity Benchmarks (`src/tests/g5_benchmark.test.ts`): 6/6 passed (Strict O(n))
-- **Total Tests Passing:** **1,180 / 1,180 (100% PASSED)**
+- **Total Tests Passing:** **1,227 / 1,227 (100% PASSED)**
 - TypeScript Diagnostics (`tsc --noEmit`): **0 errors**
 - Linter (`npm run lint`): **Clean**
 - Production Build (`npm run build`): **Success**
@@ -62,7 +75,6 @@
 - **D2-001 (Lifecycle Engine):** COMPLETE & FROZEN (G1-G6 certified)
 - **D2-002 (Transaction Processing Pipeline):** COMPLETE & FROZEN (All fixes verified)
 - **D2-003 (Financial Methods Engines):** COMPLETE & FROZEN (10/10 engines verified)
+- **D3 (Financial Invariants Engine):** COMPLETE & FROZEN (26/26 tests certified, INV-001→INV-015)
+- **D4 (Offline-First Database & Sync Layer):** COMPLETE & FROZEN (21/21 tests certified)
 - **Presentation Layer (Sprint 5):** COMPLETE & FROZEN
-
-## Next Steps:
-Proceed to **D4 — Database & Sync Layer implementation** (Local Room/SQLite/IndexedDB + Cloud Sync engine).

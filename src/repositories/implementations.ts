@@ -5,7 +5,9 @@
 
 import {
   TransactionRepository,
+  TransactionFilters,
   WalletRepository,
+  SpaceRepository,
   BudgetRepository,
   SavingRepository,
   InvestmentRepository,
@@ -31,7 +33,8 @@ import {
   Dashboard,
   BackupInfo,
   UserPreference,
-  FeatureConfig
+  FeatureConfig,
+  FinancialSpace
 } from '../types';
 
 import { DataSource, LocalDataSource } from '../data/datasource/LocalDataSource';
@@ -51,7 +54,7 @@ export class LocalTransactionRepository implements TransactionRepository {
     return this.dataSource.getTransactionById(id);
   }
 
-  async addTransaction(tx: Omit<Transaction, 'id'>): Promise<Transaction> {
+  async addTransaction(tx: Transaction | Omit<Transaction, 'id'>): Promise<Transaction> {
     return this.dataSource.addTransaction(tx);
   }
 
@@ -61,6 +64,100 @@ export class LocalTransactionRepository implements TransactionRepository {
 
   async deleteTransaction(id: string): Promise<boolean> {
     return this.dataSource.deleteTransaction(id);
+  }
+
+  async restoreTransaction(id: string): Promise<boolean> {
+    const tx = await this.dataSource.getTransactionById(id);
+    if (!tx) return false;
+    await this.dataSource.updateTransaction({
+      ...tx,
+      isDeleted: false,
+      status: 'confirmed',
+      deletedAt: null
+    });
+    return true;
+  }
+
+  async getTransactionsBySpace(spaceId: string, filters?: TransactionFilters): Promise<Transaction[]> {
+    const txs = await this.dataSource.getTransactions(spaceId);
+    let result = txs.filter(t => t.spaceId === spaceId);
+    if (filters) {
+      if (filters.status) {
+        result = result.filter(t => t.status === filters.status);
+      }
+      if (filters.type) {
+        result = result.filter(t => t.type === filters.type);
+      }
+      if (filters.categoryId) {
+        result = result.filter(t => t.categoryId === filters.categoryId || t.category === filters.categoryId);
+      }
+      if (filters.walletId) {
+        result = result.filter(t => t.walletId === filters.walletId || (t as any).sourceWalletId === filters.walletId || (t as any).destinationWalletId === filters.walletId);
+      }
+      if (filters.minAmount !== undefined) {
+        result = result.filter(t => t.amount >= filters.minAmount!);
+      }
+      if (filters.maxAmount !== undefined) {
+        result = result.filter(t => t.amount <= filters.maxAmount!);
+      }
+      if (filters.startDate) {
+        const startIso = typeof filters.startDate === 'string' ? filters.startDate : filters.startDate.toISOString();
+        result = result.filter(t => t.date >= startIso.split('T')[0]);
+      }
+      if (filters.endDate) {
+        const endIso = typeof filters.endDate === 'string' ? filters.endDate : filters.endDate.toISOString();
+        result = result.filter(t => t.date <= endIso.split('T')[0]);
+      }
+      if (filters.offset && filters.offset > 0) {
+        result = result.slice(filters.offset);
+      }
+      if (filters.limit && filters.limit > 0) {
+        result = result.slice(0, filters.limit);
+      }
+    }
+    return result;
+  }
+
+  async getAllTransactions(): Promise<Transaction[]> {
+    return this.dataSource.getTransactions();
+  }
+
+  async bulkUpsert(transactions: Transaction[]): Promise<void> {
+    for (const tx of transactions) {
+      const existing = await this.dataSource.getTransactionById(tx.id);
+      if (existing) {
+        await this.dataSource.updateTransaction(tx);
+      } else {
+        await this.dataSource.addTransaction(tx);
+      }
+    }
+  }
+
+  async findDeletedTransactions(since?: Date): Promise<Transaction[]> {
+    const all = await this.dataSource.getTransactions();
+    let deleted = all.filter(t => t.isDeleted || t.status === 'soft_deleted');
+    if (since) {
+      const sinceTime = since.getTime();
+      deleted = deleted.filter(t => {
+        const dTime = t.deletedAt ? new Date(t.deletedAt).getTime() : 0;
+        const uTime = t.updatedAt ? new Date(t.updatedAt).getTime() : 0;
+        return dTime >= sinceTime || uTime >= sinceTime;
+      });
+    }
+    return deleted;
+  }
+
+  async findSyncableTransactions(since?: Date): Promise<Transaction[]> {
+    const all = await this.dataSource.getTransactions();
+    let syncable = all.filter(t => t.syncStatus !== 'synced');
+    if (since) {
+      const sinceTime = since.getTime();
+      syncable = syncable.filter(t => {
+        const uTime = t.updatedAt ? new Date(t.updatedAt).getTime() : 0;
+        return uTime >= sinceTime;
+      });
+    }
+    return syncable;
   }
 }
 
@@ -73,11 +170,15 @@ export class LocalWalletRepository implements WalletRepository {
     return this.dataSource.getWallets(spaceId);
   }
 
+  async getWalletsBySpace(spaceId: string): Promise<Wallet[]> {
+    return this.dataSource.getWallets(spaceId);
+  }
+
   async getWalletById(id: string): Promise<Wallet | null> {
     return this.dataSource.getWalletById(id);
   }
 
-  async addWallet(wallet: Omit<Wallet, 'id'>): Promise<Wallet> {
+  async addWallet(wallet: Wallet | Omit<Wallet, 'id'>): Promise<Wallet> {
     return this.dataSource.addWallet(wallet);
   }
 
@@ -87,6 +188,51 @@ export class LocalWalletRepository implements WalletRepository {
 
   async deleteWallet(id: string): Promise<boolean> {
     return this.dataSource.deleteWallet(id);
+  }
+}
+
+export class LocalSpaceRepository implements SpaceRepository {
+  constructor(
+    private dataSource: DataSource = LocalDataSource.getInstance()
+  ) {}
+
+  async createSpace(space: FinancialSpace | Omit<FinancialSpace, 'id'>): Promise<FinancialSpace> {
+    const existing = await this.dataSource.getSpaces();
+    const created: FinancialSpace = {
+      id: ('id' in space && space.id) ? space.id : `sp_${Date.now()}`,
+      name: space.name,
+      type: space.type || 'personal',
+      balance: space.balance || 0,
+      currency: space.currency || 'VND',
+      cardColor: space.cardColor || '#3B82F6',
+      iconName: space.iconName || 'Wallet',
+      ownerName: space.ownerName || 'User',
+      membersCount: space.membersCount || 1,
+      createdAt: space.createdAt || new Date().toISOString(),
+      updatedAt: space.updatedAt || new Date().toISOString(),
+      version: space.version || 1
+    };
+    return created;
+  }
+
+  async getSpaceById(id: string): Promise<FinancialSpace | null> {
+    return this.dataSource.getSpaceById(id);
+  }
+
+  async updateSpace(space: FinancialSpace): Promise<FinancialSpace> {
+    return space;
+  }
+
+  async deleteSpace(_id: string): Promise<boolean> {
+    return true;
+  }
+
+  async getUserSpaces(_userId?: string): Promise<FinancialSpace[]> {
+    return this.dataSource.getSpaces();
+  }
+
+  async getAllSpaces(): Promise<FinancialSpace[]> {
+    return this.dataSource.getSpaces();
   }
 }
 

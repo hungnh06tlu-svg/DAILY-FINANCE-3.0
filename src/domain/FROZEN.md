@@ -7,6 +7,7 @@
 | `TransactionNormalizer.ts` | 🔒 FROZEN | 2026-08-27 | Part of 1180 | Pure deterministic transaction input normalization and non-destructive alias reconciliation. |
 | `TransactionManager.ts` | 🔒 FROZEN | 2026-08-27 | Part of 1180 | Central transaction orchestration through UseCases with undo/redo capabilities. |
 | `CompatibilityMigrationEngine.ts` | 🔒 FROZEN | 2026-08-27 | Part of 1180 | Idempotent migration engine for legacy transaction formats without data loss. |
+| `InvariantEngine.ts` | 🔒 FROZEN | 2026-08-27 | 26/26 in D3 suite (Part of 1227) | Canonical financial invariants engine (INV-001 through INV-015) enforcing business rules, money conservation, and lifecycle guarantees. |
 | `methods/AdvancedJarEngine.ts` | 🔒 FROZEN | 2026-08-27 | Part of 1180 (37/37 methods tests) | Pure mathematical calculation engine for dynamic multi-jar allocation and targets. |
 | `methods/AdvancedFireEngine.ts` | 🔒 FROZEN | 2026-08-27 | Part of 1180 (37/37 methods tests) | Multi-model FIRE calculations (Regular, Lean, Fat, Barista, Coast FIRE) with overdrive projections. |
 | `methods/FiftyThirtyTwentyEngine.ts` | 🔒 FROZEN | 2026-08-27 | Part of 1180 (37/37 methods tests) | 50/30/20 budget division and compliance tracking. |

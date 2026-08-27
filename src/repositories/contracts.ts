@@ -1,38 +1,75 @@
 /**
- * Daily Finance 2.5 - Repository Contracts
- * Interfaces defining data access layer abstraction.
+ * Daily Finance 3.0 - Repository Contracts
+ * Offline-First & Canonical Data Access Abstraction Layer.
  */
 
 import {
   Transaction,
+  TransactionType,
+  TransactionStatus,
   Wallet,
   Budget,
   SavingsGoal,
   Investment,
   DebtItem,
   Jar,
-  SixJar,
   Report,
   Dashboard,
   BackupInfo,
   UserPreference,
-  FeatureConfig
+  FeatureConfig,
+  FinancialSpace
 } from '../types';
 
+export interface TransactionFilters {
+  type?: TransactionType;
+  status?: TransactionStatus;
+  startDate?: string | Date;
+  endDate?: string | Date;
+  categoryId?: string;
+  walletId?: string;
+  minAmount?: number;
+  maxAmount?: number;
+  searchTerm?: string;
+  limit?: number;
+  offset?: number;
+}
+
 export interface TransactionRepository {
-  getTransactions(spaceId?: string): Promise<Transaction[]>;
+  // CRUD Operations
+  addTransaction(tx: Transaction | Omit<Transaction, 'id'>): Promise<Transaction>;
   getTransactionById(id: string): Promise<Transaction | null>;
-  addTransaction(tx: Omit<Transaction, 'id'>): Promise<Transaction>;
   updateTransaction(tx: Transaction): Promise<Transaction>;
   deleteTransaction(id: string): Promise<boolean>;
+  restoreTransaction?(id: string): Promise<boolean>;
+  
+  // Batch Operations
+  getTransactions(spaceId?: string): Promise<Transaction[]>;
+  getTransactionsBySpace?(spaceId: string, filters?: TransactionFilters): Promise<Transaction[]>;
+  getAllTransactions?(): Promise<Transaction[]>;
+  bulkUpsert?(transactions: Transaction[]): Promise<void>;
+  
+  // Query Operations
+  findDeletedTransactions?(since?: Date): Promise<Transaction[]>;
+  findSyncableTransactions?(since?: Date): Promise<Transaction[]>;
 }
 
 export interface WalletRepository {
   getWallets(spaceId?: string): Promise<Wallet[]>;
   getWalletById(id: string): Promise<Wallet | null>;
-  addWallet(wallet: Omit<Wallet, 'id'>): Promise<Wallet>;
+  addWallet(wallet: Wallet | Omit<Wallet, 'id'>): Promise<Wallet>;
   updateWallet(wallet: Wallet): Promise<Wallet>;
   deleteWallet(id: string): Promise<boolean>;
+  getWalletsBySpace?(spaceId: string): Promise<Wallet[]>;
+}
+
+export interface SpaceRepository {
+  createSpace(space: FinancialSpace | Omit<FinancialSpace, 'id'>): Promise<FinancialSpace>;
+  getSpaceById(id: string): Promise<FinancialSpace | null>;
+  updateSpace(space: FinancialSpace): Promise<FinancialSpace>;
+  deleteSpace(id: string): Promise<boolean>;
+  getUserSpaces(userId?: string): Promise<FinancialSpace[]>;
+  getAllSpaces?(): Promise<FinancialSpace[]>;
 }
 
 export interface BudgetRepository {
