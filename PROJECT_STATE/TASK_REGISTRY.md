@@ -45,10 +45,10 @@
 | ├── **D3-001C** | D3-001 | DOMAIN | Boundary Invariants (INV-004..006) | `COMPLETE` | `100%` | AI Studio | D3-001B | 2026-08-28 | 2026-08-28 | `EVD-D3-001C` | D3-001D |
 | ├── **D3-001D** | D3-001 | DOMAIN | Lifecycle Invariants (INV-007..009) | `COMPLETE` | `100%` | AI Studio | D3-001C | 2026-08-28 | 2026-08-28 | `EVD-D3-001D` | D3-001E |
 | └── **D3-001E** | D3-001 | DOMAIN | Space Isolation Invariants (INV-010..015) | `COMPLETE` | `100%` | AI Studio | D3-001D | 2026-08-28 | 2026-08-28 | `EVD-D3-001E` | D3-002 |
-| **D3-002** | Root | DOMAIN | Invariant Test Runner & Property Tests | `COMPLETE` | `100%` | AI Studio | D3-001 | 2026-08-28 | 2026-08-28 | `EVD-D3-002B` | D3-002C |
+| **D3-002** | Root | DOMAIN | Invariant Test Runner & Property Tests | `COMPLETE` | `100%` | AI Studio | D3-001 | 2026-08-28 | 2026-08-28 | `EVD-D3-002C` | D3-003 |
 | ├── **D3-002A** | D3-002 | DOMAIN | Invariant Execution Harness & Diagnostics | `COMPLETE` | `100%` | AI Studio | D3-001 | 2026-08-28 | 2026-08-28 | `EVD-D3-002A` | D3-002B |
-| └── **D3-002B** | D3-002 | DOMAIN | Property-Based Invariant Regression Tests | `COMPLETE` | `100%` | AI Studio | D3-002A | 2026-08-28 | 2026-08-28 | `EVD-D3-002B` | D3-002C |
-| **D3-002C** | Root | DOMAIN | Property-Based Cross-Space/Fund Isolation & Transfer Conservation Expansion | `NOT STARTED` | `0%` | Unassigned | D3-002B | — | — | None | D3-003 |
+| ├── **D3-002B** | D3-002 | DOMAIN | Property-Based Invariant Regression Tests | `COMPLETE` | `100%` | AI Studio | D3-002A | 2026-08-28 | 2026-08-28 | `EVD-D3-002B` | D3-002C |
+| └── **D3-002C** | D3-002 | DOMAIN | Property-Based Cross-Space/Fund Isolation & Transfer Conservation Expansion | `COMPLETE` | `100%` | Google AI Studio Agent | D3-002B | 2026-08-28 | 2026-08-28 | `EVD-D3-002C` | D3-003 |
 | **D3-003** | Root | DOMAIN | D3 Freeze Certification & Evidence Indexing | `NOT STARTED` | `0%` | Unassigned | D3-002 | — | — | None | D4-001 |
 
 ---

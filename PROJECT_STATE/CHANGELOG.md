@@ -5,6 +5,36 @@
 
 ---
 
+## [2026-08-28] — D3-002C Property-Based Cross-Space / Cross-Fund Isolation & Transfer Conservation Expansion
+- **AI Agent:** Google AI Studio Agent
+- **Task ID:** `D3-002C` (Property-Based Cross-Space/Fund Isolation & Transfer Conservation Expansion)
+- **Status Transition:** `NOT STARTED` ──► `COMPLETE`
+- **Scope & Findings:**
+  - Implemented 22 comprehensive property-based cross-boundary isolation and transfer conservation tests in `src/tests/d3_cross_space_property.test.ts`.
+  - Verified 4-Space Isolation Matrix (`sp_alpha`, `sp_beta`, `sp_gamma`, `sp_delta`): proven that mutations in Space A create exactly 0 balance delta in Spaces B, C, D.
+  - Verified Multi-Fund Isolation Matrix (`fund_a1`, `fund_a2`, `fund_b1`, `fund_b2`, `fund_c1`): verified zero side-effects across independent funds.
+  - Validated Wallet/Account alias interoperability (`walletId`, `accountId`, `targetWalletId`, `targetAccountId`).
+  - Verified Same-Space Transfer conservation: confirmed space balance net impact = 0 with zero income/expense leakage.
+  - Verified Cross-Space Transfer balance tracking: confirmed source space decreases by X, target space increases by X, global system delta = 0.
+  - Verified Directional Symmetry & Reversibility: `A -> B` vs `B -> A` mirror symmetry and 3-hop ring hop transfer (`A -> B -> C -> A`) balance restoration.
+  - Verified 5-Topology Cross-Space/Fund Transfer Matrix: `A/F1 -> A/F2`, `A/F1 -> B/F1`, `A/F1 -> B/F2`, `B/F1 -> C/F1`, `C/F2 -> A/F1`.
+  - Validated Inactive Transfer Exclusion: confirmed `draft`, `soft_deleted`, `archived` cross-space transfers produce zero balance impact.
+  - Validated Replay & Idempotency: duplicate batch IDs rejected under `INV-014`, repeated evaluation deterministic ($f(x) == f(x)$).
+  - Preserved Unrounded Precision & Invalid Boundary Rejection: raw float decimals preserved without premature rounding; `NaN`, `Infinity`, `-Infinity`, negative amounts trigger explicit `InvariantViolationError`.
+  - Zero edits to frozen domain contracts (`FinancialTruthEngine.ts`, `CanonicalFinancialModel.ts`, UI views).
+- **Test Files Created:** `1` (`/src/tests/d3_cross_space_property.test.ts` — 22 tests PASS)
+- **PROJECT_STATE Files Updated:**
+  - `/PROJECT_STATE/CURRENT_TASK.md`
+  - `/PROJECT_STATE/TASK_REGISTRY.md`
+  - `/PROJECT_STATE/MASTER_STATE.md`
+  - `/PROJECT_STATE/EVIDENCE_INDEX.md`
+  - `/PROJECT_STATE/CHANGELOG.md`
+  - `/PROJECT_STATE/AI_HANDOFF.md`
+- **Verification Evidence:** `npm run lint` (0 errors), `compile_applet` (Success), `npx vitest run` (**1,335/1,335 PASS** across 11 test files).
+- **Next Task:** `D3-003` (D3 Freeze Certification & Evidence Indexing)
+
+---
+
 ## [2026-08-28] — D3-002B Property-Based Invariant Regression Tests
 - **AI Agent:** Google AI Studio Agent
 - **Task ID:** `D3-002B` (Property-Based Invariant Regression Tests)
