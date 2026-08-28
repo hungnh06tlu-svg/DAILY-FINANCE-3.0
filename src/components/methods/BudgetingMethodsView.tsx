@@ -75,6 +75,8 @@ export const BudgetingMethodsView: React.FC<BudgetingMethodsViewProps> = React.m
         setActiveTab('fire');
       } else if (navigationContext.analyticsCategory === 'jars') {
         setActiveTab('jars');
+      } else if (navigationContext.analyticsCategory === 'methods_advanced') {
+        setActiveTab('methods_advanced');
       }
     }
   }, [navigationContext]);

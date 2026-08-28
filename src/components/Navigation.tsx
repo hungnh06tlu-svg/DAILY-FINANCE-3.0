@@ -7,8 +7,7 @@ import {
   Sparkles, 
   PieChart, 
   Sliders, 
-  Target,
-  Compass
+  Target
 } from 'lucide-react';
 
 interface NavigationProps {
@@ -50,12 +49,6 @@ export const Navigation: React.FC<NavigationProps> = ({
       icon: Target,
       labelVi: 'Hũ & FIRE',
       labelEn: 'Jars & FIRE',
-    },
-    {
-      id: 'methods_advanced' as AppScreen,
-      icon: Compass,
-      labelVi: '10 Phương Pháp',
-      labelEn: '10 Methods Suite',
     },
     {
       id: 'ai_insights' as AppScreen,
