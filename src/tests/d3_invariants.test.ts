@@ -176,12 +176,32 @@ describe('D3 — Financial Invariants Engine (INV-001 to INV-015)', () => {
         InvariantViolationError
       );
     });
+
+    it('[INV-007] should ignore non-active transfers in neutrality assertion', () => {
+      const txs: Transaction[] = [
+        {
+          id: 'tx_tf_draft',
+          type: 'transfer',
+          amount: 1000000,
+          currency: 'VND',
+          category: 'Transfer',
+          spaceId: 'sp_personal',
+          walletId: 'wal_src',
+          targetWalletId: 'wal_dst',
+          date: '2026-08-10',
+          status: 'draft',
+          ...({ destinationAmount: 500000 } as any) // mismatched amount in draft should not trigger invariant
+        }
+      ];
+
+      expect(() => FinancialInvariantEngine.assertTransferNeutral(txs, 'sp_personal')).not.toThrow();
+    });
   });
 
   // ==========================================
-  // Balance Invariants (INV-008, INV-009, INV-010)
+  // Group C: Lifecycle & Balance Invariants (INV-008, INV-009)
   // ==========================================
-  describe('Balance Invariants (INV-008, INV-009, INV-010)', () => {
+  describe('Group C: Lifecycle & Balance Invariants (INV-008, INV-009)', () => {
     it('[INV-008] should verify balance consistency: opening + incomes - expenses === current', () => {
       const txs: Transaction[] = [
         {
@@ -211,6 +231,119 @@ describe('D3 — Financial Invariants Engine (INV-001 to INV-015)', () => {
       expect(() => FinancialInvariantEngine.assertBalanceConsistency(1000000, txs, 5000000)).toThrow(
         InvariantViolationError
       );
+    });
+
+    it('[INV-008] should exclude draft, pending, soft_deleted, archived, and deleted transactions from balance calculation', () => {
+      const txs: Transaction[] = [
+        {
+          id: 'tx_valid_inc',
+          type: 'income',
+          amount: 1000000,
+          currency: 'VND',
+          category: 'Salary',
+          spaceId: 'sp_personal',
+          date: '2026-08-01',
+          status: 'confirmed'
+        },
+        {
+          id: 'tx_draft',
+          type: 'income',
+          amount: 999999,
+          currency: 'VND',
+          category: 'Bonus',
+          spaceId: 'sp_personal',
+          date: '2026-08-01',
+          status: 'draft'
+        },
+        {
+          id: 'tx_pending',
+          type: 'expense',
+          amount: 888888,
+          currency: 'VND',
+          category: 'Shopping',
+          spaceId: 'sp_personal',
+          date: '2026-08-01',
+          status: 'pending' as any
+        },
+        {
+          id: 'tx_soft_deleted',
+          type: 'expense',
+          amount: 777777,
+          currency: 'VND',
+          category: 'Shopping',
+          spaceId: 'sp_personal',
+          date: '2026-08-01',
+          status: 'soft_deleted'
+        },
+        {
+          id: 'tx_archived',
+          type: 'income',
+          amount: 666666,
+          currency: 'VND',
+          category: 'Old Income',
+          spaceId: 'sp_personal',
+          date: '2026-08-01',
+          status: 'archived'
+        },
+        {
+          id: 'tx_deleted_flag',
+          type: 'income',
+          amount: 555555,
+          currency: 'VND',
+          category: 'Bonus',
+          spaceId: 'sp_personal',
+          date: '2026-08-01',
+          status: 'confirmed',
+          isDeleted: true
+        },
+        {
+          id: 'tx_deleted_at',
+          type: 'expense',
+          amount: 444444,
+          currency: 'VND',
+          category: 'Bills',
+          spaceId: 'sp_personal',
+          date: '2026-08-01',
+          status: 'confirmed',
+          deletedAt: '2026-08-02T10:00:00Z'
+        }
+      ];
+
+      // Only valid income (1,000,000) counts: Opening (500,000) + 1,000,000 = 1,500,000
+      expect(() => FinancialInvariantEngine.assertBalanceConsistency(500000, txs, 1500000)).not.toThrow();
+    });
+
+    it('[INV-008] should reject non-finite opening or current balances', () => {
+      expect(() => FinancialInvariantEngine.assertBalanceConsistency(NaN, [], 100)).toThrow(InvariantViolationError);
+      expect(() => FinancialInvariantEngine.assertBalanceConsistency(100, [], Infinity)).toThrow(InvariantViolationError);
+    });
+
+    it('[INV-008] should maintain raw precision without artificial rounding', () => {
+      const precisionTxs: Transaction[] = [
+        {
+          id: 'tx_prec_1',
+          type: 'income',
+          amount: 100.456789,
+          currency: 'USD',
+          category: 'Crypto',
+          spaceId: 'sp_personal',
+          date: '2026-08-01',
+          status: 'confirmed'
+        },
+        {
+          id: 'tx_prec_2',
+          type: 'expense',
+          amount: 0.000001,
+          currency: 'USD',
+          category: 'Fee',
+          spaceId: 'sp_personal',
+          date: '2026-08-01',
+          status: 'confirmed'
+        }
+      ];
+
+      const expected = 50.0 + 100.456789 - 0.000001;
+      expect(() => FinancialInvariantEngine.assertBalanceConsistency(50.0, precisionTxs, expected)).not.toThrow();
     });
 
     it('[INV-009] should assert space conservation and prevent cross-space leaks', () => {
@@ -247,7 +380,121 @@ describe('D3 — Financial Invariants Engine (INV-001 to INV-015)', () => {
       );
     });
 
-    it('[INV-010] should verify global money conservation without NaN or corrupt values', () => {
+    it('[INV-009] should reject invalid or empty spaceId', () => {
+      expect(() => FinancialInvariantEngine.assertSpaceConservation([], '')).toThrow(InvariantViolationError);
+      expect(() => FinancialInvariantEngine.assertSpaceConservation([], '   ')).toThrow(InvariantViolationError);
+    });
+
+    it('[INV-010] should verify space isolation and reject cross-space leaks', () => {
+      const validSpaceTxs: Transaction[] = [
+        {
+          id: 'tx_sp1',
+          type: 'income',
+          amount: 1000000,
+          currency: 'VND',
+          category: 'Salary',
+          spaceId: 'sp_personal',
+          date: '2026-08-01',
+          status: 'confirmed'
+        },
+        {
+          id: 'tx_sp2',
+          type: 'expense',
+          amount: 200000,
+          currency: 'VND',
+          category: 'Supplies',
+          spaceId: 'sp_personal',
+          date: '2026-08-01',
+          status: 'confirmed'
+        }
+      ];
+
+      expect(() => FinancialInvariantEngine.assertSpaceIsolation(validSpaceTxs, 'sp_personal')).not.toThrow();
+
+      const mixedTxs: Transaction[] = [
+        ...validSpaceTxs,
+        {
+          id: 'tx_sp_foreign',
+          type: 'expense',
+          amount: 50000,
+          currency: 'VND',
+          category: 'Office',
+          spaceId: 'sp_work',
+          date: '2026-08-01',
+          status: 'confirmed'
+        }
+      ];
+
+      expect(() => FinancialInvariantEngine.assertSpaceIsolation(mixedTxs, 'sp_personal')).toThrow(
+        InvariantViolationError
+      );
+
+      // Valid cross-space transfer allowed when target matches
+      const crossSpaceTx: Transaction[] = [
+        {
+          id: 'tx_cross_sp',
+          type: 'transfer',
+          amount: 500000,
+          currency: 'VND',
+          category: 'Transfer',
+          spaceId: 'sp_work',
+          targetSpaceId: 'sp_personal',
+          date: '2026-08-01',
+          status: 'confirmed'
+        }
+      ];
+
+      expect(() => FinancialInvariantEngine.assertSpaceIsolation(crossSpaceTx, 'sp_personal')).not.toThrow();
+    });
+
+    it('[INV-010] should reject empty or invalid spaceId', () => {
+      expect(() => FinancialInvariantEngine.assertSpaceIsolation([], '')).toThrow(InvariantViolationError);
+      expect(() => FinancialInvariantEngine.assertSpaceIsolation([], '   ')).toThrow(InvariantViolationError);
+    });
+  });
+
+  // ==========================================
+  // Group D: Space, Fund & Audit Invariants (INV-011, INV-012, INV-013, INV-014, INV-015)
+  // ==========================================
+  describe('Group D: Space, Fund & Audit Invariants (INV-011 to INV-015)', () => {
+    it('[INV-011] should enforce fund isolation and prevent cross-fund contamination', () => {
+      const fundTxs: Transaction[] = [
+        {
+          id: 'tx_fund_1',
+          type: 'income',
+          amount: 1000000,
+          currency: 'VND',
+          category: 'Salary',
+          spaceId: 'sp_personal',
+          walletId: 'wal_emergency',
+          date: '2026-08-01',
+          status: 'confirmed'
+        }
+      ];
+
+      expect(() => FinancialInvariantEngine.assertFundIsolation(fundTxs, 'wal_emergency')).not.toThrow();
+
+      const contaminatedTxs: Transaction[] = [
+        ...fundTxs,
+        {
+          id: 'tx_fund_2',
+          type: 'expense',
+          amount: 200000,
+          currency: 'VND',
+          category: 'Stock',
+          spaceId: 'sp_personal',
+          walletId: 'wal_investment',
+          date: '2026-08-01',
+          status: 'confirmed'
+        }
+      ];
+
+      expect(() => FinancialInvariantEngine.assertFundIsolation(contaminatedTxs, 'wal_emergency')).toThrow(
+        InvariantViolationError
+      );
+    });
+
+    it('[INV-012] should verify global money conservation without NaN or corrupt values', () => {
       const allTxs: Transaction[] = [
         {
           id: 'tx_g1',
@@ -268,18 +515,51 @@ describe('D3 — Financial Invariants Engine (INV-001 to INV-015)', () => {
           spaceId: 'sp_work',
           date: '2026-08-01',
           status: 'confirmed'
+        },
+        {
+          id: 'tx_g3_tf',
+          type: 'transfer',
+          amount: 300000,
+          currency: 'VND',
+          category: 'Transfer',
+          spaceId: 'sp_personal',
+          targetSpaceId: 'sp_work',
+          date: '2026-08-01',
+          status: 'confirmed'
         }
       ];
 
       expect(() => FinancialInvariantEngine.assertGlobalConservation(allTxs)).not.toThrow();
     });
-  });
 
-  // ==========================================
-  // Lifecycle Invariants (INV-011, INV-012, INV-013)
-  // ==========================================
-  describe('Lifecycle Invariants (INV-011, INV-012, INV-013)', () => {
-    it('[INV-011] should accept valid transaction lifecycle statuses and reject invalid states', () => {
+    it('[INV-012] should maintain raw precision in global conservation', () => {
+      const precisionTxs: Transaction[] = [
+        {
+          id: 'tx_g_p1',
+          type: 'income',
+          amount: 123456.789123,
+          currency: 'USD',
+          category: 'Crypto',
+          spaceId: 'sp_crypto',
+          date: '2026-08-01',
+          status: 'confirmed'
+        },
+        {
+          id: 'tx_g_p2',
+          type: 'expense',
+          amount: 0.00000001,
+          currency: 'USD',
+          category: 'Gas',
+          spaceId: 'sp_crypto',
+          date: '2026-08-01',
+          status: 'confirmed'
+        }
+      ];
+
+      expect(() => FinancialInvariantEngine.assertGlobalConservation(precisionTxs)).not.toThrow();
+    });
+
+    it('[INV-013] should accept valid transaction lifecycle statuses and reject invalid states', () => {
       const validTx: Transaction = {
         id: 'tx_valid_life',
         type: 'expense',
@@ -303,7 +583,7 @@ describe('D3 — Financial Invariants Engine (INV-001 to INV-015)', () => {
       );
     });
 
-    it('[INV-012] should verify soft-deleted or archived transactions are excluded from calculation', () => {
+    it('[INV-013] should verify soft-deleted or archived transactions are excluded from calculation', () => {
       const softDeletedTx: Transaction = {
         id: 'tx_del',
         type: 'expense',
@@ -333,12 +613,7 @@ describe('D3 — Financial Invariants Engine (INV-001 to INV-015)', () => {
 
       expect(() => FinancialInvariantEngine.assertDraftExclusion(draftTx, 1000000)).not.toThrow();
     });
-  });
 
-  // ==========================================
-  // Idempotency & Audit Invariants (INV-014, INV-015)
-  // ==========================================
-  describe('Idempotency & Audit Invariants (INV-014, INV-015)', () => {
     it('[INV-014] should pass when all transactions have unique IDs', () => {
       const uniqueTxs: Transaction[] = [
         { id: 'tx_1', type: 'expense', amount: 10, currency: 'VND', category: 'A', spaceId: 'sp_1', date: '2026-08-01' },
@@ -348,7 +623,7 @@ describe('D3 — Financial Invariants Engine (INV-001 to INV-015)', () => {
       expect(FinancialInvariantEngine.assertIdempotency('bulk_insert', uniqueTxs)).toBe(true);
     });
 
-    it('[INV-014] should throw when duplicate transaction IDs are detected in batch operation', () => {
+    it('[INV-014] should throw when duplicate transaction IDs are detected in batch operation (replay protection)', () => {
       const duplicatedTxs: Transaction[] = [
         { id: 'tx_dup', type: 'expense', amount: 10, currency: 'VND', category: 'A', spaceId: 'sp_1', date: '2026-08-01' },
         { id: 'tx_dup', type: 'expense', amount: 20, currency: 'VND', category: 'B', spaceId: 'sp_1', date: '2026-08-01' }

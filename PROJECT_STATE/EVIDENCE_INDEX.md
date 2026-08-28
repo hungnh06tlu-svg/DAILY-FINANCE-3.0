@@ -20,11 +20,13 @@
 | **EVD-D3-001A** | D3-001A | 15/15 Financial Invariants Inventory & Schema Mapping | Architecture Audit | 26/26 PASS | Clean | Success | `InvariantEngine.ts`, `d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D3-001B** | D3-001B | Conservation Invariants (INV-001..003) Hardening & Taxonomy | Unit & Invariants | 26/26 PASS | Clean | Success | `InvariantEngine.ts`, `d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D3-001C** | D3-001C | Boundary Invariants (INV-004..006) Hardening & Taxonomy | Unit & Invariants | 26/26 PASS | Clean | Success | `InvariantEngine.ts`, `d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
-| **EVD-D3-01** | D3 | Financial Invariants Engine (INV-001..INV-015) | Unit & Stress | 26/26 PASS | Clean | Success | `src/tests/d3_invariants.test.ts` | `IN PROGRESS` | 2026-08-28 |
+| **EVD-D3-001D** | D3-001D | Lifecycle & Balance Invariants (INV-007..009) Hardening & Taxonomy | Unit & Invariants | 31/31 PASS | Clean | Success | `InvariantEngine.ts`, `d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
+| **EVD-D3-001E** | D3-001E | Space Isolation & Global Invariants (INV-010..015) Hardening & Taxonomy | Unit & Invariants | 35/35 PASS | Clean | Success | `InvariantEngine.ts`, `d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
+| **EVD-D3-01** | D3 | Financial Invariants Engine (INV-001..INV-015) | Unit & Stress | 35/35 PASS | Clean | Success | `src/tests/d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D4-01** | D4 | Data Contracts, Local Repositories & Sync | Unit & Sync | 21/21 PASS | Clean | Success | `src/tests/d4_sync.test.ts` | `RECONCILIATION REQUIRED` | 2026-08-28 |
 | **EVD-AI-01** | AI-001A | AI Architecture Discovery & Inventory (7 comps, 10 tools) | Audit Report | Draft | Clean | Success | `server.ts`, `src/domain/AI*.ts` | `NOT CONFIRMED` | 2026-08-28 |
 | **EVD-UC-01** | USE CASE | 31 Clean Architecture Use Cases | Unit Tests | 791/791 PASS | Clean | Success | `src/tests/domain.test.ts` | `RECONCILIATION REQUIRED` | 2026-08-28 |
-| **EVD-REG-01** | QA | Full Suite Regression & Complexity Benchmarks | Vitest Runner | 1,227/1,227 PASS | 0 errors | Success | All 8 Test Suites | `VERIFIED` | 2026-08-28 |
+| **EVD-REG-01** | QA | Full Suite Regression & Complexity Benchmarks | Vitest Runner | 1,236/1,236 PASS | 0 errors | Success | All 8 Test Suites | `VERIFIED` | 2026-08-28 |
 
 ---
 
@@ -37,12 +39,12 @@ To eliminate confusion across different AI agents quoting different test counts 
 | `src/tests/domain.test.ts` | Domain Entities, Use Cases & AI Engines | **791** | `PASS` |
 | `src/tests/d2_financial_truth.test.ts` | D2 Financial Truth Calculations & Invariants | **319** | `PASS` |
 | `src/tests/d2_003_methods_engine.test.ts` | 10 Financial Method Domain Engines | **37** | `PASS` |
-| `src/tests/d3_invariants.test.ts` | D3 Invariants Engine (INV-001..INV-015) | **26** | `PASS` |
+| `src/tests/d3_invariants.test.ts` | D3 Invariants Engine (INV-001..INV-015) | **35** | `PASS` |
 | `src/tests/d4_sync.test.ts` | D4 Data Contracts, Local DB & Sync | **21** | `PASS` |
 | `src/tests/d1_financial_model.test.ts` | D1 Canonical Financial Model & Guards | **17** | `PASS` |
 | `src/tests/d2_003_ui_smoke.test.ts` | Presentation Integration Smoke Tests | **10** | `PASS` |
 | `src/tests/g5_benchmark.test.ts` | Algorithm Complexity Benchmarks ($O(n)$) | **6** | `PASS` |
-| **TOTAL VITEST RUN** | **8 Test Files** | **1,227** | **100% PASS** |
+| **TOTAL VITEST RUN** | **8 Test Files** | **1,236** | **100% PASS** |
 
 ### Summary of Previous Numbers in Reports:
 - **"356 tests"**: Refers specifically to the combined D2 Financial Truth + Methods suites (`319` + `37` = `356`).

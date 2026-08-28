@@ -5,6 +5,54 @@
 
 ---
 
+## [2026-08-28] — D3-001E Space Isolation, Global Conservation & Audit Invariants (INV-010..015) Hardening & Taxonomy
+- **AI Agent:** AI Studio
+- **Task ID:** `D3-001E` (Space Isolation, Global Conservation & Audit Invariants INV-010..015 Hardening & Taxonomy Alignment)
+- **Status Transition:** `READY` ──► `COMPLETE`
+- **Scope & Findings:**
+  - Audited & Hardened `INV-010` (Space Isolation Law), `INV-011` (Fund Isolation Law), `INV-012` (Global System Conservation Law), `INV-013` (Lifecycle State Machine Law), `INV-014` (Idempotency Law), `INV-015` (Audit Trail & Traceability Law).
+  - Enforced strict Space and Fund boundaries preventing silent multi-tenant leakage while properly accommodating canonical cross-space transfers.
+  - Implemented rigorous idempotency protection rejecting duplicate transaction IDs in batch operations.
+  - Aligned Group D taxonomy in `src/domain/InvariantEngine.ts` and validated lifecycle predicate coupling directly to `FinancialTruthEngine.isActiveConfirmedTransaction`.
+  - Added comprehensive adversarial and precision test cases in `src/tests/d3_invariants.test.ts` (35 tests total).
+- **Source Code Files Changed:** `1` (`/src/domain/InvariantEngine.ts`)
+- **Test Files Changed:** `1` (`/src/tests/d3_invariants.test.ts`)
+- **PROJECT_STATE Files Updated:**
+  - `/PROJECT_STATE/CURRENT_TASK.md`
+  - `/PROJECT_STATE/TASK_REGISTRY.md`
+  - `/PROJECT_STATE/MASTER_STATE.md`
+  - `/PROJECT_STATE/EVIDENCE_INDEX.md`
+  - `/PROJECT_STATE/CHANGELOG.md`
+  - `/PROJECT_STATE/AI_HANDOFF.md`
+- **Verification Evidence:** `npm run lint` (0 errors), `npm run build` (Success), `npx vitest run` (1,236/1,236 PASS across all 8 suites).
+- **Next Task:** `D3-002` (Invariant Test Runner & Property Tests Harness)
+
+---
+
+## [2026-08-28] — D3-001D Lifecycle & Balance Invariants (INV-007..009) Hardening & Taxonomy
+- **AI Agent:** AI Studio
+- **Task ID:** `D3-001D` (Lifecycle & Balance Invariants INV-007..009 Hardening & Taxonomy Alignment)
+- **Status Transition:** `READY` ──► `COMPLETE`
+- **Scope & Findings:**
+  - Audited & Hardened `INV-007` (Transfer Neutrality Law), `INV-008` (Balance Consistency Law), `INV-009` (Space Conservation & Isolation Law).
+  - Aligned Group C taxonomy in `src/domain/InvariantEngine.ts` and set Group D header for upcoming subtask.
+  - Added strict finite-number checks and non-empty string validation (`Number.isFinite`, `typeof === 'string' && trim()`) in `assertTransferNeutral`, `assertBalanceConsistency`, and `assertSpaceConservation`.
+  - Reused `FinancialTruthEngine.isActiveConfirmedTransaction` to guarantee zero competition with Financial Truth authority.
+  - Added comprehensive test suite in `src/tests/d3_invariants.test.ts` verifying same-space transfer neutrality, non-active transfer lifecycle exclusion, float raw precision preservation, and space isolation enforcement (31 tests total).
+- **Source Code Files Changed:** `1` (`/src/domain/InvariantEngine.ts`)
+- **Test Files Changed:** `1` (`/src/tests/d3_invariants.test.ts`)
+- **PROJECT_STATE Files Updated:**
+  - `/PROJECT_STATE/CURRENT_TASK.md`
+  - `/PROJECT_STATE/TASK_REGISTRY.md`
+  - `/PROJECT_STATE/MASTER_STATE.md`
+  - `/PROJECT_STATE/EVIDENCE_INDEX.md`
+  - `/PROJECT_STATE/CHANGELOG.md`
+  - `/PROJECT_STATE/AI_HANDOFF.md`
+- **Verification Evidence:** `npm run lint` (0 errors), `npm run build` (Success), `npx vitest run` (1,232/1,232 PASS).
+- **Next Subtask:** `D3-001E` (Space Isolation & Global Invariants INV-010..015)
+
+---
+
 ## [2026-08-28] — D3-001C Boundary Invariants (INV-004..006) Hardening & Taxonomy
 - **AI Agent:** AI Studio
 - **Task ID:** `D3-001C` (Boundary Invariants INV-004..006 Hardening & Taxonomy Alignment)
