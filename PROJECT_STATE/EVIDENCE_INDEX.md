@@ -19,6 +19,7 @@
 | **EVD-D2-VER** | D2-TEST | 20-Point Invariant Verification (D2-TEST-001..020) | Audit Matrix | 20/20 PASS | Clean | Success | `d2_runner.ts`, `d2_financial_truth.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D3-001A** | D3-001A | 15/15 Financial Invariants Inventory & Schema Mapping | Architecture Audit | 26/26 PASS | Clean | Success | `InvariantEngine.ts`, `d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D3-001B** | D3-001B | Conservation Invariants (INV-001..003) Hardening & Taxonomy | Unit & Invariants | 26/26 PASS | Clean | Success | `InvariantEngine.ts`, `d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
+| **EVD-D3-001C** | D3-001C | Boundary Invariants (INV-004..006) Hardening & Taxonomy | Unit & Invariants | 26/26 PASS | Clean | Success | `InvariantEngine.ts`, `d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D3-01** | D3 | Financial Invariants Engine (INV-001..INV-015) | Unit & Stress | 26/26 PASS | Clean | Success | `src/tests/d3_invariants.test.ts` | `IN PROGRESS` | 2026-08-28 |
 | **EVD-D4-01** | D4 | Data Contracts, Local Repositories & Sync | Unit & Sync | 21/21 PASS | Clean | Success | `src/tests/d4_sync.test.ts` | `RECONCILIATION REQUIRED` | 2026-08-28 |
 | **EVD-AI-01** | AI-001A | AI Architecture Discovery & Inventory (7 comps, 10 tools) | Audit Report | Draft | Clean | Success | `server.ts`, `src/domain/AI*.ts` | `NOT CONFIRMED` | 2026-08-28 |

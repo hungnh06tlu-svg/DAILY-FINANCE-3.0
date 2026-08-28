@@ -12,13 +12,13 @@
 ```text
 CURRENT PHASE:        D3 — FINANCIAL INVARIANTS ENGINE
 CURRENT TASK:         D3-001 (Core Invariant Engine Structure & Execution Harness)
-CURRENT SUBTASK:      D3-001C (Boundary Invariants INV-004..006)
+CURRENT SUBTASK:      D3-001D (Lifecycle & Balance Invariants INV-007..009)
 CURRENT OWNER:        UNASSIGNED (Ready for next dispatch)
-OVERALL PROGRESS:     50% (Roadmap Delivery Progress, not financial calculation correctness)
+OVERALL PROGRESS:     52% (Roadmap Delivery Progress, not financial calculation correctness)
 COMPLETED PHASES:     PHASE-01 (G1/G2), PHASE-02 (S5 Presentation), PHASE-03 (D1 Model), PHASE-04 (D2 Truth)
-ACTIVE PHASE:         PHASE-05 (D3 Invariants) [Subtasks D3-001A, D3-001B Complete]
+ACTIVE PHASE:         PHASE-05 (D3 Invariants) [Subtasks D3-001A, D3-001B, D3-001C Complete]
 BLOCKED ITEMS:        NONE
-NEXT SCHEDULED TASK:  D3-001C
+NEXT SCHEDULED TASK:  D3-001D
 FROZEN AREAS:         Presentation (S5-001..S5-012, G1, G2), D1 Canonical Model, D2 Financial Truth
 UNCONFIRMED AREAS:    D3 (In Progress), D4, AI-001A, Use Cases, Repositories, Database, Sync, Cloud
 LAST VERIFIED AT:     2026-08-28
@@ -32,7 +32,7 @@ LAST VERIFIED AT:     2026-08-28
 
 ```text
 OVERALL PROJECT ROADMAP
-██████████░░░░░░░░░░  50%
+███████████░░░░░░░░░  52%
 
 PRESENTATION (G1, G2, S5-001 → S5-012)
 ████████████████████ 100% [COMPLETE & FROZEN]
@@ -44,7 +44,7 @@ D2 — FINANCIAL TRUTH & 10 METHODS
 ████████████████████ 100% [COMPLETE & FROZEN]
 
 D3 — FINANCIAL INVARIANTS ENGINE
-████████░░░░░░░░░░░░  40% [IN PROGRESS — D3-001A & D3-001B COMPLETE]
+████████████░░░░░░░░  60% [IN PROGRESS — D3-001A, D3-001B, D3-001C COMPLETE]
 
 D4 — DATA CONTRACTS & LOCAL SYNC
 ░░░░░░░░░░░░░░░░░░░░   0% [NOT STARTED / RECONCILIATION REQUIRED]

@@ -5,6 +5,30 @@
 
 ---
 
+## [2026-08-28] — D3-001C Boundary Invariants (INV-004..006) Hardening & Taxonomy
+- **AI Agent:** AI Studio
+- **Task ID:** `D3-001C` (Boundary Invariants INV-004..006 Hardening & Taxonomy Alignment)
+- **Status Transition:** `READY` ──► `COMPLETE`
+- **Scope & Findings:**
+  - Audited & Hardened `INV-004` (Budget Boundary Law), `INV-005` (Transfer Endpoint Boundary Law), `INV-006` (Transfer Amount Conservation Law).
+  - Aligned Group B taxonomy in `src/domain/InvariantEngine.ts` and set Group C header.
+  - Added strict finite-number checks and non-empty string trimming validation (`Number.isFinite`, `typeof === 'string' && trim()`) in `assertExpenseLimit`, `assertDifferentAccounts`, and `assertTransferBalance`.
+  - Verified multi-Space / multi-Fund isolation and D2 cross-space transfer semantics.
+  - Verified precision preservation (no implicit rounding, raw float preservation).
+- **Source Code Files Changed:** `1` (`/src/domain/InvariantEngine.ts`)
+- **Test Files Changed:** `0`
+- **PROJECT_STATE Files Updated:**
+  - `/PROJECT_STATE/CURRENT_TASK.md`
+  - `/PROJECT_STATE/TASK_REGISTRY.md`
+  - `/PROJECT_STATE/MASTER_STATE.md`
+  - `/PROJECT_STATE/EVIDENCE_INDEX.md`
+  - `/PROJECT_STATE/CHANGELOG.md`
+  - `/PROJECT_STATE/AI_HANDOFF.md`
+- **Verification Evidence:** `npm run lint` (0 errors), `npm run build` (Success), `npx vitest run` (1,227/1,227 PASS).
+- **Next Subtask:** `D3-001D` (Lifecycle & Balance Invariants INV-007..009)
+
+---
+
 ## [2026-08-28] — D3-001B Conservation Invariants (INV-001..003) Hardening & Taxonomy
 - **AI Agent:** AI Studio
 - **Task ID:** `D3-001B` (Conservation Invariants INV-001..003 Hardening & Taxonomy Alignment)

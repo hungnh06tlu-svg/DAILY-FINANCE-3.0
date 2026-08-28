@@ -88,19 +88,38 @@ export class FinancialInvariantEngine {
 
   // ============================================================================
   // GROUP B: BOUNDARY INVARIANTS (INV-004, INV-005, INV-006)
-  // [Taxonomy: Boundary Laws - Budget Allocation, Transfer Distinctness & Balance]
+  // [Taxonomy: Boundary Laws - Budget Allocation, Transfer Distinctness & Amount Conservation]
   // ============================================================================
 
   /**
-   * INV-004: Period expenses cannot exceed budget limit or defined allocation cap.
+   * INV-004: Budget Boundary Law (Group B - Boundary)
+   * Period expenses cannot exceed defined budget limit or period income allocation cap.
+   * Rejects NaN, non-finite values, and ensures strict budget boundary enforcement.
    */
   public static assertExpenseLimit(periodExpenses: number, periodIncome: number, budgetLimit?: number): void {
-    if (budgetLimit !== undefined && periodExpenses > budgetLimit) {
+    if (typeof periodExpenses !== 'number' || isNaN(periodExpenses) || !Number.isFinite(periodExpenses) || periodExpenses < 0) {
       throw new InvariantViolationError(
         'INV-004',
-        `Period expenses (${periodExpenses}) exceed defined budget limit (${budgetLimit})`,
-        { periodExpenses, budgetLimit, overspend: periodExpenses - budgetLimit }
+        `Period expenses must be a valid non-negative number, received: ${periodExpenses}`,
+        { periodExpenses, periodIncome, budgetLimit }
       );
+    }
+
+    if (budgetLimit !== undefined) {
+      if (typeof budgetLimit !== 'number' || isNaN(budgetLimit) || !Number.isFinite(budgetLimit)) {
+        throw new InvariantViolationError(
+          'INV-004',
+          `Budget limit must be a valid finite number if provided, received: ${budgetLimit}`,
+          { periodExpenses, budgetLimit }
+        );
+      }
+      if (periodExpenses > budgetLimit) {
+        throw new InvariantViolationError(
+          'INV-004',
+          `Period expenses (${periodExpenses}) exceed defined budget limit (${budgetLimit})`,
+          { periodExpenses, budgetLimit, overspend: periodExpenses - budgetLimit }
+        );
+      }
     }
 
     if (budgetLimit === undefined && periodIncome > 0 && periodExpenses > periodIncome) {
@@ -112,18 +131,17 @@ export class FinancialInvariantEngine {
     }
   }
 
-  // ============================================================================
-  // TRANSFER INVARIANTS (INV-005, INV-006, INV-007)
-  // ============================================================================
-
   /**
-   * INV-005: Source wallet/account and target wallet/account must be distinct entities.
+   * INV-005: Transfer Endpoint Boundary Law (Group B - Boundary)
+   * Source wallet/account and target wallet/account must be distinct valid entities.
+   * Transfer cannot have identical source and destination endpoints.
    */
   public static assertDifferentAccounts(sourceId: string, targetId: string): void {
-    if (!sourceId || !targetId) {
+    if (!sourceId || typeof sourceId !== 'string' || !sourceId.trim() ||
+        !targetId || typeof targetId !== 'string' || !targetId.trim()) {
       throw new InvariantViolationError(
         'INV-005',
-        'Source account and target account must be specified for transfer',
+        'Source account and target account must be valid non-empty identifiers for transfer',
         { sourceId, targetId }
       );
     }
@@ -131,20 +149,23 @@ export class FinancialInvariantEngine {
     if (sourceId.trim() === targetId.trim()) {
       throw new InvariantViolationError(
         'INV-005',
-        `Transfer source and target accounts must be different. Both are: ${sourceId}`,
+        `Transfer source and target accounts must be different. Both are: ${sourceId.trim()}`,
         { sourceId, targetId }
       );
     }
   }
 
   /**
-   * INV-006: Transfer source amount must match target received amount (for single currency transfers).
+   * INV-006: Transfer Amount Conservation Law (Group B - Boundary)
+   * Transfer source debit amount must match target received credit amount (for single-currency transfers).
+   * Amounts must be strictly positive finite numbers preserving raw precision without rounding.
    */
   public static assertTransferBalance(sourceAmount: number, targetAmount: number): void {
-    if (sourceAmount <= 0 || targetAmount <= 0) {
+    if (typeof sourceAmount !== 'number' || isNaN(sourceAmount) || !Number.isFinite(sourceAmount) || sourceAmount <= 0 ||
+        typeof targetAmount !== 'number' || isNaN(targetAmount) || !Number.isFinite(targetAmount) || targetAmount <= 0) {
       throw new InvariantViolationError(
         'INV-006',
-        'Transfer amounts must be strictly positive',
+        'Transfer amounts must be strictly positive finite numbers',
         { sourceAmount, targetAmount }
       );
     }
@@ -157,6 +178,11 @@ export class FinancialInvariantEngine {
       );
     }
   }
+
+  // ============================================================================
+  // GROUP C: LIFECYCLE & BALANCE INVARIANTS (INV-007, INV-008, INV-009)
+  // [Taxonomy: Lifecycle & Balance Laws - Net Neutrality, Consistency, Space Conservation]
+  // ============================================================================
 
   /**
    * INV-007: Net impact of internal transfer on space total must be zero (Transfer neutrality).

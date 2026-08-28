@@ -27,8 +27,8 @@ ROADMAP_PROGRESS: "20%"
 | :--- | :--- | :---: | :---: | :--- |
 | **D3-001A** | Invariant Inventory & Schema Mapping (15/15 Invariants) | `COMPLETE` | AI Studio | `EVD-D3-001A`, Audit Report |
 | **D3-001B** | Conservation Invariants (INV-001..003) | `COMPLETE` | AI Studio | `EVD-D3-001B`, InvariantEngine |
-| **D3-001C** | Boundary Invariants (INV-004..006) | `READY` | Unassigned | Scheduled |
-| **D3-001D** | Lifecycle Invariants (INV-007..009) | `NOT STARTED` | Unassigned | Scheduled |
+| **D3-001C** | Boundary Invariants (INV-004..006) | `COMPLETE` | AI Studio | `EVD-D3-001C`, InvariantEngine |
+| **D3-001D** | Lifecycle Invariants (INV-007..009) | `READY` | Unassigned | Scheduled |
 | **D3-001E** | Space Isolation Invariants (INV-010..015) | `NOT STARTED` | Unassigned | Scheduled |
 
 ---
@@ -56,9 +56,9 @@ ROADMAP_PROGRESS: "20%"
 NEXT_PHASE: "D3 — FINANCIAL INVARIANTS ENGINE"
 NEXT_TASK_ID: "D3-001"
 NEXT_TASK_NAME: "Core Invariant Engine Structure & Execution Harness"
-NEXT_SUBTASK_ID: "D3-001C"
-NEXT_SUBTASK_NAME: "Boundary Invariants (INV-004..006) Hardening & Taxonomy Alignment"
+NEXT_SUBTASK_ID: "D3-001D"
+NEXT_SUBTASK_NAME: "Lifecycle & Balance Invariants (INV-007..009) Hardening & Taxonomy Alignment"
 ASSIGNED_OWNER: "UNASSIGNED (Ready for next AI Dispatch)"
-PREREQUISITES: "D3-001B Conservation Invariants Certified"
+PREREQUISITES: "D3-001C Boundary Invariants Certified"
 PREREQUISITE_STATUS: "SATISFIED"
 ```
