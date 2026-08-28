@@ -58,19 +58,19 @@ Before writing code, changing state, or reporting status, EVERY AI agent MUST re
 When ending your session or completing a task, you MUST format your final handoff as follows:
 
 ```yaml
-LAST_COMPLETED_TASK: "D3-001"
-LAST_COMPLETED_SUBTASK: "D3-001E"
-CURRENT_STATUS: "COMPLETE (D3-001A..D3-001E) / READY FOR D3-002"
+LAST_COMPLETED_TASK: "D3-002"
+LAST_COMPLETED_SUBTASK: "D3-002A"
+CURRENT_STATUS: "COMPLETE (D3-002A) / READY FOR D3-002B"
 CURRENT_OWNER: "AI Studio"
-TEST_RESULT: "1,236 / 1,236 PASS (100%)"
+TEST_RESULT: "1,251 / 1,251 PASS (100%)"
 REGRESSION_STATUS: "CLEAN (0 failures, 0 skipped)"
 LINT_STATUS: "CLEAN (0 errors)"
 BUILD_STATUS: "SUCCESS (dist/ created)"
-FILES_CHANGED: "1 source file (/src/domain/InvariantEngine.ts), 1 test file (/src/tests/d3_invariants.test.ts), 6 PROJECT_STATE files"
-EVIDENCE_LOCATION: "/PROJECT_STATE/EVIDENCE_INDEX.md (EVD-D3-001E)"
+FILES_CHANGED: "1 source file (/src/domain/InvariantExecutionHarness.ts), 1 test file (/src/tests/d3_harness.test.ts), 6 PROJECT_STATE files"
+EVIDENCE_LOCATION: "/PROJECT_STATE/EVIDENCE_INDEX.md (EVD-D3-002A)"
 BLOCKERS: "NONE"
 NEXT_PHASE: "PHASE-05 (D3 — FINANCIAL INVARIANTS ENGINE)"
 NEXT_TASK: "D3-002 (Invariant Test Runner & Property Tests Harness)"
-NEXT_SUBTASK: "D3-002A (Comprehensive Invariant Execution Harness)"
+NEXT_SUBTASK: "D3-002B (Property-Based Invariant Regression Tests)"
 DO_NOT_MODIFY: "FinancialTruthEngine, CanonicalFinancialModel, Presentation Views, D2 Test Suite"
 ```

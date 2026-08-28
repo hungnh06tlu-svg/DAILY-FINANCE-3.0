@@ -9,14 +9,14 @@
 ## 1. ACTIVE TASK METADATA
 
 ```yaml
-ACTIVE_TASK_ID: "D3-001"
-TASK_NAME: "Core Invariant Engine Structure & Execution Harness"
+ACTIVE_TASK_ID: "D3-002"
+TASK_NAME: "Comprehensive Invariant Execution Harness & Property Tests"
 PARENT_PHASE: "PHASE-05 (D3 — FINANCIAL INVARIANTS ENGINE)"
 ACTIVE_OWNER: "AI Studio"
 CURRENT_STATUS: "IN PROGRESS"
 STARTED_AT: "2026-08-28"
 LAST_UPDATED_AT: "2026-08-28"
-ROADMAP_PROGRESS: "20%"
+ROADMAP_PROGRESS: "50%"
 ```
 
 ---
@@ -25,11 +25,8 @@ ROADMAP_PROGRESS: "20%"
 
 | Subtask ID | Subtask Name | Status | Owner | Evidence |
 | :--- | :--- | :---: | :---: | :--- |
-| **D3-001A** | Invariant Inventory & Schema Mapping (15/15 Invariants) | `COMPLETE` | AI Studio | `EVD-D3-001A`, Audit Report |
-| **D3-001B** | Conservation Invariants (INV-001..003) | `COMPLETE` | AI Studio | `EVD-D3-001B`, InvariantEngine |
-| **D3-001C** | Boundary Invariants (INV-004..006) | `COMPLETE` | AI Studio | `EVD-D3-001C`, InvariantEngine |
-| **D3-001D** | Lifecycle Invariants (INV-007..009) | `COMPLETE` | AI Studio | `EVD-D3-001D`, InvariantEngine |
-| **D3-001E** | Space Isolation Invariants (INV-010..015) | `COMPLETE` | AI Studio | `EVD-D3-001E`, InvariantEngine |
+| **D3-002A** | Invariant Execution Harness & Diagnostics | `COMPLETE` | AI Studio | `EVD-D3-002A`, `InvariantExecutionHarness.ts`, `d3_harness.test.ts` (15/15 PASS) |
+| **D3-002B** | Property-Based Invariant Regression Tests | `NOT STARTED` | Unassigned | None |
 
 ---
 
@@ -37,14 +34,14 @@ ROADMAP_PROGRESS: "20%"
 
 ### 🟢 ALLOWED DIRECTORIES & FILES
 - `/PROJECT_STATE/*` (State documentation & evidence files)
-- `/src/domain/InvariantEngine.ts` (D3 Invariants implementation)
+- `/src/domain/InvariantExecutionHarness.ts` (D3 Execution Harness)
+- `/src/tests/d3_harness.test.ts` (D3 Execution Harness Tests)
 
 ### 🔴 STRICTLY FORBIDDEN AREAS (DO NOT MODIFY)
 - `/src/domain/FinancialTruthEngine.ts` (**FROZEN**)
 - `/src/domain/CanonicalFinancialModel.ts` (**FROZEN**)
 - `/src/domain/methods/*.ts` (**FROZEN**)
 - `/src/components/*` (**FROZEN**)
-- `/src/tests/*` (**FROZEN**)
 - `/server.ts`
 - `/package.json`
 
@@ -54,9 +51,9 @@ ROADMAP_PROGRESS: "20%"
 
 ```yaml
 NEXT_PHASE: "D3 — FINANCIAL INVARIANTS ENGINE"
-NEXT_TASK_ID: "D3-002"
-NEXT_TASK_NAME: "Invariant Test Runner & Property Tests Harness"
+NEXT_TASK_ID: "D3-002B"
+NEXT_TASK_NAME: "Property-Based Invariant Regression Tests"
 ASSIGNED_OWNER: "UNASSIGNED (Ready for next AI Dispatch)"
-PREREQUISITES: "D3-001 Core Invariant Engine Complete (D3-001A..D3-001E)"
+PREREQUISITES: "D3-002A Invariant Execution Harness & Diagnostics Complete"
 PREREQUISITE_STATUS: "SATISFIED"
 ```
