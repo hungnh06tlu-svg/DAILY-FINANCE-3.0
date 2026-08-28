@@ -9,14 +9,14 @@
 ## 1. ACTIVE TASK METADATA
 
 ```yaml
-ACTIVE_TASK_ID: "GOV-002"
-TASK_NAME: "Project State Governance v2 Implementation"
-PARENT_PHASE: "PROJECT STATE GOVERNANCE"
+ACTIVE_TASK_ID: "D3-001"
+TASK_NAME: "Core Invariant Engine Structure & Execution Harness"
+PARENT_PHASE: "PHASE-05 (D3 — FINANCIAL INVARIANTS ENGINE)"
 ACTIVE_OWNER: "AI Studio"
-CURRENT_STATUS: "COMPLETE"
+CURRENT_STATUS: "IN PROGRESS"
 STARTED_AT: "2026-08-28"
 LAST_UPDATED_AT: "2026-08-28"
-ROADMAP_PROGRESS: "100%"
+ROADMAP_PROGRESS: "20%"
 ```
 
 ---
@@ -25,20 +25,18 @@ ROADMAP_PROGRESS: "100%"
 
 | Subtask ID | Subtask Name | Status | Owner | Evidence |
 | :--- | :--- | :---: | :---: | :--- |
-| **GOV-002A** | Structure 10-file PROJECT_STATE directory hierarchy | `COMPLETE` | AI Studio | File system audit |
-| **GOV-002B** | Author MASTER_ROADMAP.md & Phase dependencies | `COMPLETE` | AI Studio | `MASTER_ROADMAP.md` |
-| **GOV-002C** | Upgrade MASTER_STATE.md with ASCII dashboard & Phase tracking | `COMPLETE` | AI Studio | `MASTER_STATE.md` |
-| **GOV-002D** | Expand TASK_REGISTRY.md with granular subtasks & % progress | `COMPLETE` | AI Studio | `TASK_REGISTRY.md` |
-| **GOV-002E** | Compile D2_FROZEN_VERIFICATION.md with 20/20 invariant proof | `COMPLETE` | AI Studio | `D2_FROZEN_VERIFICATION.md` |
-| **GOV-002F** | Author CURRENT_TASK.md & CHANGELOG.md | `COMPLETE` | AI Studio | State docs created |
-| **GOV-002G** | Validate zero source changes, zero test changes, clean build | `COMPLETE` | AI Studio | `npm run lint`, `npm run build` |
+| **D3-001A** | Invariant Inventory & Schema Mapping (15/15 Invariants) | `COMPLETE` | AI Studio | `EVD-D3-001A`, Audit Report |
+| **D3-001B** | Conservation Invariants (INV-001..003) | `READY` | Unassigned | Scheduled |
+| **D3-001C** | Boundary Invariants (INV-004..006) | `NOT STARTED` | Unassigned | Scheduled |
+| **D3-001D** | Lifecycle Invariants (INV-007..009) | `NOT STARTED` | Unassigned | Scheduled |
+| **D3-001E** | Space Isolation Invariants (INV-010..015) | `NOT STARTED` | Unassigned | Scheduled |
 
 ---
 
 ## 3. ACTIVE EXECUTION BOUNDARIES
 
 ### 🟢 ALLOWED DIRECTORIES & FILES
-- `/PROJECT_STATE/*` (Only state documentation files)
+- `/PROJECT_STATE/*` (State documentation & evidence files)
 
 ### 🔴 STRICTLY FORBIDDEN AREAS (DO NOT MODIFY)
 - `/src/domain/FinancialTruthEngine.ts` (**FROZEN**)
@@ -57,9 +55,9 @@ ROADMAP_PROGRESS: "100%"
 NEXT_PHASE: "D3 — FINANCIAL INVARIANTS ENGINE"
 NEXT_TASK_ID: "D3-001"
 NEXT_TASK_NAME: "Core Invariant Engine Structure & Execution Harness"
-NEXT_SUBTASK_ID: "D3-001A"
-NEXT_SUBTASK_NAME: "Invariant Inventory & Schema Mapping"
-ASSIGNED_OWNER: "UNASSIGNED (Awaiting Human / Multi-AI Dispatch)"
-PREREQUISITES: "D1, D2 Certified Frozen"
+NEXT_SUBTASK_ID: "D3-001B"
+NEXT_SUBTASK_NAME: "Conservation Invariants (INV-001..003) Hardening & Taxonomy Alignment"
+ASSIGNED_OWNER: "UNASSIGNED (Ready for next AI Dispatch)"
+PREREQUISITES: "D3-001A Inventory & Mapping Certified"
 PREREQUISITE_STATUS: "SATISFIED"
 ```

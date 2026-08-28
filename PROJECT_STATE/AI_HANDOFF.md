@@ -58,19 +58,19 @@ Before writing code, changing state, or reporting status, EVERY AI agent MUST re
 When ending your session or completing a task, you MUST format your final handoff as follows:
 
 ```yaml
-LAST_COMPLETED_TASK: "GOV-002"
-LAST_COMPLETED_SUBTASK: "GOV-002G"
-CURRENT_STATUS: "COMPLETE"
+LAST_COMPLETED_TASK: "D3-001"
+LAST_COMPLETED_SUBTASK: "D3-001A"
+CURRENT_STATUS: "COMPLETE (D3-001A) / IN PROGRESS (D3-001)"
 CURRENT_OWNER: "AI Studio"
 TEST_RESULT: "1,227 / 1,227 PASS (100%)"
 REGRESSION_STATUS: "CLEAN (0 failures, 0 skipped)"
 LINT_STATUS: "CLEAN (0 errors)"
 BUILD_STATUS: "SUCCESS (dist/ created)"
-FILES_CHANGED: "0 source files, 0 test files, 10 PROJECT_STATE files"
-EVIDENCE_LOCATION: "/PROJECT_STATE/EVIDENCE_INDEX.md"
+FILES_CHANGED: "0 source files, 0 test files, 6 PROJECT_STATE files"
+EVIDENCE_LOCATION: "/PROJECT_STATE/EVIDENCE_INDEX.md (EVD-D3-001A)"
 BLOCKERS: "NONE"
-NEXT_PHASE: "D3 — FINANCIAL INVARIANTS ENGINE"
-NEXT_TASK: "D3-001"
-NEXT_SUBTASK: "D3-001A (Invariant Inventory & Schema Mapping)"
+NEXT_PHASE: "PHASE-05 (D3 — FINANCIAL INVARIANTS ENGINE)"
+NEXT_TASK: "D3-001 (Core Invariant Engine Structure & Execution Harness)"
+NEXT_SUBTASK: "D3-001B (Conservation Invariants INV-001..003)"
 DO_NOT_MODIFY: "FinancialTruthEngine, CanonicalFinancialModel, Presentation Views, Test Suites"
 ```
