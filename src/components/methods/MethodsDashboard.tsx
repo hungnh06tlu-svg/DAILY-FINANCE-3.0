@@ -137,7 +137,7 @@ export const MethodsDashboard: React.FC<MethodsDashboardProps> = ({
         <div>
           <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider mb-1">
             <Sparkles className="w-4 h-4" />
-            <span>{language === 'vi' ? 'Hệ Thống Phương Pháp Tài Chính Toàn Diện' : 'Financial Methods Engine Suite (D2-003)'}</span>
+            <span>{language === 'vi' ? 'HŨ & FIRE › BỘ 10 PHƯƠNG PHÁP TÀI CHÍNH TOÀN DIỆN' : 'JARS & FIRE SUITE › 10 FINANCIAL METHODS'}</span>
           </div>
           <h2 className="text-xl font-black text-slate-100">
             {language === 'vi' ? '10 Trường Phái & Chiến Lược Quản Trị Tài Chính' : '10 Financial Philosophies & Methodologies'}

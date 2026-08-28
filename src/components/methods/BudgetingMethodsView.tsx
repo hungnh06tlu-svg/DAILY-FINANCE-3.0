@@ -103,20 +103,39 @@ export const BudgetingMethodsView: React.FC<BudgetingMethodsViewProps> = React.m
 
   return (
     <div className="p-4 space-y-6">
-      {/* Navigation Chips for Budgeting Philosophies */}
-      <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1">
-        <button
-          onClick={() => setActiveTab('jars')}
-          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all shrink-0 ${
-            activeTab === 'jars'
-              ? 'bg-emerald-600 text-white shadow-md'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
-          }`}
-        >
-          <Layers className="w-4 h-4" />
-          <span>{language === 'vi' ? '6 Hũ Tài Chính' : '6 Jars System'}</span>
-        </button>
+      {/* Navigation Grouping for Hũ & FIRE Suite */}
+      <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
+        {/* GROUP 1: HŨ TÀI CHÍNH (6 Hũ & 10 Phương Pháp Mở Rộng) */}
+        <div className="flex items-center bg-slate-900/90 border border-emerald-900/50 rounded-2xl p-1 gap-1 shrink-0 shadow-inner">
+          <button
+            onClick={() => setActiveTab('jars')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              activeTab === 'jars'
+                ? 'bg-emerald-600 text-white shadow-md'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5 text-emerald-400" />
+            <span>{language === 'vi' ? '6 Hũ Tài Chính' : '6 Jars'}</span>
+          </button>
 
+          <button
+            onClick={() => setActiveTab('methods_advanced')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              activeTab === 'methods_advanced'
+                ? 'bg-teal-600 text-white shadow-md'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Compass className="w-3.5 h-3.5 text-teal-300" />
+            <span>{language === 'vi' ? '10 Phương Pháp' : '10 Methods'}</span>
+            <span className="text-[9px] font-extrabold px-1.5 py-0.5 bg-teal-500/20 text-teal-300 rounded-md border border-teal-500/30">
+              Suite
+            </span>
+          </button>
+        </div>
+
+        {/* OTHER STANDALONE PHILOSOPHIES */}
         <button
           onClick={() => setActiveTab('envelope')}
           className={`flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all shrink-0 ${
@@ -125,8 +144,8 @@ export const BudgetingMethodsView: React.FC<BudgetingMethodsViewProps> = React.m
               : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
           }`}
         >
-          <Target className="w-4 h-4" />
-          <span>{language === 'vi' ? 'Ngân Sách Phong Bì' : 'Envelope Budgeting'}</span>
+          <Target className="w-4 h-4 text-indigo-400" />
+          <span>{language === 'vi' ? 'Phong Bì' : 'Envelope'}</span>
         </button>
 
         <button
@@ -137,8 +156,8 @@ export const BudgetingMethodsView: React.FC<BudgetingMethodsViewProps> = React.m
               : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
           }`}
         >
-          <BookOpen className="w-4 h-4" />
-          <span>{language === 'vi' ? 'Sổ Kakeibo Nhật' : 'Kakeibo Method'}</span>
+          <BookOpen className="w-4 h-4 text-amber-400" />
+          <span>{language === 'vi' ? 'Sổ Kakeibo' : 'Kakeibo'}</span>
         </button>
 
         <button
@@ -149,20 +168,8 @@ export const BudgetingMethodsView: React.FC<BudgetingMethodsViewProps> = React.m
               : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
           }`}
         >
-          <Flame className="w-4 h-4" />
+          <Flame className="w-4 h-4 text-rose-400" />
           <span>FIRE & Overdrive</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('methods_advanced')}
-          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all shrink-0 ${
-            activeTab === 'methods_advanced'
-              ? 'bg-teal-600 text-white shadow-md'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
-          }`}
-        >
-          <Compass className="w-4 h-4" />
-          <span>{language === 'vi' ? '10 Phương Pháp' : 'Advanced Methods'}</span>
         </button>
       </div>
 
@@ -171,6 +178,9 @@ export const BudgetingMethodsView: React.FC<BudgetingMethodsViewProps> = React.m
         <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-4">
           <div className="flex items-center justify-between">
             <div>
+              <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider mb-1">
+                <span>{language === 'vi' ? 'HŨ TÀI CHÍNH › 6 HŨ HARV EKER' : 'JARS SUITE › 6 JARS HARV EKER'}</span>
+              </div>
               <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
                 <Layers className="w-5 h-5 text-emerald-400" />
                 <span>{language === 'vi' ? 'Phương Pháp 6 Hũ (Harv Eker)' : 'Six Jars Method (Harv Eker)'}</span>
@@ -179,6 +189,13 @@ export const BudgetingMethodsView: React.FC<BudgetingMethodsViewProps> = React.m
                 {language === 'vi' ? 'Tự động phân bổ thu nhập hàng tháng vào 6 mục tiêu tự do tài chính.' : 'Auto-allocate monthly income into 6 dedicated wealth jars.'}
               </p>
             </div>
+            <button
+              onClick={() => setActiveTab('methods_advanced')}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-teal-300 rounded-xl text-xs font-bold transition-all"
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span>{language === 'vi' ? 'Mở 10 Phương Pháp' : 'Open 10 Methods'}</span>
+            </button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
