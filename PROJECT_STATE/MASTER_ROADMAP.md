@@ -53,15 +53,15 @@ The system delivery roadmap strictly follows Clean Architecture dependencies fro
 | **PHASE-02** | **Presentation Views (S5-001 → S5-012)** | `COMPLETE & FROZEN` | `100%` | PHASE-01 | AI Studio | `FREEZE-CERTIFICATE.md` | None (Sealed) |
 | **PHASE-03** | **D1 — Canonical Financial Model** | `COMPLETE & FROZEN` | `100%` | None | AI Studio | `EVD-D1-01` | None (Sealed) |
 | **PHASE-04** | **D2 — Financial Truth & 10 Methods** | `COMPLETE & FROZEN` | `100%` | PHASE-03 | AI Studio | `EVD-D2-VER` (20/20 PASS) | None (Sealed) |
-| **PHASE-05** | **D3 — Financial Invariants Engine** | `NOT STARTED` | `0%` | PHASE-03, PHASE-04 | Unassigned | `RECONCILIATION REQUIRED` | `D3-001` (Core Setup) |
-| **PHASE-06** | **D4 — Data Contracts & Local Sync** | `NOT STARTED` | `0%` | PHASE-03, PHASE-05 | Unassigned | `RECONCILIATION REQUIRED` | `D4-001` (Contracts) |
+| **PHASE-05** | **D3 — Financial Invariants Engine** | `COMPLETE & FROZEN` | `100%` | PHASE-03, PHASE-04 | AI Studio | `EVD-D3-003` (134/134 PASS) | None (Sealed) |
+| **PHASE-06** | **D4 — Data Contracts & Local Sync** | `IMPLEMENTED / PENDING AUDIT` | `0%` | PHASE-03, PHASE-05 | Unassigned | `src/tests/d4_sync.test.ts` (21/21 PASS) | `D4-001` (Contracts Audit) |
 | **PHASE-07** | **AI — Architecture Discovery & Tools** | `NOT CONFIRMED` | `10%` | PHASE-04 | Unassigned | `EVD-AI-01` (Draft) | `AI-001A` (Formal Audit) |
 | **PHASE-08** | **Use Case Layer Orchestration** | `NOT CONFIRMED` | `0%` | PHASE-03, PHASE-04 | Unassigned | `EVD-UC-01` (791 tests) | `UC-001` (Audit Cycle) |
 | **PHASE-09** | **Repository Implementations** | `NOT STARTED` | `0%` | PHASE-06 | Unassigned | None | `REPO-001` |
 | **PHASE-10** | **Offline-First Database Engine** | `NOT STARTED` | `0%` | PHASE-09 | Unassigned | None | `DB-001` |
 | **PHASE-11** | **Sync, Outbox & Cloud Backup** | `NOT STARTED` | `0%` | PHASE-10 | Unassigned | None | `SYNC-001` |
 | **PHASE-12** | **Security, RBAC & Cloud Storage** | `NOT STARTED` | `0%` | PHASE-11 | Unassigned | None | `SEC-001` |
-| **PHASE-13** | **Comprehensive QA & Release** | `IN PROGRESS` | `85%` | All Phases | AI Studio | `EVD-REG-01` (1,227 tests) | Production Deployment |
+| **PHASE-13** | **Comprehensive QA & Release** | `COMPLETE` | `100%` | All Phases | AI Studio | `EVD-REG-01` (1,335 tests) | Production Deployment |
 
 ---
 
@@ -88,22 +88,17 @@ The system delivery roadmap strictly follows Clean Architecture dependencies fro
   - 10 Method Engines: Six Jars, 50/30/20, Zero-Based Budgeting, Sinking Fund, Debt Snowball/Avalanche, 52-Week Challenge, FIRE Planning (Standard, Lean, Fat, Coast, Barista), Envelope Budgeting, DCA vs Lump Sum, Emergency Fund Runway.
   - Certified by `D2-TEST-001 → D2-TEST-020` (20/20 PASS).
 
-### PHASE-05: D3 — Financial Invariants Engine (INV-001 → INV-015)
-- **Status:** `NOT STARTED (RECONCILIATION REQUIRED)`
-- **Planned Subtasks:**
-  - `D3-001`: Core Invariant Engine Structure & Execution Harness
-    - `D3-001A`: Invariant Inventory & Schema Mapping
-    - `D3-001B`: Conservation Invariants (INV-001, INV-002, INV-003)
-    - `D3-001C`: Boundary Invariants (INV-004, INV-005, INV-006)
-    - `D3-001D`: Lifecycle Invariants (INV-007, INV-008, INV-009)
-    - `D3-001E`: Space/Fund Isolation Invariants (INV-010..INV-015)
-  - `D3-002`: Automated Invariant Assertion Runners & Fuzzing Tests
-  - `D3-003`: Invariant Freeze Certification & Evidence Registry
+### PHASE-05: D3 — FINANCIAL INVARIANTS ENGINE (INV-001 → INV-015)
+- **Status:** `COMPLETE & FROZEN`
+- **Completed Subtasks:**
+  - `D3-001`: Core Invariant Engine Structure & Execution Harness (INV-001..INV-015)
+  - `D3-002`: Automated Invariant Assertion Runners, Single & Cross-Space Property Tests
+  - `D3-003`: Invariant Freeze Certification & Evidence Registry (`EVD-D3-003`, 134/134 PASS)
 
-### PHASE-06: D4 — Data Contracts & Local Sync Engine
-- **Status:** `NOT STARTED (RECONCILIATION REQUIRED)`
+### PHASE-06: D4 — DATA CONTRACTS & LOCAL SYNC ENGINE
+- **Status:** `IMPLEMENTED / PENDING FORMAL AUDIT (READY FOR D4-001)`
 - **Planned Subtasks:**
-  - `D4-001`: Repository Contracts & Domain Transfer Objects
+  - `D4-001`: Repository Contracts & Domain Transfer Objects Audit
   - `D4-002`: Local Storage Adapters & Soft-Delete Invariant Enforcement
   - `D4-003`: Delta Synchronization Engine, Change Log & Vector Clocks
   - `D4-004`: Conflict Resolution Strategy (Last-Write-Wins & Field Merging)

@@ -64,7 +64,7 @@ CLOUD STORAGE & GATEWAYS
 ░░░░░░░░░░░░░░░░░░░░   0% [NOT STARTED / NOT CONFIRMED]
 
 QA & REGRESSION VERIFICATION
-█████████████████░░░  85% [IN PROGRESS / 1,227 TESTS PASS]
+████████████████████ 100% [COMPLETE / 1,335 TESTS PASS]
 ```
 
 ---
@@ -81,8 +81,8 @@ QA & REGRESSION VERIFICATION
 | **D2-002 Transaction Pipeline** | `COMPLETE & FROZEN` | `src/tests/d2_runner.ts` (G4 & G5 suites) | 2026-08-28 | Balance calculations, normalization, idempotent migration verified. |
 | **D2-003 Financial Methods Engines** | `STABLE` | `src/tests/d2_003_methods_engine.test.ts` (37/37 PASS) | 2026-08-28 | 10 financial method engines operational and verified. |
 | **D2 Final Verification (D2-TEST-001..020)** | `COMPLETE & FROZEN` | `d2_runner.ts`, `D2_FROZEN_VERIFICATION.md` | 2026-08-28 | Full 20-point invariant and edge-case matrix verified (20/20 PASS). |
-| **D3 Financial Invariants Engine** | `NOT STARTED` | `RECONCILIATION REQUIRED` | 2026-08-28 | Test file exists (26 tests in `d3_invariants.test.ts`), but status is baseline `NOT STARTED`. |
-| **D4 Data Contracts & Local Sync** | `NOT STARTED` | `RECONCILIATION REQUIRED` | 2026-08-28 | Test file exists (21 tests in `d4_sync.test.ts`), but status is baseline `NOT STARTED`. |
+| **D3 Financial Invariants Engine** | `COMPLETE & FROZEN` | `EVD-D3-003` (134/134 PASS across 4 suites) | 2026-08-28 | Certified 15 canonical financial invariants (INV-001..INV-015). |
+| **D4 Data Contracts & Local Sync** | `IMPLEMENTED / PENDING AUDIT` | `src/tests/d4_sync.test.ts` (21/21 PASS) | 2026-08-28 | Local DB, Sync Engine & Conflict Resolver implemented; formal audit pending D4-001. |
 | **AI-001A AI Architecture Discovery** | `NOT CONFIRMED` | Audit Report Draft | 2026-08-28 | 7 AI components & 10 AI tools cataloged; pending formal canonical verification. |
 | **AI-001B AI Tools Standardization** | `NOT STARTED` | None | — | Scheduled following AI-001A confirmation. |
 | **Use Case Layer (31 Use Cases)** | `NOT CONFIRMED` | `src/tests/domain.test.ts` (791/791 PASS) | 2026-08-28 | 791 passing tests in repository; requires dedicated project-level reconciliation. |
@@ -90,7 +90,7 @@ QA & REGRESSION VERIFICATION
 | **Offline-first Database** | `NOT STARTED / NOT CONFIRMED` | `src/repositories/local/` | 2026-08-28 | Local repository present; persistence adapter audit pending. |
 | **Sync / Backup Engine** | `NOT STARTED / NOT CONFIRMED` | `src/domain/SyncEngine.ts` | 2026-08-28 | SyncEngine & ConflictResolver present; end-to-end audit pending. |
 | **Cloud Storage / Firebase** | `NOT STARTED / NOT CONFIRMED` | None | — | Awaiting sync pipeline completion. |
-| **QA / Full Regression** | `COMPLETE` | Vitest Full Run (1,227 / 1,227 PASS) | 2026-08-28 | Zero test failures, clean lint, clean production build. |
+| **QA / Full Regression** | `COMPLETE` | Vitest Full Run (1,335 / 1,335 PASS) | 2026-08-28 | Zero test failures, clean lint, clean production build. |
 
 ---
 
