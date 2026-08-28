@@ -25,6 +25,7 @@
 | **EVD-D3-002A** | D3-002A | Invariant Execution Harness, Property Verification & Diagnostics | Unit & Harness | 15/15 PASS | Clean | Success | `InvariantExecutionHarness.ts`, `d3_harness.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D3-002B** | D3-002B | Property-Based Invariant Regression Tests (INV-001..INV-015) | Property Tests | 62/62 PASS | Clean | Success | `src/tests/d3_property.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D3-002C** | D3-002C | Property-Based Cross-Space/Fund Isolation & Transfer Conservation Expansion | Property Tests | 22/22 PASS | Clean | Success | `src/tests/d3_cross_space_property.test.ts` | `VERIFIED` | 2026-08-28 |
+| **EVD-D3-003** | D3-003 | PHASE-05 / D3 Financial Invariants Engine Freeze Certification | Freeze Audit | 1,335/1,335 PASS | Clean (0 err) | Success (Build OK) | `InvariantEngine.ts`, `d3_cross_space_property.test.ts` | `VERIFIED & FROZEN` | 2026-08-28 |
 | **EVD-D3-01** | D3 | Financial Invariants Engine (INV-001..INV-015) | Unit & Stress | 35/35 PASS | Clean | Success | `src/tests/d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D4-01** | D4 | Data Contracts, Local Repositories & Sync | Unit & Sync | 21/21 PASS | Clean | Success | `src/tests/d4_sync.test.ts` | `RECONCILIATION REQUIRED` | 2026-08-28 |
 | **EVD-AI-01** | AI-001A | AI Architecture Discovery & Inventory (7 comps, 10 tools) | Audit Report | Draft | Clean | Success | `server.ts`, `src/domain/AI*.ts` | `NOT CONFIRMED` | 2026-08-28 |

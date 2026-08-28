@@ -49,7 +49,7 @@
 | ├── **D3-002A** | D3-002 | DOMAIN | Invariant Execution Harness & Diagnostics | `COMPLETE` | `100%` | AI Studio | D3-001 | 2026-08-28 | 2026-08-28 | `EVD-D3-002A` | D3-002B |
 | ├── **D3-002B** | D3-002 | DOMAIN | Property-Based Invariant Regression Tests | `COMPLETE` | `100%` | AI Studio | D3-002A | 2026-08-28 | 2026-08-28 | `EVD-D3-002B` | D3-002C |
 | └── **D3-002C** | D3-002 | DOMAIN | Property-Based Cross-Space/Fund Isolation & Transfer Conservation Expansion | `COMPLETE` | `100%` | Google AI Studio Agent | D3-002B | 2026-08-28 | 2026-08-28 | `EVD-D3-002C` | D3-003 |
-| **D3-003** | Root | DOMAIN | D3 Freeze Certification & Evidence Indexing | `NOT STARTED` | `0%` | Unassigned | D3-002 | — | — | None | D4-001 |
+| **D3-003** | Root | DOMAIN | D3 Freeze Certification & Evidence Indexing | `COMPLETE` | `100%` | Google AI Studio Agent | D3-002 | 2026-08-28 | 2026-08-28 | `EVD-D3-003` | D4-001 |
 
 ---
 

@@ -11,15 +11,15 @@
 
 ```text
 CURRENT PHASE:        D3 — FINANCIAL INVARIANTS ENGINE
-CURRENT TASK:         D3-002C (Property-Based Cross-Space/Fund Isolation & Transfer Conservation Expansion)
+CURRENT TASK:         D3-003 (D3 Freeze Certification & Evidence Indexing)
 CURRENT OWNER:        Google AI Studio Agent
-OVERALL PROGRESS:     60% (Roadmap Delivery Progress, not financial calculation correctness)
-COMPLETED PHASES:     PHASE-01 (G1/G2), PHASE-02 (S5 Presentation), PHASE-03 (D1 Model), PHASE-04 (D2 Truth)
-ACTIVE PHASE:         PHASE-05 (D3 Invariants) [D3-001 Core Engine Complete, D3-002A/B/C Harness & Property Tests Complete]
+OVERALL PROGRESS:     62% (Roadmap Delivery Progress, not financial calculation correctness)
+COMPLETED PHASES:     PHASE-01 (G1/G2), PHASE-02 (S5 Presentation), PHASE-03 (D1 Model), PHASE-04 (D2 Truth), PHASE-05 (D3 Invariants)
+ACTIVE PHASE:         PHASE-05 (D3 Invariants Engine) [COMPLETE & FROZEN]
 BLOCKED ITEMS:        NONE
-NEXT SCHEDULED TASK:  D3-003
-FROZEN AREAS:         Presentation (S5-001..S5-012, G1, G2), D1 Canonical Model, D2 Financial Truth
-UNCONFIRMED AREAS:    D3 (In Progress), D4, AI-001A, Use Cases, Repositories, Database, Sync, Cloud
+NEXT SCHEDULED TASK:  D4-001
+FROZEN AREAS:         Presentation (S5-001..S5-012, G1, G2), D1 Canonical Model, D2 Financial Truth, D3 Financial Invariants Engine
+UNCONFIRMED AREAS:    D4, AI-001A, Use Cases, Repositories, Database, Sync, Cloud
 LAST VERIFIED AT:     2026-08-28
 ```
 
@@ -31,7 +31,7 @@ LAST VERIFIED AT:     2026-08-28
 
 ```text
 OVERALL PROJECT ROADMAP
-███████████░░░░░░░░░  56%
+████████████░░░░░░░░  62%
 
 PRESENTATION (G1, G2, S5-001 → S5-012)
 ████████████████████ 100% [COMPLETE & FROZEN]
@@ -43,7 +43,7 @@ D2 — FINANCIAL TRUTH & 10 METHODS
 ████████████████████ 100% [COMPLETE & FROZEN]
 
 D3 — FINANCIAL INVARIANTS ENGINE
-████████████████████  90% [IN PROGRESS — D3-001 COMPLETE (INV-001..INV-015)]
+████████████████████ 100% [COMPLETE & FROZEN]
 
 D4 — DATA CONTRACTS & LOCAL SYNC
 ░░░░░░░░░░░░░░░░░░░░   0% [NOT STARTED / RECONCILIATION REQUIRED]
