@@ -58,19 +58,19 @@ Before writing code, changing state, or reporting status, EVERY AI agent MUST re
 When ending your session or completing a task, you MUST format your final handoff as follows:
 
 ```yaml
-LAST_COMPLETED_TASK: "GOV-001"
-LAST_COMPLETED_SUBTASK: "GOV-001"
-CURRENT_STATUS: "GOV-001 SYNCHRONIZED / CLEAR"
+LAST_COMPLETED_TASK: "D4-001"
+LAST_COMPLETED_SUBTASK: "D4-001"
+CURRENT_STATUS: "D4-001 COMPLETE"
 CURRENT_OWNER: "Google AI Studio Agent"
 TEST_RESULT: "1,335 / 1,335 PASS (100%) across 11 test suites"
 REGRESSION_STATUS: "CLEAN (0 failures, 0 skipped)"
 LINT_STATUS: "CLEAN (0 errors)"
 BUILD_STATUS: "SUCCESS (dist/ compiled)"
-FILES_CHANGED: "1 FREEZE-CERTIFICATE file, 5 PROJECT_STATE files"
-EVIDENCE_LOCATION: "/PROJECT_STATE/EVIDENCE_INDEX.md (EVD-GOV-001)"
+FILES_CHANGED: "6 PROJECT_STATE files"
+EVIDENCE_LOCATION: "/PROJECT_STATE/EVIDENCE_INDEX.md (EVD-D4-001)"
 BLOCKERS: "NONE"
 NEXT_PHASE: "PHASE-06 (D4 — REPOSITORIES, DATA CONTRACTS & SYNC)"
-NEXT_TASK: "D4-001 (Data Contracts & Local Repository Audit)"
-NEXT_SUBTASK: "D4-001"
-DO_NOT_MODIFY: "FinancialTruthEngine, CanonicalFinancialModel, InvariantEngine, Presentation Views, D2/D3 Test Suites"
+NEXT_TASK: "D4-002 (Local Storage Adapters & Persistence Behavior Verification)"
+NEXT_SUBTASK: "D4-002"
+DO_NOT_MODIFY: "FinancialTruthEngine, CanonicalFinancialModel, InvariantEngine, Presentation Views, D1/D2/D3 Test Suites"
 ```
