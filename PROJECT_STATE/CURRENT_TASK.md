@@ -9,14 +9,14 @@
 ## 1. ACTIVE TASK METADATA
 
 ```yaml
-ACTIVE_TASK_ID: "D3-002"
-TASK_NAME: "Comprehensive Invariant Execution Harness & Property Tests"
+ACTIVE_TASK_ID: "D3-002B"
+TASK_NAME: "Property-Based Invariant Regression Tests"
 PARENT_PHASE: "PHASE-05 (D3 — FINANCIAL INVARIANTS ENGINE)"
-ACTIVE_OWNER: "AI Studio"
-CURRENT_STATUS: "IN PROGRESS"
+ACTIVE_OWNER: "Google AI Studio Agent"
+CURRENT_STATUS: "COMPLETE"
 STARTED_AT: "2026-08-28"
 LAST_UPDATED_AT: "2026-08-28"
-ROADMAP_PROGRESS: "50%"
+ROADMAP_PROGRESS: "100%"
 ```
 
 ---
@@ -26,7 +26,7 @@ ROADMAP_PROGRESS: "50%"
 | Subtask ID | Subtask Name | Status | Owner | Evidence |
 | :--- | :--- | :---: | :---: | :--- |
 | **D3-002A** | Invariant Execution Harness & Diagnostics | `COMPLETE` | AI Studio | `EVD-D3-002A`, `InvariantExecutionHarness.ts`, `d3_harness.test.ts` (15/15 PASS) |
-| **D3-002B** | Property-Based Invariant Regression Tests | `NOT STARTED` | Unassigned | None |
+| **D3-002B** | Property-Based Invariant Regression Tests | `COMPLETE` | Google AI Studio Agent | `EVD-D3-002B`, `d3_property.test.ts` (62/62 PASS), Full Suite (1313/1313 PASS) |
 
 ---
 
@@ -34,8 +34,7 @@ ROADMAP_PROGRESS: "50%"
 
 ### 🟢 ALLOWED DIRECTORIES & FILES
 - `/PROJECT_STATE/*` (State documentation & evidence files)
-- `/src/domain/InvariantExecutionHarness.ts` (D3 Execution Harness)
-- `/src/tests/d3_harness.test.ts` (D3 Execution Harness Tests)
+- `/src/tests/d3_property.test.ts` (D3 Property-Based Invariant Tests)
 
 ### 🔴 STRICTLY FORBIDDEN AREAS (DO NOT MODIFY)
 - `/src/domain/FinancialTruthEngine.ts` (**FROZEN**)
@@ -51,9 +50,9 @@ ROADMAP_PROGRESS: "50%"
 
 ```yaml
 NEXT_PHASE: "D3 — FINANCIAL INVARIANTS ENGINE"
-NEXT_TASK_ID: "D3-002B"
-NEXT_TASK_NAME: "Property-Based Invariant Regression Tests"
+NEXT_TASK_ID: "D3-002C"
+NEXT_TASK_NAME: "Property-Based Cross-Space/Fund Isolation & Transfer Conservation Expansion"
 ASSIGNED_OWNER: "UNASSIGNED (Ready for next AI Dispatch)"
-PREREQUISITES: "D3-002A Invariant Execution Harness & Diagnostics Complete"
+PREREQUISITES: "D3-002B Property-Based Invariant Regression Tests Complete"
 PREREQUISITE_STATUS: "SATISFIED"
 ```

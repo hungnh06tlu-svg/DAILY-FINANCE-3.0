@@ -23,6 +23,7 @@
 | **EVD-D3-001D** | D3-001D | Lifecycle & Balance Invariants (INV-007..009) Hardening & Taxonomy | Unit & Invariants | 31/31 PASS | Clean | Success | `InvariantEngine.ts`, `d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D3-001E** | D3-001E | Space Isolation & Global Invariants (INV-010..015) Hardening & Taxonomy | Unit & Invariants | 35/35 PASS | Clean | Success | `InvariantEngine.ts`, `d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D3-002A** | D3-002A | Invariant Execution Harness, Property Verification & Diagnostics | Unit & Harness | 15/15 PASS | Clean | Success | `InvariantExecutionHarness.ts`, `d3_harness.test.ts` | `VERIFIED` | 2026-08-28 |
+| **EVD-D3-002B** | D3-002B | Property-Based Invariant Regression Tests (INV-001..INV-015) | Property Tests | 62/62 PASS | Clean | Success | `src/tests/d3_property.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D3-01** | D3 | Financial Invariants Engine (INV-001..INV-015) | Unit & Stress | 35/35 PASS | Clean | Success | `src/tests/d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D4-01** | D4 | Data Contracts, Local Repositories & Sync | Unit & Sync | 21/21 PASS | Clean | Success | `src/tests/d4_sync.test.ts` | `RECONCILIATION REQUIRED` | 2026-08-28 |
 | **EVD-AI-01** | AI-001A | AI Architecture Discovery & Inventory (7 comps, 10 tools) | Audit Report | Draft | Clean | Success | `server.ts`, `src/domain/AI*.ts` | `NOT CONFIRMED` | 2026-08-28 |
@@ -39,6 +40,7 @@ To eliminate confusion across different AI agents quoting different test counts 
 | :--- | :--- | :---: | :---: |
 | `src/tests/domain.test.ts` | Domain Entities, Use Cases & AI Engines | **791** | `PASS` |
 | `src/tests/d2_financial_truth.test.ts` | D2 Financial Truth Calculations & Invariants | **319** | `PASS` |
+| `src/tests/d3_property.test.ts` | D3 Property-Based Invariant Regression Tests | **62** | `PASS` |
 | `src/tests/d2_003_methods_engine.test.ts` | 10 Financial Method Domain Engines | **37** | `PASS` |
 | `src/tests/d3_invariants.test.ts` | D3 Invariants Engine (INV-001..INV-015) | **35** | `PASS` |
 | `src/tests/d4_sync.test.ts` | D4 Data Contracts, Local DB & Sync | **21** | `PASS` |
@@ -46,7 +48,7 @@ To eliminate confusion across different AI agents quoting different test counts 
 | `src/tests/d3_harness.test.ts` | D3 Invariant Execution Harness & Diagnostics | **15** | `PASS` |
 | `src/tests/d2_003_ui_smoke.test.ts` | Presentation Integration Smoke Tests | **10** | `PASS` |
 | `src/tests/g5_benchmark.test.ts` | Algorithm Complexity Benchmarks ($O(n)$) | **6** | `PASS` |
-| **TOTAL VITEST RUN** | **9 Test Files** | **1,251** | **100% PASS** |
+| **TOTAL VITEST RUN** | **10 Test Files** | **1,313** | **100% PASS** |
 
 ### Summary of Previous Numbers in Reports:
 - **"356 tests"**: Refers specifically to the combined D2 Financial Truth + Methods suites (`319` + `37` = `356`).
