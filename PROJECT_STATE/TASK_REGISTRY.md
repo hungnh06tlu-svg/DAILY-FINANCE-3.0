@@ -39,10 +39,10 @@
 
 | Task / Subtask ID | Parent | Phase | Task Name | Status | Progress | Owner | Dependencies | Started | Completed | Evidence Ref | Next Task |
 | :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :--- |
-| **D3-001** | Root | DOMAIN | Invariant Engine Architecture & Rules | `IN PROGRESS` | `20%` | AI Studio | D1, D2 | 2026-08-28 | — | `EVD-D3-001A` | D3-001B |
+| **D3-001** | Root | DOMAIN | Invariant Engine Architecture & Rules | `IN PROGRESS` | `40%` | AI Studio | D1, D2 | 2026-08-28 | — | `EVD-D3-001B` | D3-001C |
 | ├── **D3-001A** | D3-001 | DOMAIN | Invariant Inventory & Schema Mapping | `COMPLETE` | `100%` | AI Studio | D2 | 2026-08-28 | 2026-08-28 | `EVD-D3-001A` | D3-001B |
-| ├── **D3-001B** | D3-001 | DOMAIN | Conservation Invariants (INV-001..003) | `READY` | `0%` | Unassigned | D3-001A | — | — | None | D3-001C |
-| ├── **D3-001C** | D3-001 | DOMAIN | Boundary Invariants (INV-004..006) | `NOT STARTED` | `0%` | Unassigned | D3-001B | — | — | None | D3-001D |
+| ├── **D3-001B** | D3-001 | DOMAIN | Conservation Invariants (INV-001..003) | `COMPLETE` | `100%` | AI Studio | D3-001A | 2026-08-28 | 2026-08-28 | `EVD-D3-001B` | D3-001C |
+| ├── **D3-001C** | D3-001 | DOMAIN | Boundary Invariants (INV-004..006) | `READY` | `0%` | Unassigned | D3-001B | — | — | None | D3-001D |
 | ├── **D3-001D** | D3-001 | DOMAIN | Lifecycle Invariants (INV-007..009) | `NOT STARTED` | `0%` | Unassigned | D3-001C | — | — | None | D3-001E |
 | └── **D3-001E** | D3-001 | DOMAIN | Space Isolation Invariants (INV-010..015) | `NOT STARTED` | `0%` | Unassigned | D3-001D | — | — | None | D3-002 |
 | **D3-002** | Root | DOMAIN | Invariant Test Runner & Property Tests | `NOT STARTED` | `0%` | Unassigned | D3-001 | — | — | Pending Audit | D3-003 |

@@ -22,14 +22,17 @@ export class InvariantViolationError extends Error {
 
 export class FinancialInvariantEngine {
   // ============================================================================
-  // INCOME INVARIANTS (INV-001, INV-002)
+  // GROUP A: CONSERVATION INVARIANTS (INV-001, INV-002, INV-003)
+  // [Taxonomy: Conservation Laws - Preservation of System Value & Positivity]
   // ============================================================================
 
   /**
-   * INV-001: Income amount must be positive (> 0).
+   * INV-001: Income Positivity Law (Group A - Conservation)
+   * Income amount must be a finite, strictly positive number (> 0).
+   * Rejects NaN, +Infinity, -Infinity, 0, or negative numbers without implicit rounding.
    */
   public static assertIncomePositive(amount: number): void {
-    if (typeof amount !== 'number' || isNaN(amount) || amount <= 0) {
+    if (typeof amount !== 'number' || isNaN(amount) || !Number.isFinite(amount) || amount <= 0) {
       throw new InvariantViolationError(
         'INV-001',
         `Income amount must be strictly positive (> 0), received: ${amount}`,
@@ -39,7 +42,9 @@ export class FinancialInvariantEngine {
   }
 
   /**
-   * INV-002: Total income must strictly equal the sum of all confirmed, non-deleted income transactions.
+   * INV-002: Income Conservation Law (Group A - Conservation)
+   * Total income within a financial space must strictly equal the sum of all confirmed,
+   * non-deleted income transactions. Draft, pending, soft-deleted, and archived items are excluded.
    */
   public static assertIncomeBalance(transactions: Transaction[], spaceId: string, expectedTotal?: number): void {
     const spaceIncomes = transactions.filter(t => 
@@ -59,15 +64,12 @@ export class FinancialInvariantEngine {
     }
   }
 
-  // ============================================================================
-  // EXPENSE INVARIANTS (INV-003, INV-004)
-  // ============================================================================
-
   /**
-   * INV-003: Expense amount cannot exceed available balance unless overdraft is permitted.
+   * INV-003: Expense Conservation & Balance Solvency Law (Group A - Conservation)
+   * Expense amount must be strictly positive and cannot exceed available balance unless overdraft is permitted.
    */
   public static assertExpenseWithinBalance(expenseAmount: number, accountBalance: number): void {
-    if (typeof expenseAmount !== 'number' || expenseAmount <= 0) {
+    if (typeof expenseAmount !== 'number' || isNaN(expenseAmount) || !Number.isFinite(expenseAmount) || expenseAmount <= 0) {
       throw new InvariantViolationError(
         'INV-003',
         `Expense amount must be strictly positive, received: ${expenseAmount}`,
@@ -83,6 +85,11 @@ export class FinancialInvariantEngine {
       );
     }
   }
+
+  // ============================================================================
+  // GROUP B: BOUNDARY INVARIANTS (INV-004, INV-005, INV-006)
+  // [Taxonomy: Boundary Laws - Budget Allocation, Transfer Distinctness & Balance]
+  // ============================================================================
 
   /**
    * INV-004: Period expenses cannot exceed budget limit or defined allocation cap.

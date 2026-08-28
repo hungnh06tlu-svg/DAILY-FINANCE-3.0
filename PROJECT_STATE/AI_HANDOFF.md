@@ -59,18 +59,18 @@ When ending your session or completing a task, you MUST format your final handof
 
 ```yaml
 LAST_COMPLETED_TASK: "D3-001"
-LAST_COMPLETED_SUBTASK: "D3-001A"
-CURRENT_STATUS: "COMPLETE (D3-001A) / IN PROGRESS (D3-001)"
+LAST_COMPLETED_SUBTASK: "D3-001B"
+CURRENT_STATUS: "COMPLETE (D3-001B) / IN PROGRESS (D3-001)"
 CURRENT_OWNER: "AI Studio"
 TEST_RESULT: "1,227 / 1,227 PASS (100%)"
 REGRESSION_STATUS: "CLEAN (0 failures, 0 skipped)"
 LINT_STATUS: "CLEAN (0 errors)"
 BUILD_STATUS: "SUCCESS (dist/ created)"
-FILES_CHANGED: "0 source files, 0 test files, 6 PROJECT_STATE files"
-EVIDENCE_LOCATION: "/PROJECT_STATE/EVIDENCE_INDEX.md (EVD-D3-001A)"
+FILES_CHANGED: "1 source file (/src/domain/InvariantEngine.ts), 0 test files, 6 PROJECT_STATE files"
+EVIDENCE_LOCATION: "/PROJECT_STATE/EVIDENCE_INDEX.md (EVD-D3-001B)"
 BLOCKERS: "NONE"
 NEXT_PHASE: "PHASE-05 (D3 — FINANCIAL INVARIANTS ENGINE)"
 NEXT_TASK: "D3-001 (Core Invariant Engine Structure & Execution Harness)"
-NEXT_SUBTASK: "D3-001B (Conservation Invariants INV-001..003)"
+NEXT_SUBTASK: "D3-001C (Boundary Invariants INV-004..006)"
 DO_NOT_MODIFY: "FinancialTruthEngine, CanonicalFinancialModel, Presentation Views, Test Suites"
 ```
