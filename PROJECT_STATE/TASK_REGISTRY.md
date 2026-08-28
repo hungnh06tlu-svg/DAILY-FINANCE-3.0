@@ -1,84 +1,85 @@
-# 📋 TASK REGISTRY — GLOBAL WORKFLOW & ROADMAP
+# 📋 TASK REGISTRY — GLOBAL WORKFLOW & TASK PROGRESS
 
 > **PROJECT:** DAILY FINANCE 3.0  
-> **SCOPE:** Full Lifecycle Task Tracking & Multi-Agent Responsibility Matrix  
+> **SCOPE:** Full Hierarchical Task Breakdown, Granular Subtasks, Ownership & Progress Tracking  
 > **LAST VERIFIED:** 2026-08-28  
 
 ---
 
-## 1. PRESENTATION & NAVIGATION ROADMAP (G1, G2 & SPRINT 5)
+## 1. PRESENTATION & NAVIGATION SHELL (PHASE-01 & PHASE-02)
 
-| Task ID | Task Description | Status | Owner | Evidence Ref | Tests | Files Impacted | Dependencies | Last Verified |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **G1** | Navigation Restructuring (5 mobile, 7 tablet items) | `COMPLETE & FROZEN` | AI Studio | EVD-G1-01 | UI Smoke | `App.tsx`, `NavigationShell.tsx` | None | 2026-08-28 |
-| **G2** | UX Hierarchy (Methods nested under Jars) | `COMPLETE & FROZEN` | AI Studio | EVD-G2-01 | UI Smoke | `BudgetingMethodsView.tsx` | G1 | 2026-08-28 |
-| **S5-001** | Wallets & Funds Overview UI | `COMPLETE & FROZEN` | AI Studio | EVD-S5-001 | Smoke (10/10) | `WalletsView.tsx`, `FundsView.tsx` | G1, G2 | 2026-08-28 |
-| **S5-002** | Transaction History & Filter UI | `COMPLETE & FROZEN` | AI Studio | EVD-S5-002 | Smoke (10/10) | `TransactionsView.tsx` | D1, D2 | 2026-08-28 |
-| **S5-003** | Assets, Debts & Net Worth UI | `COMPLETE & FROZEN` | AI Studio | EVD-S5-003 | Smoke (10/10) | `AssetsDebtsView.tsx` | D1, D2 | 2026-08-28 |
-| **S5-004** | Jars & Financial Methods Hub UI | `COMPLETE & FROZEN` | AI Studio | EVD-S5-004 | Smoke (10/10) | `SixJarsView.tsx`, `MethodsDashboard.tsx` | G2, D2-003 | 2026-08-28 |
-| **S5-005** | Budgeting & Spending Limits UI | `COMPLETE & FROZEN` | AI Studio | EVD-S5-005 | Smoke (10/10) | `BudgetsView.tsx` | D2-003 | 2026-08-28 |
-| **S5-006** | Savings Goals & Sinking Funds UI | `COMPLETE & FROZEN` | AI Studio | EVD-S5-006 | Smoke (10/10) | `SavingsGoalsView.tsx` | D2-003 | 2026-08-28 |
-| **S5-007** | Investment Portfolio & DCA UI | `COMPLETE & FROZEN` | AI Studio | EVD-S5-007 | Smoke (10/10) | `InvestmentsView.tsx` | D2-003 | 2026-08-28 |
-| **S5-008** | Smart Voice Assistant UI & Audio Wave | `COMPLETE & FROZEN` | AI Studio | EVD-S5-008 | Smoke (10/10) | `SmartVoiceAssistant.tsx` | D1, D2 | 2026-08-28 |
-| **S5-009** | AI Coach & Financial Insights UI | `COMPLETE & FROZEN` | AI Studio | EVD-S5-009 | Smoke (10/10) | `AiCoachInsights.tsx` | D2, D2-003 | 2026-08-28 |
-| **S5-010** | Smart AI Interactive Chat UI | `COMPLETE & FROZEN` | AI Studio | EVD-S5-010 | Smoke (10/10) | `SmartAIChat.tsx` | D2 | 2026-08-28 |
-| **S5-011** | Financial Reports & Export UI | `COMPLETE & FROZEN` | AI Studio | EVD-S5-011 | Smoke (10/10) | `ReportsView.tsx` | D2, D2-003 | 2026-08-28 |
-| **S5-012** | Automation Center & Notifications UI | `COMPLETE & FROZEN` | AI Studio | EVD-S5-012 | Smoke (10/10) | `AutomationCenterView.tsx` | D1 | 2026-08-28 |
+| Task / Subtask ID | Parent | Phase | Task Name | Status | Progress | Owner | Dependencies | Started | Completed | Evidence Ref | Next Task |
+| :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :--- |
+| **G1** | Root | PRESENTATION | Navigation Shell Restructuring | `COMPLETE` | `100%` | AI Studio | None | 2026-08-27 | 2026-08-27 | `EVD-G1-01` | G2 |
+| ├── **G1-001** | G1 | PRESENTATION | Mobile 5-item Bottom Navigation | `COMPLETE` | `100%` | AI Studio | None | 2026-08-27 | 2026-08-27 | `EVD-G1-01` | G1-002 |
+| └── **G1-002** | G1 | PRESENTATION | Tablet/Desktop 7-item Sidebar | `COMPLETE` | `100%` | AI Studio | G1-001 | 2026-08-27 | 2026-08-27 | `EVD-G1-01` | G2 |
+| **G2** | Root | PRESENTATION | 10 Methods UX Integration under Jars | `COMPLETE` | `100%` | AI Studio | G1 | 2026-08-27 | 2026-08-27 | `EVD-G2-01` | S5-001 |
+| ├── **G2-001** | G2 | PRESENTATION | Jars Hub Methods Placement | `COMPLETE` | `100%` | AI Studio | G1 | 2026-08-27 | 2026-08-27 | `EVD-G2-01` | G2-002 |
+| └── **G2-002** | G2 | PRESENTATION | Quick Switcher & Breadcrumb Navigation | `COMPLETE` | `100%` | AI Studio | G2-001 | 2026-08-27 | 2026-08-27 | `EVD-G2-01` | S5-001 |
+| **S5-001 → S5-012** | Root | PRESENTATION | 12 MVI Presentation Modules | `COMPLETE` | `100%` | AI Studio | G1, G2 | 2026-08-27 | 2026-08-28 | `FREEZE-CERT` | D1 |
 
 ---
 
-## 2. DOMAIN & FINANCIAL TRUTH ROADMAP (D1 & D2)
+## 2. DOMAIN & FINANCIAL TRUTH (PHASE-03 & PHASE-04)
 
-| Task ID | Task Description | Status | Owner | Evidence Ref | Tests | Files Impacted | Dependencies | Last Verified |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **D1** | Canonical Financial Model Core | `COMPLETE & FROZEN` | AI Studio | EVD-D1-01 | 17/17 PASS | `CanonicalFinancialModel.ts` | None | 2026-08-28 |
-| **D2-001** | Transaction Lifecycle & State Transitions | `COMPLETE & FROZEN` | AI Studio | EVD-D2-01 | G1-G6 PASS | `TransactionLifecycleGuard.ts` | D1 | 2026-08-28 |
-| **D2-002** | Financial Truth Engine Pipeline & Calculations | `COMPLETE & FROZEN` | AI Studio | EVD-D2-02 | 319/319 PASS | `FinancialTruthEngine.ts` | D1, D2-001 | 2026-08-28 |
-| **D2-003** | 10 Financial Method Domain Engines | `STABLE` | AI Studio | EVD-D2-03 | 37/37 PASS | `src/domain/methods/*.ts` | D1, D2-002 | 2026-08-28 |
-| **D2-VERIFY** | D2 Final 20-Point Invariant Verification | `COMPLETE & FROZEN` | AI Studio | EVD-D2-VER | 20/20 PASS | `d2_runner.ts` | D2-001..003 | 2026-08-28 |
-
----
-
-## 3. INVARIANTS & INTEGRITY (D3)
-
-| Task ID | Task Description | Status | Owner | Evidence Ref | Tests | Files Impacted | Dependencies | Last Verified |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **D3-001** | Invariant Engine Core (INV-001..INV-005) | `NOT STARTED` | Unassigned | Pending Audit | 26 tests exist | `src/domain/InvariantEngine.ts` | D1, D2 | 2026-08-28 |
-| **D3-002** | Invariant Engine Rules (INV-006..INV-010) | `NOT STARTED` | Unassigned | Pending Audit | 26 tests exist | `src/domain/InvariantEngine.ts` | D3-001 | 2026-08-28 |
-| **D3-003** | Invariant Engine Bounds (INV-011..INV-015) | `NOT STARTED` | Unassigned | Pending Audit | 26 tests exist | `src/domain/InvariantEngine.ts` | D3-002 | 2026-08-28 |
+| Task / Subtask ID | Parent | Phase | Task Name | Status | Progress | Owner | Dependencies | Started | Completed | Evidence Ref | Next Task |
+| :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :--- |
+| **D1** | Root | DOMAIN | Canonical Financial Model Core | `COMPLETE` | `100%` | AI Studio | None | 2026-08-27 | 2026-08-27 | `EVD-D1-01` | D2-001 |
+| ├── **D1-001** | D1 | DOMAIN | Standard Domain Entities & Types | `COMPLETE` | `100%` | AI Studio | None | 2026-08-27 | 2026-08-27 | `EVD-D1-01` | D1-002 |
+| ├── **D1-002** | D1 | DOMAIN | Multi-Space & Multi-Fund Guards | `COMPLETE` | `100%` | AI Studio | D1-001 | 2026-08-27 | 2026-08-27 | `EVD-D1-01` | D1-003 |
+| └── **D1-003** | D1 | DOMAIN | Raw Precision & MoneyUtils | `COMPLETE` | `100%` | AI Studio | D1-002 | 2026-08-27 | 2026-08-27 | `EVD-D1-01` | D2-001 |
+| **D2-001** | Root | DOMAIN | Transaction Lifecycle Engine | `COMPLETE` | `100%` | AI Studio | D1 | 2026-08-27 | 2026-08-28 | `EVD-D2-01` | D2-002 |
+| **D2-002** | Root | DOMAIN | Financial Truth Calculation Pipeline | `COMPLETE` | `100%` | AI Studio | D1, D2-001 | 2026-08-27 | 2026-08-28 | `EVD-D2-02` | D2-003 |
+| **D2-003** | Root | DOMAIN | 10 Financial Method Engines | `COMPLETE` | `100%` | AI Studio | D1, D2-002 | 2026-08-27 | 2026-08-28 | `EVD-D2-03` | D2-VER |
+| **D2-VER** | Root | DOMAIN | D2 Invariant Audit (D2-TEST-001..020) | `COMPLETE` | `100%` | AI Studio | D2-001..003 | 2026-08-28 | 2026-08-28 | `EVD-D2-VER` | D3-001 |
 
 ---
 
-## 4. PERSISTENCE & DATA CONTRACTS (D4)
+## 3. FINANCIAL INVARIANTS ENGINE (PHASE-05: D3)
 
-| Task ID | Task Description | Status | Owner | Evidence Ref | Tests | Files Impacted | Dependencies | Last Verified |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **D4-001** | Repository Data Contracts & Entities | `NOT STARTED` | Unassigned | Pending Audit | 21 tests exist | `src/repositories/contracts.ts` | D1 | 2026-08-28 |
-| **D4-002** | Local Storage Adapter & Soft-Delete | `NOT STARTED` | Unassigned | Pending Audit | 21 tests exist | `src/repositories/local/*.ts` | D4-001 | 2026-08-28 |
-| **D4-003** | Delta Sync Engine & Conflict Resolver | `NOT STARTED` | Unassigned | Pending Audit | 21 tests exist | `src/domain/SyncEngine.ts` | D4-002 | 2026-08-28 |
-
----
-
-## 5. AI ARCHITECTURE & INTEGRATION (AI-001)
-
-| Task ID | Task Description | Status | Owner | Evidence Ref | Tests | Files Impacted | Dependencies | Last Verified |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **AI-001A** | AI Architecture Discovery & Inventory | `NOT CONFIRMED` | AI Studio | EVD-AI-01 | Audit Draft | `server.ts`, `src/domain/AI*.ts` | D2 | 2026-08-28 |
-| **AI-001B** | AI Tools Standardization & Schema Contracts | `NOT STARTED` | Unassigned | None | None | `src/domain/ai/*.ts` | AI-001A | — |
-| **AI-001C** | Voice Assistant Hardening & Space Guard | `NOT STARTED` | Unassigned | None | None | `VoiceAssistantBuilder.ts` | AI-001B, D1 | — |
-| **AI-001D** | Server Gemini Proxy Security & Validation | `NOT STARTED` | Unassigned | None | None | `server.ts` | AI-001B | — |
+| Task / Subtask ID | Parent | Phase | Task Name | Status | Progress | Owner | Dependencies | Started | Completed | Evidence Ref | Next Task |
+| :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :--- |
+| **D3-001** | Root | DOMAIN | Invariant Engine Architecture & Rules | `NOT STARTED` | `0%` | Unassigned | D1, D2 | — | — | Pending Audit | D3-002 |
+| ├── **D3-001A** | D3-001 | DOMAIN | Invariant Inventory & Schema Mapping | `NOT STARTED` | `0%` | Unassigned | D2 | — | — | None | D3-001B |
+| ├── **D3-001B** | D3-001 | DOMAIN | Conservation Invariants (INV-001..003) | `NOT STARTED` | `0%` | Unassigned | D3-001A | — | — | None | D3-001C |
+| ├── **D3-001C** | D3-001 | DOMAIN | Boundary Invariants (INV-004..006) | `NOT STARTED` | `0%` | Unassigned | D3-001B | — | — | None | D3-001D |
+| ├── **D3-001D** | D3-001 | DOMAIN | Lifecycle Invariants (INV-007..009) | `NOT STARTED` | `0%` | Unassigned | D3-001C | — | — | None | D3-001E |
+| └── **D3-001E** | D3-001 | DOMAIN | Space Isolation Invariants (INV-010..015) | `NOT STARTED` | `0%` | Unassigned | D3-001D | — | — | None | D3-002 |
+| **D3-002** | Root | DOMAIN | Invariant Test Runner & Property Tests | `NOT STARTED` | `0%` | Unassigned | D3-001 | — | — | Pending Audit | D3-003 |
+| **D3-003** | Root | DOMAIN | D3 Freeze Certification & Evidence Indexing | `NOT STARTED` | `0%` | Unassigned | D3-002 | — | — | None | D4-001 |
 
 ---
 
-## 6. APPLICATION & INFRASTRUCTURE SUBSYSTEMS
+## 4. DATA CONTRACTS & LOCAL SYNC (PHASE-06: D4)
 
-| Subsystem | Scope Description | Status | Owner | Dependencies | Notes |
-| :--- | :--- | :---: | :---: | :---: | :--- |
-| **USE CASE** | 31 Clean Architecture Use Cases | `NOT CONFIRMED` | Unassigned | D1, D2 | 791 passing tests exist; requires formal state confirmation. |
-| **REPOSITORY** | Domain Repository Implementations | `NOT STARTED / NOT CONFIRMED` | Unassigned | D4-001 | Offline local implementation present in code. |
-| **DATABASE** | Room / SQLite / Local Storage Engine | `NOT STARTED / NOT CONFIRMED` | Unassigned | D4-002 | Needs cross-platform persistence audit. |
-| **SYNC / BACKUP** | Delta-Sync, Outbox, Cloud Backup | `NOT STARTED / NOT CONFIRMED` | Unassigned | D4-003 | SyncEngine & ConflictResolver present. |
-| **CLOUD** | Cloud Ingress, Firebase Auth/Firestore | `NOT STARTED / NOT CONFIRMED` | Unassigned | SYNC | Deferred until local sync certified. |
-| **SECURITY** | Role Isolation, Space Guard, Key Safety | `AUDIT REQUIRED` | Unassigned | D1, AI-001 | Server Gemini key safe; space check needed on AI proxy. |
-| **QA / TEST** | Test Runner, Complexity Benchmarks | `COMPLETE` | AI Studio | All | 1,227/1,227 tests passing, O(n) benchmarks verified. |
-| **RELEASE** | Production Bundle & Distribution | `IN PROGRESS` | AI Studio | All | Build & Lint passing. Production deploy ready. |
+| Task / Subtask ID | Parent | Phase | Task Name | Status | Progress | Owner | Dependencies | Started | Completed | Evidence Ref | Next Task |
+| :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :--- |
+| **D4-001** | Root | DOMAIN | Repository Data Contracts & Interfaces | `NOT STARTED` | `0%` | Unassigned | D1 | — | — | Pending Audit | D4-002 |
+| ├── **D4-001A** | D4-001 | DOMAIN | Transaction & Wallet Repository Contracts | `NOT STARTED` | `0%` | Unassigned | D1 | — | — | None | D4-001B |
+| └── **D4-001B** | D4-001 | DOMAIN | Method & Budget Repository Contracts | `NOT STARTED` | `0%` | Unassigned | D4-001A | — | — | None | D4-002 |
+| **D4-002** | Root | DOMAIN | Local Storage Adapter & Soft-Delete Invariant | `NOT STARTED` | `0%` | Unassigned | D4-001 | — | — | Pending Audit | D4-003 |
+| **D4-003** | Root | DOMAIN | Delta Sync Engine & Conflict Resolution | `NOT STARTED` | `0%` | Unassigned | D4-002 | — | — | Pending Audit | AI-001A |
+
+---
+
+## 5. AI ENGINES & TOOLS (PHASE-07: AI)
+
+| Task / Subtask ID | Parent | Phase | Task Name | Status | Progress | Owner | Dependencies | Started | Completed | Evidence Ref | Next Task |
+| :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :--- |
+| **AI-001A** | Root | AI | AI Component & Tool Architecture Discovery | `NOT CONFIRMED` | `50%` | Unassigned | D2 | 2026-08-28 | — | Audit Draft | AI-001B |
+| **AI-001B** | Root | AI | AI Tool Standard Contracts & Schema Hardening | `NOT STARTED` | `0%` | Unassigned | AI-001A | — | — | None | AI-001C |
+| **AI-001C** | Root | AI | Voice Assistant Two-Phase Confirmation Guard | `NOT STARTED` | `0%` | Unassigned | AI-001B | — | — | None | AI-001D |
+| **AI-001D** | Root | AI | Server-Side Gemini API Proxy Hardening | `NOT STARTED` | `0%` | Unassigned | AI-001B | — | — | None | UC-001 |
+
+---
+
+## 6. APPLICATION, INFRASTRUCTURE & QA ROADMAP
+
+| Phase ID | Subsystem | Scope Description | Status | Progress | Owner | Dependencies | Next Task |
+| :--- | :--- | :--- | :---: | :---: | :---: | :--- | :--- |
+| **PHASE-08** | **USE CASE** | 31 Clean Architecture Application Use Cases | `NOT CONFIRMED` | `50%` | Unassigned | D1, D2 | `UC-001` |
+| **PHASE-09** | **REPOSITORY** | Domain Repository Implementations | `NOT STARTED` | `0%` | Unassigned | D4-001 | `REPO-001` |
+| **PHASE-10** | **DATABASE** | Local Persistence / Room SQLite Adapter | `NOT STARTED` | `0%` | Unassigned | PHASE-09 | `DB-001` |
+| **PHASE-11** | **SYNC** | Delta-Sync, Outbox Queue & Cloud Backup | `NOT STARTED` | `0%` | Unassigned | PHASE-10 | `SYNC-001` |
+| **PHASE-12** | **SECURITY** | Role Isolation, Space Guard & Cloud Storage | `NOT STARTED` | `0%` | Unassigned | PHASE-11 | `SEC-001` |
+| **PHASE-13** | **QA / RELEASE** | Vitest Regression (1,227 tests), Build & Dist | `IN PROGRESS` | `85%` | AI Studio | All | Production Ready |

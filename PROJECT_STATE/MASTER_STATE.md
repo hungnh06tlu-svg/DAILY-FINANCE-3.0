@@ -1,26 +1,89 @@
-# 📊 MASTER STATE — CURRENT PROJECT DASHBOARD
+# 📊 MASTER STATE — CURRENT PROJECT DASHBOARD v2
 
 > **PROJECT:** DAILY FINANCE 3.0  
-> **SCOPE:** Global Status Dashboard, Progress Tracking & Cross-AI Alignment  
+> **SCOPE:** Global Multi-AI Status Dashboard, Phase Progress & Execution Alignment  
 > **LAST VERIFIED:** 2026-08-28  
 > **GOVERNING RULE:** No status promotion to `COMPLETE` or `FROZEN` without verified, reproducible evidence recorded in `EVIDENCE_INDEX.md`.
 
 ---
 
-## 1. PROJECT DASHBOARD SUMMARY TABLE
+## 1. REAL-TIME AI EXECUTION STATUS
 
-| Area / Subsystem | Current Status | Primary Evidence Reference | Last Verified | Notes / Constraints |
+```text
+CURRENT PHASE:        D3 — FINANCIAL INVARIANTS ENGINE
+CURRENT TASK:         D3-001 (Core Invariant Engine Structure & Execution Harness)
+CURRENT SUBTASK:      D3-001A (Invariant Inventory & Schema Mapping)
+CURRENT OWNER:        UNASSIGNED (Awaiting Multi-AI Task Assignment)
+OVERALL PROGRESS:     46% (Roadmap Delivery Progress, not financial calculation correctness)
+COMPLETED PHASES:     PHASE-01 (G1/G2), PHASE-02 (S5 Presentation), PHASE-03 (D1 Model), PHASE-04 (D2 Truth)
+ACTIVE PHASE:         PHASE-05 (D3 Invariants)
+BLOCKED ITEMS:        NONE
+NEXT SCHEDULED TASK:  D3-001A
+FROZEN AREAS:         Presentation (S5-001..S5-012, G1, G2), D1 Canonical Model, D2 Financial Truth
+UNCONFIRMED AREAS:    D3, D4, AI-001A, Use Cases, Repositories, Database, Sync, Cloud
+LAST VERIFIED AT:     2026-08-28
+```
+
+---
+
+## 2. VISUAL ROADMAP DASHBOARD
+
+*(Note: Percentage bars represent architectural roadmap progress, not financial calculation correctness.)*
+
+```text
+OVERALL PROJECT ROADMAP
+██████████░░░░░░░░░░  46%
+
+PRESENTATION (G1, G2, S5-001 → S5-012)
+████████████████████ 100% [COMPLETE & FROZEN]
+
+D1 — CANONICAL FINANCIAL MODEL
+████████████████████ 100% [COMPLETE & FROZEN]
+
+D2 — FINANCIAL TRUTH & 10 METHODS
+████████████████████ 100% [COMPLETE & FROZEN]
+
+D3 — FINANCIAL INVARIANTS ENGINE
+░░░░░░░░░░░░░░░░░░░░   0% [NOT STARTED / RECONCILIATION REQUIRED]
+
+D4 — DATA CONTRACTS & LOCAL SYNC
+░░░░░░░░░░░░░░░░░░░░   0% [NOT STARTED / RECONCILIATION REQUIRED]
+
+AI — AI ENGINES & TOOLS STANDARDIZATION
+██░░░░░░░░░░░░░░░░░░  10% [NOT CONFIRMED]
+
+USE CASES (31 CLEAN ARCHITECTURE USE CASES)
+██████████░░░░░░░░░░  50% [NOT CONFIRMED / RECONCILIATION REQUIRED]
+
+REPOSITORY & OFFLINE-FIRST DATABASE
+░░░░░░░░░░░░░░░░░░░░   0% [NOT STARTED / NOT CONFIRMED]
+
+SYNC & BACKUP ENGINE
+░░░░░░░░░░░░░░░░░░░░   0% [NOT STARTED / NOT CONFIRMED]
+
+CLOUD STORAGE & GATEWAYS
+░░░░░░░░░░░░░░░░░░░░   0% [NOT STARTED / NOT CONFIRMED]
+
+QA & REGRESSION VERIFICATION
+█████████████████░░░  85% [IN PROGRESS / 1,227 TESTS PASS]
+```
+
+---
+
+## 3. COMPREHENSIVE AREA STATUS TABLE
+
+| Area / Subsystem | Current Status | Primary Evidence Reference | Last Verified | Constraints & Governing Rules |
 | :--- | :---: | :--- | :---: | :--- |
-| **G1 Navigation Shell** | `COMPLETE & FROZEN` | `App.tsx`, `NavigationShell.tsx` | 2026-08-28 | 5-item mobile nav, 7-item tablet sidebar. 10 methods removed from top-level. |
+| **G1 Navigation Shell** | `COMPLETE & FROZEN` | `App.tsx`, `NavigationShell.tsx` | 2026-08-28 | 5 bottom items (mobile), 7 sidebar items (tablet). 10 methods removed from top nav. |
 | **G2 UX Hierarchy** | `COMPLETE & FROZEN` | `BudgetingMethodsView.tsx`, `MethodsDashboard.tsx` | 2026-08-28 | 10 methods nested under JARS view with quick-switch and breadcrumbs. |
-| **Presentation (S5-001 → S5-012)** | `COMPLETE & FROZEN` | `FREEZE-CERTIFICATE.md`, `d2_003_ui_smoke.test.ts` | 2026-08-28 | All 12 presentation modules audited and stable. |
-| **D1 Canonical Financial Model** | `COMPLETE & FROZEN` | `src/tests/d1_financial_model.test.ts` (17/17 PASS) | 2026-08-28 | Types, MoneyUtils, SpaceIsolationGuard, TransactionLifecycleGuard verified. |
+| **Presentation (S5-001 → S5-012)** | `COMPLETE & FROZEN` | `FREEZE-CERTIFICATE.md`, `d2_003_ui_smoke.test.ts` | 2026-08-28 | All 12 presentation modules audited, passing and frozen. |
+| **D1 Canonical Financial Model** | `COMPLETE & FROZEN` | `src/tests/d1_financial_model.test.ts` (17/17 PASS) | 2026-08-28 | Immutable types, MoneyUtils, SpaceGuard, LifecycleGuard verified. |
 | **D2-001 Lifecycle Engine** | `COMPLETE & FROZEN` | `src/tests/d2_runner.ts` (G1-G6 passes) | 2026-08-28 | Transaction lifecycle states and transitions certified. |
-| **D2-002 Transaction Processing Pipeline** | `COMPLETE & FROZEN` | `src/tests/d2_runner.ts` (G4 & G5 suites) | 2026-08-28 | Balance calculations, normalization, idempotent migration verified. |
+| **D2-002 Transaction Pipeline** | `COMPLETE & FROZEN` | `src/tests/d2_runner.ts` (G4 & G5 suites) | 2026-08-28 | Balance calculations, normalization, idempotent migration verified. |
 | **D2-003 Financial Methods Engines** | `STABLE` | `src/tests/d2_003_methods_engine.test.ts` (37/37 PASS) | 2026-08-28 | 10 financial method engines operational and verified. |
-| **D2 Final Verification (D2-TEST-001..020)** | `COMPLETE & FROZEN` | `d2_runner.ts`, `d2_financial_truth.test.ts` (20/20 PASS) | 2026-08-28 | Full 20-point invariant and edge-case matrix verified. |
-| **D3 Financial Invariants Engine** | `NOT STARTED` | `RECONCILIATION REQUIRED` | 2026-08-28 | *Conflict Note*: Test suite exists (26/26 in `d3_invariants.test.ts`), but formal baseline mandates `NOT STARTED` pending new cycle audit. |
-| **D4 Data Contracts & Local Sync** | `NOT STARTED` | `RECONCILIATION REQUIRED` | 2026-08-28 | *Conflict Note*: Test suite exists (21/21 in `d4_sync.test.ts`), but formal baseline mandates `NOT STARTED` pending new cycle audit. |
+| **D2 Final Verification (D2-TEST-001..020)** | `COMPLETE & FROZEN` | `d2_runner.ts`, `D2_FROZEN_VERIFICATION.md` | 2026-08-28 | Full 20-point invariant and edge-case matrix verified (20/20 PASS). |
+| **D3 Financial Invariants Engine** | `NOT STARTED` | `RECONCILIATION REQUIRED` | 2026-08-28 | Test file exists (26 tests in `d3_invariants.test.ts`), but status is baseline `NOT STARTED`. |
+| **D4 Data Contracts & Local Sync** | `NOT STARTED` | `RECONCILIATION REQUIRED` | 2026-08-28 | Test file exists (21 tests in `d4_sync.test.ts`), but status is baseline `NOT STARTED`. |
 | **AI-001A AI Architecture Discovery** | `NOT CONFIRMED` | Audit Report Draft | 2026-08-28 | 7 AI components & 10 AI tools cataloged; pending formal canonical verification. |
 | **AI-001B AI Tools Standardization** | `NOT STARTED` | None | — | Scheduled following AI-001A confirmation. |
 | **Use Case Layer (31 Use Cases)** | `NOT CONFIRMED` | `src/tests/domain.test.ts` (791/791 PASS) | 2026-08-28 | 791 passing tests in repository; requires dedicated project-level reconciliation. |
@@ -32,29 +95,14 @@
 
 ---
 
-## 2. STATUS HIERARCHY & PROMOTION RULES
+## 4. STATUS HIERARCHY & GATEWAY CRITERIA
 
 ```text
 [NOT STARTED]  ──►  [IN PROGRESS]  ──►  [AUDIT REQUIRED]  ──►  [COMPLETE]  ──►  [FROZEN]
 ```
 
-- **NOT STARTED**: Task is planned in roadmap; no active work or unverified state.
-- **IN PROGRESS**: Currently assigned and actively being worked on by a designated AI owner.
-- **AUDIT REQUIRED**: Code/tests authored; awaiting strict invariant and regression verification.
-- **COMPLETE**: Verified with reproducible automated tests, zero lint errors, and evidence in `EVIDENCE_INDEX.md`.
-- **FROZEN**: Architecturally sealed. No modifications permitted without explicit unfreeze order.
-
----
-
-## 3. ACTIVE CONFLICTS & RECONCILIATION TRACKER
-
-1. **D3 & D4 Baseline Conflict**:
-   - *Conflict*: `FREEZE-CERTIFICATE.md` previously claimed D3 and D4 were frozen based on test files `d3_invariants.test.ts` (26 tests) and `d4_sync.test.ts` (21 tests). However, baseline multi-AI instructions set D3 and D4 as `NOT STARTED`.
-   - *Resolution*: Formally marked as `NOT STARTED (RECONCILIATION REQUIRED)`. Existing test files are preserved as historical evidence, but no AI may treat D3/D4 as certified complete until a dedicated verification cycle is executed.
-2. **AI-001A Discovery Report Claim**:
-   - *Conflict*: AI discovery audit identified 7 components and 10 tools, but is not yet validated against a formal specification checklist.
-   - *Resolution*: Marked as `NOT CONFIRMED` in Master State.
-3. **Total Test Count Discrepancy Reconciliation**:
-   - `356 tests` = D2 Financial Truth + Methods suites (`319` + `37`).
-   - `791 tests` = Domain & UseCase suite in `domain.test.ts`.
-   - `1,227 tests` = Full Vitest suite across all 8 test files (`791` + `319` + `37` + `26` + `21` + `10` + `17` + `6`).
+1. **NOT STARTED**: Task is scheduled; no execution commenced.
+2. **IN PROGRESS**: Active AI owner assigned and working on specific subtasks.
+3. **AUDIT REQUIRED**: Implementation code complete; undergoing invariant and regression testing.
+4. **COMPLETE**: Acceptance criteria met, unit tests passing, clean lint, clean build, evidence indexed.
+5. **FROZEN**: Architecturally sealed with zero pending blockers and explicit project approval.
