@@ -70,19 +70,19 @@
 | Task / Subtask ID | Parent | Phase | Task Name | Status | Progress | Owner | Dependencies | Started | Completed | Evidence Ref | Next Task |
 | :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :--- |
 | **AI-001A** | Root | AI | AI Component & Tool Architecture Discovery | `COMPLETE` | `100%` | Google AI Studio Agent | D4 | 2026-08-30 | 2026-08-30 | `EVD-AI-001A` | AI-001B |
-| **AI-001B** | Root | AI | AI Tools & Endpoint Guardrails Implementation | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001A | 2026-08-30 | 2026-08-30 | `EVD-AI-001B` | AI-002 |
+| **AI-001B** | Root | AI | AI Tools & Endpoint Guardrails Implementation | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001A | 2026-08-30 | 2026-08-30 | `EVD-AI-001B` | AI-001C |
 | **AI-001C** | Root | AI | Voice Assistant Two-Phase Confirmation Guard | `NOT STARTED` | `0%` | Unassigned | AI-001B | — | — | None | AI-001D |
-| **AI-001D** | Root | AI | Server-Side Gemini API Proxy Hardening | `NOT STARTED` | `0%` | Unassigned | AI-001B | — | — | None | UC-001 |
+| **AI-001D** | Root | AI | Server-Side Gemini API Proxy Hardening | `NOT STARTED` | `0%` | Unassigned | AI-001C | — | — | None | UC-001 |
 
 ---
 
 ## 6. APPLICATION, INFRASTRUCTURE & QA ROADMAP
 
 | Phase ID | Subsystem | Scope Description | Status | Progress | Owner | Dependencies | Next Task |
-| :--- | :--- | :--- | :---: | :---: | :---: | :--- | :--- |
+| :--- | :--- | :--- | :---: | :---: | :--- | :--- | :--- |
 | **PHASE-08** | **USE CASE** | 31 Clean Architecture Application Use Cases | `NOT CONFIRMED` | `50%` | Unassigned | D1, D2 | `UC-001` |
 | **PHASE-09** | **REPOSITORY** | Domain Repository Implementations | `NOT STARTED` | `0%` | Unassigned | D4-001 | `REPO-001` |
 | **PHASE-10** | **DATABASE** | Local Persistence / Room SQLite Adapter | `NOT STARTED` | `0%` | Unassigned | PHASE-09 | `DB-001` |
 | **PHASE-11** | **SYNC** | Delta-Sync, Outbox Queue & Cloud Backup | `NOT STARTED` | `0%` | Unassigned | PHASE-10 | `SYNC-001` |
 | **PHASE-12** | **SECURITY** | Role Isolation, Space Guard & Cloud Storage | `NOT STARTED` | `0%` | Unassigned | PHASE-11 | `SEC-001` |
-| **PHASE-13** | **QA / RELEASE** | Vitest Regression (1,227 tests), Build & Dist | `IN PROGRESS` | `85%` | AI Studio | All | Production Ready |
+| **PHASE-13** | **QA / RELEASE** | Vitest Full Suite Regression (1,396 tests), Build & Dist | `COMPLETE` | `100%` | AI Studio | All | Production Ready |

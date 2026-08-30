@@ -30,10 +30,11 @@
 | **EVD-D4-001** | D4-001 | Data Contracts & Local Repository Audit (Contracts, LocalRepo, Sync, Conflict) | Contract Audit | 21/21 PASS (1,335 total) | Clean (0 err) | Success (Build OK) | `src/repositories/contracts.ts`, `src/tests/d4_sync.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D4-002** | D4-002 | Local Storage Adapters & Persistence Behavior Verification | Persistence Audit | 21/21 PASS (1,356 total) | Clean (0 err) | Success (Build OK) | `src/repositories/local/*`, `src/tests/d4_persistence.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D4-003** | D4-003 | Sync Engine & Conflict Resolution Audit | Sync & Conflict Audit | 15/15 PASS (1,371 total) | Clean (0 err) | Success (Build OK) | `src/domain/SyncEngine.ts`, `src/domain/ConflictResolver.ts`, `src/tests/d4_sync_property.test.ts` | `VERIFIED` | 2026-08-28 |
-| **EVD-AI-001A** | AI-001A | AI Architecture Discovery & Inventory (18 components, 3 endpoints, 5 engines) | Discovery Audit | 1,371/1,371 PASS | Clean (0 err) | Success (Build OK) | `server.ts`, `src/domain/AI*.ts`, `AI_ARCHITECTURE_AUDIT.md` | `VERIFIED` | 2026-08-30 |
+| **EVD-AI-001A** | AI-001A | AI Architecture Discovery & Inventory (18 components, 3 endpoints, 5 engines) | Discovery Audit | 1,371/1,371 PASS | Clean (0 err) | Success (Build OK) | `server.ts`, `src/domain/AI*.ts`, `AI_ARCHITECTURE_AUDIT.md`, `EVD-AI-001A.md` | `VERIFIED` | 2026-08-30 |
 | **EVD-AI-001B** | AI-001B | AI Tools & Endpoint Guardrails Final Verification Gate | Guardrail Suite | 1,396/1,396 PASS | Clean (0 err) | Success (Build OK) | `server.ts`, `src/tests/ai_guardrails.test.ts`, `EVD-AI-001B.md` | `CERTIFIED` | 2026-08-30 |
+| **EVD-GOV-002** | GOV-002 | AI Phase Repository / PROJECT_STATE Synchronization Audit | Governance Audit | 1,396/1,396 PASS | Clean (0 err) | Success (Build OK) | `/PROJECT_STATE/*`, `EVD-GOV-002.md` | `SYNCHRONIZED / CLEAR` | 2026-08-30 |
 | **EVD-UC-01** | USE CASE | 31 Clean Architecture Use Cases | Unit Tests | 791/791 PASS | Clean | Success | `src/tests/domain.test.ts` | `RECONCILIATION REQUIRED` | 2026-08-28 |
-| **EVD-REG-01** | QA | Full Suite Regression & Complexity Benchmarks | Vitest Runner | 1,335/1,335 PASS | 0 errors | Success | All 11 Test Suites | `VERIFIED` | 2026-08-28 |
+| **EVD-REG-01** | QA | Full Suite Regression & Complexity Benchmarks | Vitest Runner | 1,396/1,396 PASS | 0 errors | Success | All 14 Test Suites | `VERIFIED` | 2026-08-30 |
 
 ---
 
@@ -43,24 +44,28 @@ To eliminate confusion across different AI agents quoting different test counts 
 
 | Test Suite File | Test Category | Number of Tests | Status |
 | :--- | :--- | :---: | :---: |
-| `src/tests/domain.test.ts` | Domain Entities, Use Cases & AI Engines | **791** | `PASS` |
+| `src/tests/domain.test.ts` | Domain Entities, 31 Use Cases & AI Engines | **791** | `PASS` |
 | `src/tests/d2_financial_truth.test.ts` | D2 Financial Truth Calculations & Invariants | **319** | `PASS` |
 | `src/tests/d3_property.test.ts` | D3 Property-Based Invariant Regression Tests | **62** | `PASS` |
 | `src/tests/d2_003_methods_engine.test.ts` | 10 Financial Method Domain Engines | **37** | `PASS` |
 | `src/tests/d3_invariants.test.ts` | D3 Invariants Engine (INV-001..INV-015) | **35** | `PASS` |
+| `src/tests/ai_guardrails.test.ts` | AI Guardrails & Financial Truth Protection (FG-01..05, T01..T11) | **25** | `PASS` |
 | `src/tests/d3_cross_space_property.test.ts` | D3 Cross-Space/Fund Isolation & Transfer Conservation | **22** | `PASS` |
 | `src/tests/d4_sync.test.ts` | D4 Data Contracts, Local DB & Sync | **21** | `PASS` |
+| `src/tests/d4_persistence.test.ts` | D4 Local Storage Adapters & Soft-Delete Invariant | **21** | `PASS` |
 | `src/tests/d1_financial_model.test.ts` | D1 Canonical Financial Model & Guards | **17** | `PASS` |
+| `src/tests/d4_sync_property.test.ts` | D4 Sync Property Tests & Conflict Resolution | **15** | `PASS` |
 | `src/tests/d3_harness.test.ts` | D3 Invariant Execution Harness & Diagnostics | **15** | `PASS` |
 | `src/tests/d2_003_ui_smoke.test.ts` | Presentation Integration Smoke Tests | **10** | `PASS` |
 | `src/tests/g5_benchmark.test.ts` | Algorithm Complexity Benchmarks ($O(n)$) | **6** | `PASS` |
-| **TOTAL VITEST RUN** | **11 Test Files** | **1,335** | **100% PASS** |
+| **TOTAL VITEST RUN** | **14 Test Files** | **1,396** | **100% PASS** |
 
-### Summary of Previous Numbers in Reports:
-- **"356 tests"**: Refers specifically to the combined D2 Financial Truth + Methods suites (`319` + `37` = `356`).
-- **"791 tests"**: Refers to the `domain.test.ts` suite covering domain entities and 31 use cases.
-- **"1,180 tests"**: Represents an earlier checkpoint total before all suites were aggregated.
-- **"1,227 tests"**: The canonical, total automated test count of the current repository.
+### Summary of Historical Test Milestones:
+- **"1,335 tests"**: The baseline achieved after D3 Freeze Certification (`EVD-D3-003`, 11 test files).
+- **"1,356 tests"**: Baseline after D4-002 local persistence suite was added (+21 tests in `d4_persistence.test.ts`).
+- **"1,371 tests"**: Baseline after D4-003 sync property suite was added (+15 tests in `d4_sync_property.test.ts`, 13 test files).
+- **"1,385 tests"**: Intermediate baseline during AI-001B implementation.
+- **"1,396 tests"**: Current canonical executable test baseline following AI-001B Final Verification Gate (+25 tests in `ai_guardrails.test.ts`, 14 test files).
 
 ---
 
