@@ -30,9 +30,7 @@
 | **EVD-D4-001** | D4-001 | Data Contracts & Local Repository Audit (Contracts, LocalRepo, Sync, Conflict) | Contract Audit | 21/21 PASS (1,335 total) | Clean (0 err) | Success (Build OK) | `src/repositories/contracts.ts`, `src/tests/d4_sync.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D4-002** | D4-002 | Local Storage Adapters & Persistence Behavior Verification | Persistence Audit | 21/21 PASS (1,356 total) | Clean (0 err) | Success (Build OK) | `src/repositories/local/*`, `src/tests/d4_persistence.test.ts` | `VERIFIED` | 2026-08-28 |
 | **EVD-D4-003** | D4-003 | Sync Engine & Conflict Resolution Audit | Sync & Conflict Audit | 15/15 PASS (1,371 total) | Clean (0 err) | Success (Build OK) | `src/domain/SyncEngine.ts`, `src/domain/ConflictResolver.ts`, `src/tests/d4_sync_property.test.ts` | `VERIFIED` | 2026-08-28 |
-| **EVD-D3-01** | D3 | Financial Invariants Engine (INV-001..INV-015) | Unit & Stress | 35/35 PASS | Clean | Success | `src/tests/d3_invariants.test.ts` | `VERIFIED` | 2026-08-28 |
-| **EVD-D4-01** | D4 | Data Contracts, Local Repositories & Sync | Unit & Sync | 21/21 PASS | Clean | Success | `src/tests/d4_sync.test.ts` | `VERIFIED` | 2026-08-28 |
-| **EVD-AI-01** | AI-001A | AI Architecture Discovery & Inventory (7 comps, 10 tools) | Audit Report | Draft | Clean | Success | `server.ts`, `src/domain/AI*.ts` | `NOT CONFIRMED` | 2026-08-28 |
+| **EVD-AI-001A** | AI-001A | AI Architecture Discovery & Inventory (18 components, 3 endpoints, 5 engines) | Discovery Audit | 1,371/1,371 PASS | Clean (0 err) | Success (Build OK) | `server.ts`, `src/domain/AI*.ts`, `AI_ARCHITECTURE_AUDIT.md` | `VERIFIED` | 2026-08-30 |
 | **EVD-UC-01** | USE CASE | 31 Clean Architecture Use Cases | Unit Tests | 791/791 PASS | Clean | Success | `src/tests/domain.test.ts` | `RECONCILIATION REQUIRED` | 2026-08-28 |
 | **EVD-REG-01** | QA | Full Suite Regression & Complexity Benchmarks | Vitest Runner | 1,335/1,335 PASS | 0 errors | Success | All 11 Test Suites | `VERIFIED` | 2026-08-28 |
 
