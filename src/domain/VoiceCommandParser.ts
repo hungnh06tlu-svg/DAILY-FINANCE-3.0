@@ -55,9 +55,12 @@ export class VoiceCommandParser {
     if (
       lower.includes('thêm khoản chi') ||
       lower.includes('chi tiêu') ||
-      lower.includes('chi 500') ||
+      lower.includes('chi ') ||
+      lower.includes('tiêu ') ||
       lower.includes('tiêu hết') ||
-      lower.includes('add expense')
+      lower.includes('mua ') ||
+      lower.includes('add expense') ||
+      lower.startsWith('chi')
     ) {
       intent = 'add_expense';
       confidence = 0.95;

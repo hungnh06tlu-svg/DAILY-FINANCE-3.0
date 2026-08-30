@@ -70,7 +70,7 @@
 | Task / Subtask ID | Parent | Phase | Task Name | Status | Progress | Owner | Dependencies | Started | Completed | Evidence Ref | Next Task |
 | :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :--- |
 | **AI-001A** | Root | AI | AI Component & Tool Architecture Discovery | `COMPLETE` | `100%` | Google AI Studio Agent | D4 | 2026-08-30 | 2026-08-30 | `EVD-AI-001A` | AI-001B |
-| **AI-001B** | Root | AI | AI Tool Standard Contracts & Schema Hardening | `NOT STARTED` | `0%` | Unassigned | AI-001A | — | — | None | AI-001C |
+| **AI-001B** | Root | AI | AI Tools & Endpoint Guardrails Implementation | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001A | 2026-08-30 | 2026-08-30 | `EVD-AI-001B` | AI-002 |
 | **AI-001C** | Root | AI | Voice Assistant Two-Phase Confirmation Guard | `NOT STARTED` | `0%` | Unassigned | AI-001B | — | — | None | AI-001D |
 | **AI-001D** | Root | AI | Server-Side Gemini API Proxy Hardening | `NOT STARTED` | `0%` | Unassigned | AI-001B | — | — | None | UC-001 |
 
