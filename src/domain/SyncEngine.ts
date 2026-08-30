@@ -83,16 +83,26 @@ export class SyncEngine {
       // If previous was create and now update, keep as create with merged data
       if (existing.operation === 'create' && change.operation === 'update') {
         this.pendingChanges[existingIdx] = {
+          ...existing,
           ...change,
           operation: 'create',
           data: { ...existing.data, ...change.data },
-          timestamp: change.timestamp
+          timestamp: change.timestamp,
+          spaceId: change.spaceId || existing.spaceId,
+          version: change.version || existing.version,
+          vectorClock: change.vectorClock || existing.vectorClock
         };
       } else if (existing.operation === 'create' && change.operation === 'delete') {
         // If created locally then deleted before sync, remove from pending completely
         this.pendingChanges.splice(existingIdx, 1);
       } else {
-        this.pendingChanges[existingIdx] = { ...change };
+        this.pendingChanges[existingIdx] = {
+          ...existing,
+          ...change,
+          spaceId: change.spaceId || existing.spaceId,
+          version: change.version || existing.version,
+          vectorClock: change.vectorClock || existing.vectorClock
+        };
       }
     } else {
       this.pendingChanges.push({ ...change });

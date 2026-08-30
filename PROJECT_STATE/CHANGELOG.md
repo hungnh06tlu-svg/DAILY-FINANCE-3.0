@@ -5,6 +5,30 @@
 
 ---
 
+## [2026-08-28] — D4-003 Sync Engine & Conflict Resolution Audit
+- **AI Agent:** Google AI Studio Agent
+- **Task ID:** `D4-003` (Sync Engine & Conflict Resolution Audit)
+- **Status Transition:** `NOT STARTED` → `COMPLETE`
+- **Scope & Governance:**
+  - Conducted strict audit-first audit of Sync Engine (`SyncEngine.ts`) and Conflict Resolver (`ConflictResolver.ts`).
+  - Fixed subtle metadata field preservation bug in `SyncEngine.queueChange` (preserving `spaceId`, `version`, and `vectorClock` when merging `create` and `update` operations).
+  - Created property-based audit test suite `src/tests/d4_sync_property.test.ts` validating P01–P15 invariants: idempotent sync (`SYNC(SYNC(S)) == SYNC(S)`), version monotonicity (stale write rejection, `local.version v5` vs `remote.version v3`), version advancement (`local.version v2` vs `remote.version v4`), multi-Space isolation under concurrent sync (`space_A` vs `space_B` vs `space_C`), multi-Fund isolation under shared Space (`fund_A1` vs `fund_A2`), cross-Space & cross-Fund transfer topology preservation (6-point topology), exact money amount preservation (`100.456`, `0.01`, `999999999.999`, `-500.1234`, `0` with zero rounding/truncation), currency code preservation (`VND`, `USD`, `EUR`, `JPY`), soft-delete replication (`isDeleted: true`, `status: 'soft_deleted'`, `deletedAt`), restore cycle sync (`isDeleted: false`, `status: 'confirmed'`, `deletedAt: null`), audit trail preservation & array deduplication, duplicate entity prevention, deterministic strategy resolution (`LAST_WRITE_WINS`, `CLIENT_WINS`, `SERVER_WINS`, `MANUAL_MERGE`, `CREATIVE_MERGE`), network failure durability & outbox retry safety, and Financial Truth boundary protection.
+  - Verified 15/15 D4-003 property tests and 1,371/1,371 full Vitest suite passing across 13 test files with 0 lint errors and successful compilation.
+- **Files Created/Updated:**
+  - `src/domain/SyncEngine.ts`
+  - `src/tests/d4_sync_property.test.ts`
+  - `/PROJECT_STATE/CURRENT_TASK.md`
+  - `/PROJECT_STATE/TASK_REGISTRY.md`
+  - `/PROJECT_STATE/EVIDENCE_INDEX.md`
+  - `/PROJECT_STATE/CHANGELOG.md`
+  - `/PROJECT_STATE/AI_HANDOFF.md`
+  - `/PROJECT_STATE/MASTER_STATE.md`
+  - `/PROJECT_STATE/MASTER_ROADMAP.md`
+- **Verification Evidence:** `EVD-D4-003`, 1,371/1,371 PASS, 0 Lint Errors, Build Success.
+- **Next Authorized Task:** `AI-001A` (AI Architecture Discovery & Tools Standardization Audit)
+
+---
+
 ## [2026-08-28] — D4-002 Local Storage Adapters & Persistence Behavior Verification
 - **AI Agent:** Google AI Studio Agent
 - **Task ID:** `D4-002` (Local Storage Adapters & Persistence Behavior Verification)
