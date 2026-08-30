@@ -9,8 +9,8 @@
 ## 1. ACTIVE TASK METADATA
 
 ```yaml
-ACTIVE_TASK_ID: "D4-001"
-TASK_NAME: "Data Contracts & Local Repository Audit"
+ACTIVE_TASK_ID: "D4-002"
+TASK_NAME: "Local Storage Adapters & Persistence Behavior Verification"
 PARENT_PHASE: "PHASE-06 (D4 — REPOSITORIES, DATA CONTRACTS & SYNC)"
 ACTIVE_OWNER: "Google AI Studio Agent"
 CURRENT_STATUS: "COMPLETE"
@@ -25,7 +25,8 @@ ROADMAP_PROGRESS: "100%"
 
 | Subtask ID | Subtask Name | Status | Owner | Evidence |
 | :--- | :--- | :---: | :---: | :--- |
-| **D4-001** | Data Contracts & Local Repository Audit | `COMPLETE` | Google AI Studio Agent | `EVD-D4-001`, `d4_sync.test.ts` (21/21 PASS), Full Suite (1,335/1,335 PASS) |
+| **D4-001** | Data Contracts & Local Repository Audit | `COMPLETE` | Google AI Studio Agent | `EVD-D4-001`, `d4_sync.test.ts` (21/21 PASS) |
+| **D4-002** | Local Storage Adapters & Persistence Behavior Verification | `COMPLETE` | Google AI Studio Agent | `EVD-D4-002`, `d4_persistence.test.ts` (21/21 PASS), Full Suite (1,356/1,356 PASS) |
 
 ---
 
@@ -50,10 +51,10 @@ ROADMAP_PROGRESS: "100%"
 
 ```yaml
 NEXT_PHASE: "PHASE-06 (D4 — REPOSITORIES, DATA CONTRACTS & SYNC)"
-NEXT_TASK_ID: "D4-002"
-NEXT_TASK_NAME: "Local Storage Adapters & Persistence Behavior Verification"
+NEXT_TASK_ID: "D4-003"
+NEXT_TASK_NAME: "Sync Engine & Delta Synchronization Certification"
 ASSIGNED_OWNER: "UNASSIGNED (Ready for next AI Dispatch)"
-PREREQUISITES: "D4-001 Audit Complete"
+PREREQUISITES: "D4-002 Verification Complete"
 PREREQUISITE_STATUS: "SATISFIED"
 ```
 

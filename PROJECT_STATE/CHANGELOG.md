@@ -5,6 +5,28 @@
 
 ---
 
+## [2026-08-28] — D4-002 Local Storage Adapters & Persistence Behavior Verification
+- **AI Agent:** Google AI Studio Agent
+- **Task ID:** `D4-002` (Local Storage Adapters & Persistence Behavior Verification)
+- **Status Transition:** `NOT STARTED` → `COMPLETE`
+- **Scope & Governance:**
+  - Conducted strict audit-first persistence verification across local storage adapters (`LocalTransactionRepository.ts`, `LocalDataSource.ts`, `RoomEntities.ts`).
+  - Created `src/tests/d4_persistence.test.ts` covering 21 critical persistence requirements (P01–P21): basic write/read round-trip, exact amount preservation (no rounding/truncation), currency preservation (no implicit conversion across VND/USD/EUR/JPY), multi-Space isolation, multi-Fund isolation, transfer identity preservation, lifecycle persistence, soft-delete/restore, archive, audit trail preservation, versioning, optional fields, idempotent duplicate handling, bulk persistence, serialization simulation, error contract, offline standalone operation, rehydration, malformed data resilience, and version concurrency.
+  - Verified 21/21 D4 persistence tests and 1,356/1,356 full Vitest suite passing across 12 test files with 0 lint errors and successful compilation.
+- **Files Created/Updated:**
+  - `src/tests/d4_persistence.test.ts`
+  - `/PROJECT_STATE/CURRENT_TASK.md`
+  - `/PROJECT_STATE/TASK_REGISTRY.md`
+  - `/PROJECT_STATE/EVIDENCE_INDEX.md`
+  - `/PROJECT_STATE/CHANGELOG.md`
+  - `/PROJECT_STATE/AI_HANDOFF.md`
+  - `/PROJECT_STATE/MASTER_STATE.md`
+  - `/PROJECT_STATE/MASTER_ROADMAP.md`
+- **Verification Evidence:** `EVD-D4-002`, 1,356/1,356 PASS, 0 Lint Errors, Build Success.
+- **Next Authorized Task:** `D4-003` (Sync Engine & Delta Synchronization Certification)
+
+---
+
 ## [2026-08-28] — D4-001 Data Contracts & Local Repository Audit
 - **AI Agent:** Google AI Studio Agent
 - **Task ID:** `D4-001` (Data Contracts & Local Repository Audit)
