@@ -4,68 +4,73 @@
 > **TASK NAME:** AI Tools & Endpoint Guardrails Implementation  
 > **PHASE:** PHASE-07 — AI: ARCHITECTURE DISCOVERY & TOOLS  
 > **DATE:** 2026-08-30  
-> **STATUS:** COMPLETE & VERIFIED (1,385/1,385 PASSING TESTS)  
+> **STATUS:** CERTIFIED & VERIFIED (1,396/1,396 PASSING TESTS)  
 
 ---
 
 ## 1. SUMMARY OF IMPLEMENTATION & HARDENING
 
-Task **AI-001B** has successfully implemented and enforced all strict AI Guardrails (FG-01 to FG-05, OCR, Voice, Chat, Transfer Safety, and Precision Resilience) across the codebase.
+Task **AI-001B** has successfully passed the **Final Verification Gate** and enforced all strict AI Guardrails (FG-01 to FG-05, G1 to G10, T01 to T11) across the codebase.
 
-### Key Guardrail Enforcements:
+### Final Verification Gate Certification Matrix:
 
-1. **FG-01: No Calculation Authority**
-   - Verified `AICoachEngine`, `FinancialIntelligenceEngine`, and `AICoachOrchestrator`.
-   - AI components consume immutable `FinancialSnapshot` input and perform zero financial balance calculations or overrides.
-
-2. **FG-02: No Direct Repository Writes**
-   - Verified server endpoints (`/api/ai/ocr-receipt`, `/api/ai/parse-voice`), `AIChatViewModel`, `VoiceCommandParser`, and `VoiceAssistantViewModel`.
-   - All AI interactions emit proposal/intent structures (`requiresConfirmation: true`). No direct repository write operations exist inside AI routes or view models.
-
-3. **FG-03: Mandatory Human Confirmation**
-   - Hardened `server.ts` endpoints `/api/ai/ocr-receipt` and `/api/ai/parse-voice` to append `requiresConfirmation: true` to all responses.
-   - Enforced proposal-based workflows in `AIChatViewModel` (`commandType: 'MUTATION'`, `requiresConfirmation: true`) and `VoiceCommandParser`.
-
-4. **FG-04 & FG-04B: Space & Fund Isolation**
-   - Space ID context validation enforced across AI workflows. Cross-space parameter mismatches trigger explicit exception handling.
-   - Transfer operations strictly validate source and target wallet IDs (`fromWalletId !== toWalletId`) and reject missing/identical wallets.
-
-5. **FG-05 & Fallback Resilience**
-   - Server endpoints provide safe, non-mutating fallback structures (`amount: 0`, `requiresConfirmation: true`) upon JSON parse errors or upstream Gemini service failures.
-   - Malformed inputs, empty text, or network timeouts yield 0 partial financial mutations.
+| Gate | Requirement | Verification Method | Result | Evidence |
+| :--- | :--- | :--- | :---: | :--- |
+| **G1** | Fallback cannot mutate | Source trace + executable test | **PASS** | T01, T08 (`amount: 0`, `requiresConfirmation: true`, 0 repo mutations) |
+| **G2** | Mutation requires confirmation | Runtime flow + executable test | **PASS** | T02, T03 (`requiresConfirmation: true`, unconfirmed/rejected yields 0 repo mutations) |
+| **G3** | No direct AI repository mutation | Repository-wide grep/code search | **PASS** | T09 (0 direct repo write methods in AI components) |
+| **G4** | Space isolation | Source trace + executable test | **PASS** | T05 (Mismatched/invalid spaceId throws exception, 0 mutation) |
+| **G5** | Fund isolation | Source trace + executable test | **PASS** | T06 (Missing Jar/Fund yields 0 mutation) |
+| **G6** | Transfer target protection | Source trace + executable test | **PASS** | T07 (Missing target wallet throws error, 0 commit) |
+| **G7** | Amount preservation | Exact property tests | **PASS** | T10 (Exact float precision 100.456, 0.01, 999999999.999 preserved) |
+| **G8** | Currency preservation | Exact property tests | **PASS** | T11 (VND, USD, EUR, JPY preserved without implicit conversion) |
+| **G9** | Failure safety | Property tests | **PASS** | T04, T08 (Malformed JSON / Provider timeout yields safe fallback, 0 mutation) |
+| **G10**| Frozen modules intact | Code inspection | **PASS** | `FinancialTruthEngine.ts`, `CanonicalFinancialModel.ts`, `InvariantEngine.ts` untouched |
 
 ---
 
 ## 2. VERIFICATION EVIDENCE & TEST SUITE
 
 ### Test Execution Summary:
-- **Test File:** `src/tests/ai_guardrails.test.ts`
+- **Test File:** `src/tests/ai_guardrails.test.ts` (25 tests covering FG-01..FG-05, T01..T11, P01..P10)
 - **Total Test Files:** 14 / 14 PASS
-- **Total Individual Tests:** 1,385 / 1,385 PASS (100% Pass Rate)
+- **Total Individual Tests:** 1,396 / 1,396 PASS (100% Pass Rate)
+- **Linter Status:** 0 errors (`tsc --noEmit`)
+- **Build Status:** SUCCESS (`compile_applet`)
 - **Regressions:** 0
 
 ```text
- ✓ src/tests/ai_guardrails.test.ts (14 tests) 218ms
  ✓ src/tests/domain.test.ts (791 tests)
+ ✓ src/tests/ai_guardrails.test.ts (25 tests)
+ ✓ src/tests/d3_property.test.ts (62 tests)
+ ✓ src/tests/d3_cross_space_property.test.ts (22 tests)
+ ✓ src/tests/d2_financial_truth.test.ts (319 tests)
+ ✓ src/tests/d2_003_methods_engine.test.ts (37 tests)
+ ✓ src/tests/d3_invariants.test.ts (35 tests)
+ ✓ src/tests/d4_sync.test.ts (21 tests)
+ ✓ src/tests/d4_persistence.test.ts (21 tests)
+ ✓ src/tests/d4_sync_property.test.ts (15 tests)
+ ✓ src/tests/d3_harness.test.ts (15 tests)
+ ✓ src/tests/d2_003_ui_smoke.test.ts (10 tests)
  ✓ src/tests/d1_financial_model.test.ts (17 tests)
  ✓ src/tests/g5_benchmark.test.ts (6 tests)
- ...
  Test Files  14 passed (14)
-      Tests  1385 passed (1385)
+      Tests  1396 passed (1396)
 ```
 
 ---
 
 ## 3. MODIFIED & VERIFIED FILES
 
-1. `/server.ts` — Hardened `/api/ai/ocr-receipt` & `/api/ai/parse-voice` with `requiresConfirmation: true` & fail-safe fallbacks.
-2. `/src/domain/VoiceCommandParser.ts` — Hardened Vietnamese expense intent keywords (`chi `, `tiêu `, `mua `).
-3. `/src/tests/ai_guardrails.test.ts` — Created comprehensive 14-test guardrail verification suite covering FG-01 to FG-05, OCR, Voice, Chat, Space/Fund isolation, and Precision resilience.
+1. `server.ts` — Hardened `/api/ai/ocr-receipt` and `/api/ai/parse-voice` with `requiresConfirmation: true` and non-mutating safe fallbacks.
+2. `src/domain/VoiceCommandParser.ts` — Pure deterministic parsing, explicit currency extraction, read-only proposals.
+3. `src/viewmodels/AIChatViewModel.ts` — Differentiated analytical queries vs mutation commands, enforcing `requiresConfirmation: true`.
+4. `src/tests/ai_guardrails.test.ts` — Dedicated 25-test suite for AI Guardrails, G1..G10, T01..T11.
 
 ---
 
-## 4. FROZEN DOMAIN BOUNDARY AUDIT
-- `FinancialTruthEngine.ts` — UNTOUCHED (FROZEN)
-- `CanonicalFinancialModel.ts` — UNTOUCHED (FROZEN)
-- `InvariantEngine.ts` — UNTOUCHED (FROZEN)
-- All D1-D4 Repository and Sync Engine implementation files — UNTOUCHED (FROZEN)
+## 4. FROZEN BOUNDARY AUDIT
+- `src/domain/FinancialTruthEngine.ts` — **FROZEN & UNTOUCHED**
+- `src/domain/CanonicalFinancialModel.ts` — **FROZEN & UNTOUCHED**
+- `src/domain/InvariantEngine.ts` — **FROZEN & UNTOUCHED**
+- D1–D4 Repositories & Sync Implementations — **FROZEN & UNTOUCHED**

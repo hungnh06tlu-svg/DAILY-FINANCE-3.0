@@ -44,6 +44,16 @@ export class VoiceCommandParser {
       });
     }
 
+    // Parse currency parameter if present
+    const currencyMatch = text.match(/\b(VND|USD|EUR|JPY)\b/i);
+    if (currencyMatch) {
+      parameters.push({
+        name: 'currency',
+        value: currencyMatch[1].toUpperCase(),
+        type: 'string'
+      });
+    }
+
     // Parse explicit wallet IDs if present in text
     const walletIdMatches = text.match(/w_[a-zA-Z0-9_]+/g);
     if (walletIdMatches && walletIdMatches.length >= 2) {

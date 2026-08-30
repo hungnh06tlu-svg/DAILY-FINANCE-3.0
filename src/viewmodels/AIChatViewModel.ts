@@ -108,11 +108,13 @@ export class AIChatViewModel {
 
       // Analyze intent for State-Changing vs Read-Only
       const lowerText = trimmedText.toLowerCase();
+      const isQuery = ['phân tích', 'báo cáo', 'thống kê', 'tổng quan', 'tra cứu', 'xem', 'kiểm tra', 'analyze', 'report', 'query', 'view', 'check']
+        .some(qw => lowerText.includes(qw));
       const stateChangingKeywords = [
-        'tạo', 'xóa', 'sửa', 'chuyển', 'cập nhật', 'thêm giao dịch', 'đặt lại',
-        'create', 'delete', 'update', 'transfer', 'add transaction', 'reset', 'modify'
+        'tạo', 'xóa', 'sửa', 'chuyển', 'cập nhật', 'thêm giao dịch', 'thêm khoản chi', 'thêm thu nhập', 'thêm chi tiêu', 'đặt lại',
+        'create', 'delete', 'update', 'transfer', 'add transaction', 'add expense', 'add income', 'reset', 'modify'
       ];
-      const isStateChanging = stateChangingKeywords.some(kw => lowerText.includes(kw));
+      const isStateChanging = !isQuery && stateChangingKeywords.some(kw => lowerText.includes(kw));
 
       let assistantMsg: ChatMessage;
 
