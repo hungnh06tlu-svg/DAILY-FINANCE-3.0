@@ -9,8 +9,8 @@
 ## 1. ACTIVE TASK METADATA
 
 ```yaml
-ACTIVE_TASK_ID: "AI-001C"
-TASK_NAME: "Voice Assistant Two-Phase Confirmation Guard"
+ACTIVE_TASK_ID: "GOV-003"
+TASK_NAME: "MASTER_ROADMAP Consistency Repair"
 PARENT_PHASE: "PHASE-07 (AI — ARCHITECTURE DISCOVERY & TOOLS)"
 ACTIVE_OWNER: "Google AI Studio Agent"
 CURRENT_STATUS: "COMPLETE"
@@ -29,19 +29,14 @@ ROADMAP_PROGRESS: "100%"
 | **AI-001B** | AI Tools & Endpoint Guardrails Implementation & Verification | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-AI-001B`, `src/tests/ai_guardrails.test.ts` (1,396/1,396 PASS) |
 | **GOV-002** | AI Phase Repository / PROJECT_STATE Synchronization | `COMPLETE` | Google AI Studio Agent | `EVD-GOV-002`, `/PROJECT_STATE/*` |
 | **AI-001C** | Voice Assistant Two-Phase Confirmation Guard | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-AI-001C`, `src/tests/ai_voice_confirmation.test.ts` (1,421/1,421 PASS) |
+| **GOV-003** | MASTER_ROADMAP Consistency Repair | `COMPLETE` | Google AI Studio Agent | `EVD-GOV-003`, `/PROJECT_STATE/*` |
 
 ---
 
 ## 3. ACTIVE EXECUTION BOUNDARIES
 
 ### 🟢 ALLOWED DIRECTORIES & FILES
-- `/src/domain/VoiceCommandParser.ts`
-- `/src/usecases/GetVoiceAssistantStateUseCase.ts`
-- `/src/viewmodels/VoiceAssistantViewModel.ts`
-- `/src/components/voice/SmartVoiceAssistant.tsx`
-- `server.ts`
-- `/src/tests/ai_voice_confirmation.test.ts`
-- `/PROJECT_STATE/*`
+- `/PROJECT_STATE/*` (State documentation & evidence files)
 
 ### 🔴 STRICTLY FORBIDDEN AREAS (DO NOT MODIFY — FROZEN DOMAIN)
 - `/src/domain/FinancialTruthEngine.ts` (**FROZEN**)
@@ -50,6 +45,7 @@ ROADMAP_PROGRESS: "100%"
 - `/src/domain/methods/*.ts` (**FROZEN**)
 - `/src/repositories/*` (**FROZEN**)
 - `/src/domain/SyncEngine.ts` (**FROZEN**)
+- `/src/components/*` (**FROZEN**)
 
 ---
 
@@ -60,7 +56,7 @@ NEXT_PHASE: "PHASE-07 (AI — ARCHITECTURE DISCOVERY & TOOLS)"
 NEXT_TASK_ID: "AI-001D"
 NEXT_TASK_NAME: "Server-Side Gemini API Proxy Hardening"
 ASSIGNED_OWNER: "UNASSIGNED (Ready for next AI Dispatch)"
-PREREQUISITES: "AI-001C Certified"
+PREREQUISITES: "AI-001C Certified, GOV-003 Synchronized"
 PREREQUISITE_STATUS: "SATISFIED"
 ```
 
