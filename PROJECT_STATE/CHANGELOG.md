@@ -5,6 +5,25 @@
 
 ---
 
+## [2026-08-30] — AI-001C Voice Assistant Two-Phase Confirmation Guard
+- **AI Agent:** Google AI Studio Agent
+- **Task ID:** `AI-001C` (Voice Assistant Two-Phase Confirmation Guard)
+- **Status Transition:** `IN PROGRESS` → `CERTIFIED & VERIFIED`
+- **Scope & Implementation:**
+  - Standardized the Voice Assistant flow into a strict two-phase lifecycle: (1) Proposal (`status: 'PENDING'`, `requiresConfirmation: true`) with 0 repository mutations, followed by (2) Explicit Human Confirmation via the Use Case execution boundary.
+  - Hardened `VoiceCommandParser.ts` with deterministic `fundId` extraction and currency-aware confirmation strings.
+  - Hardened `GetVoiceAssistantStateUseCase.ts` (`processVoiceCommand`, `executeConfirmedCommand`, `cancelPendingCommand`) with fail-closed amount validation (> 0), space isolation checks, and fund ID matching.
+  - Hardened `VoiceAssistantViewModel.ts` to support multi-parameter space ID dispatch and pass-through fund isolation.
+  - Hardened `SmartVoiceAssistant.tsx` to guard confirmation feedback display against failed execution.
+  - Hardened `server.ts` to enforce `status: "PENDING"` in the `/api/ai/parse-voice` endpoint.
+  - Built comprehensive executable test suite `src/tests/ai_voice_confirmation.test.ts` (25 tests) verifying P01–P18 scenarios and Property-Based Invariants 1–7.
+  - Reached 1,421 / 1,421 passing tests across 15 test suites, 0 lint errors, clean build.
+  - Confirmed 0 modifications to frozen core modules (`FinancialTruthEngine.ts`, `CanonicalFinancialModel.ts`, `InvariantEngine.ts`).
+- **Verification Evidence:** `EVD-AI-001C` (`/PROJECT_STATE/EVD-AI-001C.md`), 1,421/1,421 PASS, 0 Lint Errors, Build Success.
+- **Next Authorized Task:** `AI-001D` (Server-Side Gemini API Proxy Hardening).
+
+---
+
 ## [2026-08-30] — GOV-002 AI Phase Repository / PROJECT_STATE Synchronization
 - **AI Agent:** Google AI Studio Agent
 - **Task ID:** `GOV-002` (AI Phase Repository / PROJECT_STATE Synchronization)

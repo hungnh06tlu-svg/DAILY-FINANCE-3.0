@@ -40,10 +40,12 @@ import { Language } from '../types';
 export interface PendingVoiceCommandPayload {
   readonly type?: 'expense' | 'income' | 'transfer';
   readonly amount: number;
+  readonly currency?: string;
   readonly category?: string;
   readonly note: string;
   readonly fromWalletId?: string;
   readonly toWalletId?: string;
+  readonly fundId?: string;
 }
 
 export interface PendingVoiceCommand {
@@ -51,6 +53,7 @@ export interface PendingVoiceCommand {
   readonly rawText: string;
   readonly intent: VoiceCommandIntent;
   readonly spaceId: string;
+  readonly fundId?: string;
   readonly parameters: ReadonlyArray<VoiceCommandParameter>;
   readonly payload: PendingVoiceCommandPayload;
   readonly requiresConfirmation: boolean;
@@ -150,12 +153,15 @@ export class GetVoiceAssistantStateUseCase {
       command.intent === 'transfer_money'
     ) {
       const amountParam = command.parameters.find(p => p.name === 'amount');
-      const amount = amountParam && typeof amountParam.value === 'number' && amountParam.value > 0
-        ? amountParam.value
-        : 100000;
-
+      const currencyParam = command.parameters.find(p => p.name === 'currency');
+      const fundParam = command.parameters.find(p => p.name === 'fundId');
       const fromWalletParam = command.parameters.find(p => p.name === 'fromWalletId');
       const toWalletParam = command.parameters.find(p => p.name === 'toWalletId');
+
+      const hasValidAmount = amountParam && typeof amountParam.value === 'number' && amountParam.value > 0 && !isNaN(amountParam.value);
+      const amount = hasValidAmount ? amountParam.value : 0;
+      const currency = (currencyParam && typeof currencyParam.value === 'string') ? currencyParam.value : 'VND';
+      const fundId = (fundParam && typeof fundParam.value === 'string') ? fundParam.value : undefined;
 
       const isExpense = command.intent === 'add_expense';
       const isIncome = command.intent === 'add_income';
@@ -163,6 +169,8 @@ export class GetVoiceAssistantStateUseCase {
       const payload: PendingVoiceCommandPayload = Object.freeze({
         type: isExpense ? 'expense' : isIncome ? 'income' : 'transfer',
         amount,
+        currency,
+        fundId,
         category: isExpense
           ? (isVi ? 'Chi Tiêu Voice' : 'Voice Expense')
           : isIncome
@@ -178,6 +186,7 @@ export class GetVoiceAssistantStateUseCase {
         rawText: command.rawText,
         intent: command.intent,
         spaceId,
+        fundId,
         parameters: command.parameters,
         payload,
         requiresConfirmation: true,
@@ -193,9 +202,10 @@ export class GetVoiceAssistantStateUseCase {
         ? (isVi ? 'thêm thu nhập' : 'add income')
         : (isVi ? 'chuyển tiền' : 'transfer');
 
+      const amountFormatted = hasValidAmount ? ` ${amount.toLocaleString()} ${currency}` : '';
       const confirmationMsg = isVi
-        ? `Xác nhận: Bạn có muốn ${actionName} ${amount.toLocaleString()} VND?`
-        : `Confirmation required: Do you want to ${actionName} ${amount.toLocaleString()} VND?`;
+        ? `Xác nhận: Bạn có muốn ${actionName}${amountFormatted}?`
+        : `Confirmation required: Do you want to ${actionName}${amountFormatted}?`;
 
       const result: VoiceCommandResult = Object.freeze({
         commandId: command.id,
@@ -233,9 +243,23 @@ export class GetVoiceAssistantStateUseCase {
   async executeConfirmedCommand(
     commandId: string,
     spaceId: string = 'sp_personal',
-    language: Language = 'vi'
+    language: Language = 'vi',
+    fundId?: string
   ): Promise<{ command: VoiceCommand; result: VoiceCommandResult }> {
     const isVi = language === 'vi';
+
+    if (!commandId || typeof commandId !== 'string' || !commandId.trim()) {
+      throw new Error(
+        isVi ? 'Mã lệnh giọng nói không hợp lệ.' : 'Invalid command ID.'
+      );
+    }
+
+    if (!spaceId || typeof spaceId !== 'string' || !spaceId.trim()) {
+      throw new Error(
+        isVi ? 'Không gian làm việc không hợp lệ.' : 'Invalid space ID.'
+      );
+    }
+
     const pendingCmd = this.pendingCommands.get(commandId);
 
     if (!pendingCmd) {
@@ -251,6 +275,14 @@ export class GetVoiceAssistantStateUseCase {
         isVi
           ? 'Không thể thực thi lệnh giọng nói từ không gian làm việc khác.'
           : 'Cannot execute voice command for a different space.'
+      );
+    }
+
+    if (pendingCmd.fundId && fundId && pendingCmd.fundId !== fundId) {
+      throw new Error(
+        isVi
+          ? 'Không thể thực thi lệnh giọng nói từ quỹ tài chính khác.'
+          : 'Cannot execute voice command for a different fund.'
       );
     }
 
@@ -277,8 +309,20 @@ export class GetVoiceAssistantStateUseCase {
     }
 
     const { intent, payload } = pendingCmd;
+
+    // Fail closed if required amount is missing, zero, or non-positive
+    if (!payload.amount || typeof payload.amount !== 'number' || payload.amount <= 0 || isNaN(payload.amount)) {
+      pendingCmd.status = 'PENDING';
+      throw new Error(
+        isVi
+          ? 'Số tiền không hợp lệ hoặc bị thiếu trong lệnh giọng nói.'
+          : 'Invalid or missing amount in voice command.'
+      );
+    }
+
     let success = false;
     let message = '';
+    const currency = payload.currency || 'VND';
 
     if (intent === 'add_expense' || intent === 'add_income') {
       const isExpense = intent === 'add_expense';
@@ -286,18 +330,19 @@ export class GetVoiceAssistantStateUseCase {
         await this.addTransactionUseCase.execute({
           type: isExpense ? 'expense' : 'income',
           amount: payload.amount,
-          currency: 'VND',
+          currency,
           category: payload.category || (isExpense ? 'Voice Expense' : 'Voice Income'),
           spaceId: pendingCmd.spaceId,
           date: new Date().toISOString(),
           note: payload.note,
-          method: 'cash'
-        });
+          method: 'cash',
+          ...(payload.fundId ? { fundId: payload.fundId } : {})
+        } as any);
         pendingCmd.status = 'EXECUTED';
         success = true;
         message = isVi
-          ? `Đã tạo giao dịch ${isExpense ? 'chi tiêu' : 'thu nhập'} ${payload.amount.toLocaleString()} VND thành công.`
-          : `Successfully created ${isExpense ? 'expense' : 'income'} transaction of ${payload.amount.toLocaleString()} VND.`;
+          ? `Đã tạo giao dịch ${isExpense ? 'chi tiêu' : 'thu nhập'} ${payload.amount.toLocaleString()} ${currency} thành công.`
+          : `Successfully created ${isExpense ? 'expense' : 'income'} transaction of ${payload.amount.toLocaleString()} ${currency}.`;
       } catch (err) {
         pendingCmd.status = 'PENDING';
         throw err;
@@ -335,8 +380,8 @@ export class GetVoiceAssistantStateUseCase {
         pendingCmd.status = 'EXECUTED';
         success = true;
         message = isVi
-          ? `Đã chuyển thành công ${payload.amount.toLocaleString()} VND.`
-          : `Successfully transferred ${payload.amount.toLocaleString()} VND.`;
+          ? `Đã chuyển thành công ${payload.amount.toLocaleString()} ${currency}.`
+          : `Successfully transferred ${payload.amount.toLocaleString()} ${currency}.`;
       } catch (err) {
         pendingCmd.status = 'PENDING';
         throw err;
@@ -374,7 +419,8 @@ export class GetVoiceAssistantStateUseCase {
   async cancelPendingCommand(
     commandId: string,
     spaceId: string = 'sp_personal',
-    language: Language = 'vi'
+    language: Language = 'vi',
+    fundId?: string
   ): Promise<boolean> {
     const isVi = language === 'vi';
     const pendingCmd = this.pendingCommands.get(commandId);
@@ -392,6 +438,14 @@ export class GetVoiceAssistantStateUseCase {
         isVi
           ? 'Không thể hủy lệnh giọng nói từ không gian làm việc khác.'
           : 'Cannot cancel command for a different space.'
+      );
+    }
+
+    if (pendingCmd.fundId && fundId && pendingCmd.fundId !== fundId) {
+      throw new Error(
+        isVi
+          ? 'Không thể hủy lệnh giọng nói từ quỹ tài chính khác.'
+          : 'Cannot cancel command for a different fund.'
       );
     }
 

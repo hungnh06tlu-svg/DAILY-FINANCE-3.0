@@ -232,6 +232,7 @@ Extract JSON with structure:
 
     res.json({
       ...parsed,
+      status: "PENDING",
       requiresConfirmation: true
     });
   } catch (error: any) {
@@ -246,6 +247,7 @@ Extract JSON with structure:
         note: spokenText || "",
         space: "sp_personal",
         date: new Date().toISOString().split("T")[0],
+        status: "PENDING",
         requiresConfirmation: true
       }
     });

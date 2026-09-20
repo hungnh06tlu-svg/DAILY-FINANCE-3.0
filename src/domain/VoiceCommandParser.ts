@@ -61,6 +61,16 @@ export class VoiceCommandParser {
       parameters.push({ name: 'toWalletId', value: walletIdMatches[1], type: 'string' });
     }
 
+    // Parse explicit fund IDs if present in text
+    const fundMatch = text.match(/\b(fund_[a-zA-Z0-9_]+|f_[a-zA-Z0-9_]+)\b/i);
+    if (fundMatch) {
+      parameters.push({
+        name: 'fundId',
+        value: fundMatch[1],
+        type: 'string'
+      });
+    }
+
     // Intent detection based on keywords
     if (
       lower.includes('thêm khoản chi') ||
@@ -204,7 +214,10 @@ export class VoiceCommandParser {
       command.intent === 'transfer_money'
     ) {
       const amountParam = command.parameters.find(p => p.name === 'amount');
-      const amountFormatted = amountParam ? `${amountParam.value.toLocaleString()} VND` : '';
+      const currencyParam = command.parameters.find(p => p.name === 'currency');
+      const curr = (currencyParam && typeof currencyParam.value === 'string') ? currencyParam.value : 'VND';
+      const hasValidAmount = amountParam && typeof amountParam.value === 'number' && amountParam.value > 0;
+      const amountFormatted = hasValidAmount ? ` ${amountParam.value.toLocaleString()} ${curr}` : '';
       const actionName =
         command.intent === 'add_expense'
           ? (isVi ? 'thêm khoản chi' : 'add expense')
@@ -213,8 +226,8 @@ export class VoiceCommandParser {
           : (isVi ? 'chuyển tiền' : 'transfer');
 
       const confirmationMsg = isVi
-        ? `Xác nhận: Bạn có muốn ${actionName} ${amountFormatted}?`
-        : `Confirmation required: Do you want to ${actionName} ${amountFormatted}?`;
+        ? `Xác nhận: Bạn có muốn ${actionName}${amountFormatted}?`
+        : `Confirmation required: Do you want to ${actionName}${amountFormatted}?`;
 
       return Object.freeze({
         commandId: command.id,

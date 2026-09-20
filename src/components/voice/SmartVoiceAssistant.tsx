@@ -134,17 +134,19 @@ export const SmartVoiceAssistant: React.FC<SmartVoiceAssistantProps> = ({
         setRecentCommands(updatedUiState.state.recentCommands);
       }
 
-      // Route navigation if applicable
-      if (pendingConfirmation.navigationRoute && onNavigateScreen) {
-        onNavigateScreen(pendingConfirmation.navigationRoute);
+      if (!updatedUiState.error) {
+        // Route navigation if applicable
+        if (pendingConfirmation.navigationRoute && onNavigateScreen) {
+          onNavigateScreen(pendingConfirmation.navigationRoute);
+        }
+
+        const successMsg = isVi
+          ? '✓ Đã xác nhận và thực thi lệnh giọng nói thành công!'
+          : '✓ Voice command confirmed and executed successfully!';
+
+        setConfirmationFeedback(successMsg);
+        setPendingConfirmation(null);
       }
-
-      const successMsg = isVi
-        ? '✓ Đã xác nhận và thực thi lệnh giọng nói thành công!'
-        : '✓ Voice command confirmed and executed successfully!';
-
-      setConfirmationFeedback(successMsg);
-      setPendingConfirmation(null);
     } catch {
       // Safe error is already captured inside ViewModel
     } finally {

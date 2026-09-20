@@ -101,18 +101,18 @@ export class VoiceAssistantViewModel {
     let existingCommands: ReadonlyArray<VoiceCommand> = [];
     let language: Language = 'vi';
 
-    if (typeof arg2 === 'string' && (arg2.startsWith('sp_') || arg2 === 'personal' || arg2 === 'business')) {
+    if (typeof arg2 === 'string') {
       spaceId = arg2;
       existingCommands = Array.isArray(arg3) ? (arg3 as ReadonlyArray<VoiceCommand>) : [];
       language = (arg4 as Language) || 'vi';
-    } else if (typeof arg4 === 'string' && arg4.startsWith('sp_')) {
+    } else if (Array.isArray(arg2)) {
+      existingCommands = arg2;
+      if (typeof arg3 === 'string') spaceId = arg3;
+      if (typeof arg4 === 'string') language = arg4 as Language;
+    } else if (typeof arg4 === 'string') {
       spaceId = arg4;
       existingCommands = Array.isArray(arg5) ? (arg5 as ReadonlyArray<VoiceCommand>) : [];
-      language = arg6 || 'vi';
-    } else if (typeof arg2 === 'string') {
-      if (typeof arg4 === 'string') spaceId = arg4;
-      if (Array.isArray(arg5)) existingCommands = arg5;
-      if (typeof arg6 === 'string') language = arg6 as Language;
+      language = (arg6 as Language) || 'vi';
     }
 
     try {
