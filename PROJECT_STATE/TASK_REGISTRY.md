@@ -72,7 +72,7 @@
 | **AI-001A** | Root | AI | AI Component & Tool Architecture Discovery | `COMPLETE` | `100%` | Google AI Studio Agent | D4 | 2026-08-30 | 2026-08-30 | `EVD-AI-001A` | AI-001B |
 | **AI-001B** | Root | AI | AI Tools & Endpoint Guardrails Implementation | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001A | 2026-08-30 | 2026-08-30 | `EVD-AI-001B` | AI-001C |
 | **AI-001C** | Root | AI | Voice Assistant Two-Phase Confirmation Guard | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001B | 2026-08-30 | 2026-08-30 | `EVD-AI-001C` | AI-001D |
-| **AI-001D** | Root | AI | Server-Side Gemini API Proxy Hardening | `NOT STARTED` | `0%` | Unassigned | AI-001C | — | — | None | UC-001 |
+| **AI-001D** | Root | AI | Server-Side Gemini API Proxy Hardening | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001C | 2026-08-30 | 2026-08-30 | `EVD-AI-001D` | UC-001 |
 | **GOV-001** | Root | GOVERNANCE | D3/Phase-05 Freeze Governance Audit | `COMPLETE` | `100%` | AI Studio | D3-003 | 2026-08-28 | 2026-08-28 | `EVD-GOV-001` | D4-001 |
 | **GOV-002** | Root | GOVERNANCE | AI Phase Repository / PROJECT_STATE Synchronization | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001B | 2026-08-30 | 2026-08-30 | `EVD-GOV-002` | AI-001C |
 | **GOV-003** | Root | GOVERNANCE | MASTER_ROADMAP Consistency Repair | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001C | 2026-08-30 | 2026-08-30 | `EVD-GOV-003` | AI-001D |
@@ -89,4 +89,4 @@
 | **PHASE-10** | **DATABASE** | Local Persistence / Room SQLite Adapter | `NOT STARTED` | `0%` | Unassigned | PHASE-09 | `DB-001` |
 | **PHASE-11** | **SYNC** | Delta-Sync, Outbox Queue & Cloud Backup | `NOT STARTED` | `0%` | Unassigned | PHASE-10 | `SYNC-001` |
 | **PHASE-12** | **SECURITY** | Role Isolation, Space Guard & Cloud Storage | `NOT STARTED` | `0%` | Unassigned | PHASE-11 | `SEC-001` |
-| **PHASE-13** | **QA / RELEASE** | Vitest Full Suite Regression (1,421 tests), Build & Dist | `COMPLETE` | `100%` | AI Studio | All | Production Ready |
+| **PHASE-13** | **QA / RELEASE** | Vitest Full Suite Regression (1,442 tests across 16 suites), Build & Dist | `COMPLETE` | `100%` | AI Studio | All | Production Ready |

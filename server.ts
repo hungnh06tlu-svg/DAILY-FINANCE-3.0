@@ -3,6 +3,7 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
+import { AIPayloadValidator } from "./src/domain/AIPayloadValidator";
 
 try {
   if (typeof dotenv?.config === "function") {
@@ -41,27 +42,48 @@ function getGeminiClient() {
 
 // API Routes
 app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", app: "Daily Finance 2.0 Backend" });
+  res.json({ status: "ok", app: "Daily Finance 3.0 Backend" });
 });
 
-// AI Financial Insights Route
+// AI Financial Insights Route (Hardened for Space/Fund Isolation & Financial Grounding)
 app.post("/api/ai/insights", async (req, res) => {
+  let groundingRef: any = null;
   try {
-    const { transactions, budget, language } = req.body;
-    const langPrompt = language === "vi" ? "Trả lời bằng tiếng Việt." : "Respond in English.";
-    
+    const { transactions, budget, budgets, language, spaceId, fundId } = req.body;
+    const lang = language === "en" ? "en" : "vi";
+    const langPrompt = lang === "vi" ? "Trả lời bằng tiếng Việt." : "Respond in English.";
+
+    // 1. Prepare, isolate, and ground the payload using canonical validator
+    const {
+      targetSpaceId,
+      targetFundId,
+      sanitizedTransactions,
+      sanitizedBudgets,
+      grounding,
+      groundedPromptSnippet
+    } = AIPayloadValidator.prepareInsightsPayload({
+      transactions: transactions || [],
+      budgets: budgets || (budget ? [budget] : []),
+      spaceId: spaceId || (Array.isArray(transactions) && transactions[0]?.spaceId) || "sp_personal",
+      fundId
+    });
+
+    groundingRef = grounding;
+
     const prompt = `
-You are the AI Financial Advisor in Daily Finance 2.0 Android app.
+You are the AI Financial Coach in Daily Finance 3.0 app.
 Analyze the following financial data and provide 3 actionable, empathetic insights and 1 smart warning or recommendation.
 Language instruction: ${langPrompt}
 
-Data:
-Transactions summary: ${JSON.stringify(transactions || [])}
-Budget details: ${JSON.stringify(budget || {})}
+${groundedPromptSnippet}
+
+Verified Data Details:
+Active Transactions: ${JSON.stringify(sanitizedTransactions.slice(0, 30))}
+Active Budgets: ${JSON.stringify(sanitizedBudgets)}
 
 Return JSON with format:
 {
-  "summary": "Short financial headline",
+  "summary": "Short financial headline strictly matching verified numbers",
   "insights": [
     {"type": "positive" | "warning" | "tip", "title": "...", "description": "..."}
   ],
@@ -71,7 +93,7 @@ Return JSON with format:
 
     const ai = getGeminiClient();
     const response = await ai.models.generateContent({
-      model: "gemini-3.7-flash",
+      model: "gemini-3.8-flash",
       contents: prompt,
       config: {
         responseMimeType: "application/json",
@@ -79,43 +101,70 @@ Return JSON with format:
     });
 
     const text = response.text;
-    res.json(JSON.parse(text || "{}"));
+    let parsed: any = {};
+    try {
+      parsed = JSON.parse(text || "{}");
+    } catch {
+      parsed = {};
+    }
+
+    res.json({
+      ...parsed,
+      grounding
+    });
   } catch (error: any) {
     console.error("AI Insights Error:", error);
+    const safeFallback = groundingRef
+      ? AIPayloadValidator.generateSafeFallback(groundingRef, req.body?.language || "vi")
+      : {
+          summary: "Financial Health Analysis",
+          insights: [
+            {
+              type: "positive",
+              title: "System Ready",
+              description: "Financial system active. Please add transactions to begin AI analysis."
+            }
+          ],
+          fireProgressNote: "Daily Finance 3.0 system ready.",
+          grounding: {
+            spaceId: req.body?.spaceId || "sp_personal",
+            totalIncome: 0,
+            totalExpense: 0,
+            netCashFlow: 0,
+            activeTransactionCount: 0,
+            activeBudgetCount: 0,
+            totalBudgetLimit: 0,
+            currency: "VND",
+            excludedAudit: {
+              mismatchedSpaceCount: 0,
+              mismatchedFundCount: 0,
+              inactiveLifecycleCount: 0,
+              invalidAmountCount: 0,
+              totalExcluded: 0
+            }
+          }
+        };
+
     res.status(500).json({
       error: error.message || "Failed to generate AI insights",
-      fallback: {
-        summary: "Financial Health Analysis",
-        insights: [
-          {
-            type: "positive",
-            title: "Expense Control",
-            description: "Your monthly spending is within 78% of your overall allocated budget."
-          },
-          {
-            type: "warning",
-            title: "6 Jars Adjustment Needed",
-            description: "Your Play Jar is under-allocated this month compared to your Financial Freedom Jar."
-          }
-        ],
-        fireProgressNote: "On track to reach your target retirement corpus in 11.4 years."
-      }
+      fallback: safeFallback
     });
   }
 });
 
-// OCR Receipt Scanning Route
+// OCR Receipt Scanning Route (Hardened with PENDING status & requiresConfirmation)
 app.post("/api/ai/ocr-receipt", async (req, res) => {
+  const targetSpaceId = AIPayloadValidator.validateSpaceId(req.body?.spaceId);
   try {
     const { imageBase64, language } = req.body;
-    if (!imageBase64) {
-      return res.status(400).json({ error: "Missing imageBase64 data" });
+    if (!imageBase64 || typeof imageBase64 !== "string") {
+      return res.status(400).json({ error: "Missing or invalid imageBase64 data" });
     }
 
     const langPrompt = language === "vi" ? "Extracted category and merchant names should be natural in Vietnamese." : "Provide in English.";
     
     const prompt = `
-Analyze this receipt image and extract key receipt details for Daily Finance 2.0.
+Analyze this receipt image and extract key receipt details for Daily Finance 3.0.
 ${langPrompt}
 
 Extract JSON with structure:
@@ -137,7 +186,7 @@ Extract JSON with structure:
 
     const ai = getGeminiClient();
     const response = await ai.models.generateContent({
-      model: "gemini-3.7-flash",
+      model: "gemini-3.8-flash",
       contents: {
         parts: [
           {
@@ -164,6 +213,8 @@ Extract JSON with structure:
 
     res.json({
       ...parsed,
+      spaceId: targetSpaceId,
+      status: "PENDING",
       requiresConfirmation: true
     });
   } catch (error: any) {
@@ -171,34 +222,37 @@ Extract JSON with structure:
     res.status(500).json({
       error: error.message || "Failed to process receipt",
       fallback: {
-        merchant: "WinMart+",
+        merchant: "Unrecognized Merchant",
         date: new Date().toISOString().split("T")[0],
-        totalAmount: 328000,
+        totalAmount: 0,
         currency: "VND",
         suggestedCategory: "Shopping",
         items: [],
         taxAmount: 0,
-        confidenceScore: 0.5,
+        confidenceScore: 0.0,
+        spaceId: targetSpaceId,
+        status: "PENDING",
         requiresConfirmation: true
       }
     });
   }
 });
 
-// Voice Input Processing Route
+// Voice Input Processing Route (Hardened with PENDING status & requiresConfirmation)
 app.post("/api/ai/parse-voice", async (req, res) => {
   let spokenText = "";
+  const targetSpaceId = AIPayloadValidator.validateSpaceId(req.body?.spaceId);
   try {
     spokenText = req.body?.spokenText || "";
     const language = req.body?.language || "vi";
-    if (!spokenText || !spokenText.trim()) {
+    if (!spokenText || typeof spokenText !== "string" || !spokenText.trim()) {
       return res.status(400).json({ error: "Missing or empty spokenText parameter" });
     }
 
     const langPrompt = language === "vi" ? "Xử lý giọng nói bằng Tiếng Việt." : "Process English spoken text.";
 
     const prompt = `
-Parse this user voice command into a structured financial transaction for Daily Finance 2.0 app.
+Parse this user voice command into a structured financial transaction proposal for Daily Finance 3.0 app.
 Spoken text: "${spokenText}"
 ${langPrompt}
 
@@ -216,7 +270,7 @@ Extract JSON with structure:
 
     const ai = getGeminiClient();
     const response = await ai.models.generateContent({
-      model: "gemini-3.7-flash",
+      model: "gemini-3.8-flash",
       contents: prompt,
       config: {
         responseMimeType: "application/json",
@@ -232,6 +286,7 @@ Extract JSON with structure:
 
     res.json({
       ...parsed,
+      spaceId: targetSpaceId,
       status: "PENDING",
       requiresConfirmation: true
     });
@@ -245,7 +300,7 @@ Extract JSON with structure:
         currency: "VND",
         category: "Other",
         note: spokenText || "",
-        space: "sp_personal",
+        spaceId: targetSpaceId,
         date: new Date().toISOString().split("T")[0],
         status: "PENDING",
         requiresConfirmation: true

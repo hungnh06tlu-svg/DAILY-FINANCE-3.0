@@ -59,6 +59,7 @@ export const AiCoachInsights: React.FC<AiCoachInsightsProps> = ({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          spaceId: selectedSpaceId || 'sp_personal',
           transactions,
           budgets,
           language

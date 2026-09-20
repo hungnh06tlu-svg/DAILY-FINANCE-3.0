@@ -36,8 +36,9 @@
 | **EVD-AI-001C** | AI-001C | Voice Assistant Two-Phase Confirmation Guard & Isolation | Voice Guard Suite | 25/25 PASS (1,421 total) | Clean (0 err) | Success (Build OK) | `src/domain/VoiceCommandParser.ts`, `src/tests/ai_voice_confirmation.test.ts`, `EVD-AI-001C.md` | `CERTIFIED` | 2026-08-30 |
 | **EVD-GOV-003** | GOV-003 | MASTER_ROADMAP Consistency Repair & State Synchronization | Governance Audit | 1,421/1,421 PASS | Clean (0 err) | Success (Build OK) | `/PROJECT_STATE/MASTER_ROADMAP.md`, `EVD-GOV-003.md` | `SYNCHRONIZED / CLEAR` | 2026-08-30 |
 | **EVD-GOV-003R** | GOV-003R | Repository State Reconciliation & Consistency Audit | Governance Audit | 1,421/1,421 PASS | Clean (0 err) | Success (Build OK) | `/PROJECT_STATE/*`, `EVD-GOV-003R.md` | `SYNCHRONIZED / CLEAR` | 2026-08-30 |
+| **EVD-AI-001D** | AI-001D | Server-Side Gemini API Proxy Payload Validation & Error Normalization | AI Proxy Suite | 21/21 PASS (1,442 total) | Clean (0 err) | Success (Build OK) | `server.ts`, `src/domain/AIPayloadValidator.ts`, `src/tests/ai_proxy_hardening.test.ts`, `EVD-AI-001D.md` | `CERTIFIED` | 2026-08-30 |
 | **EVD-UC-01** | USE CASE | 31 Clean Architecture Use Cases | Unit Tests | 791/791 PASS | Clean | Success | `src/tests/domain.test.ts` | `RECONCILIATION REQUIRED` | 2026-08-28 |
-| **EVD-REG-01** | QA | Full Suite Regression & Complexity Benchmarks | Vitest Runner | 1,421/1,421 PASS | 0 errors | Success | All 15 Test Suites | `VERIFIED` | 2026-08-30 |
+| **EVD-REG-01** | QA | Full Suite Regression & Complexity Benchmarks | Vitest Runner | 1,442/1,442 PASS | 0 errors | Success | All 16 Test Suites | `VERIFIED` | 2026-08-30 |
 
 ---
 
@@ -55,6 +56,7 @@ To eliminate confusion across different AI agents quoting different test counts 
 | `src/tests/ai_guardrails.test.ts` | AI Guardrails & Financial Truth Protection (FG-01..05, T01..T11) | **25** | `PASS` |
 | `src/tests/ai_voice_confirmation.test.ts` | Voice Assistant Two-Phase Confirmation Guard (P01..P18, Prop 1..7) | **25** | `PASS` |
 | `src/tests/d3_cross_space_property.test.ts` | D3 Cross-Space/Fund Isolation & Transfer Conservation | **22** | `PASS` |
+| `src/tests/ai_proxy_hardening.test.ts` | Server-Side Gemini API Proxy Hardening & Isolation (AI-001D) | **21** | `PASS` |
 | `src/tests/d4_sync.test.ts` | D4 Data Contracts, Local DB & Sync | **21** | `PASS` |
 | `src/tests/d4_persistence.test.ts` | D4 Local Storage Adapters & Soft-Delete Invariant | **21** | `PASS` |
 | `src/tests/d1_financial_model.test.ts` | D1 Canonical Financial Model & Guards | **17** | `PASS` |
@@ -62,7 +64,7 @@ To eliminate confusion across different AI agents quoting different test counts 
 | `src/tests/d3_harness.test.ts` | D3 Invariant Execution Harness & Diagnostics | **15** | `PASS` |
 | `src/tests/d2_003_ui_smoke.test.ts` | Presentation Integration Smoke Tests | **10** | `PASS` |
 | `src/tests/g5_benchmark.test.ts` | Algorithm Complexity Benchmarks ($O(n)$) | **6** | `PASS` |
-| **TOTAL VITEST RUN** | **15 Test Files** | **1,421** | **100% PASS** |
+| **TOTAL VITEST RUN** | **16 Test Files** | **1,442** | **100% PASS** |
 
 ### Summary of Historical Test Milestones:
 - **"1,335 tests"**: The baseline achieved after D3 Freeze Certification (`EVD-D3-003`, 11 test files).
@@ -70,7 +72,8 @@ To eliminate confusion across different AI agents quoting different test counts 
 - **"1,371 tests"**: Baseline after D4-003 sync property suite was added (+15 tests in `d4_sync_property.test.ts`, 13 test files).
 - **"1,385 tests"**: Intermediate baseline during AI-001B implementation.
 - **"1,396 tests"**: Baseline following AI-001B Final Verification Gate (+25 tests in `ai_guardrails.test.ts`, 14 test files).
-- **"1,421 tests"**: Current canonical executable test baseline following AI-001C Final Verification Gate (+25 tests in `ai_voice_confirmation.test.ts`, 15 test files).
+- **"1,421 tests"**: Baseline following AI-001C Final Verification Gate (+25 tests in `ai_voice_confirmation.test.ts`, 15 test files).
+- **"1,442 tests"**: Current canonical executable test baseline following AI-001D Server Proxy Hardening (+21 tests in `ai_proxy_hardening.test.ts`, 16 test files).
 
 ---
 

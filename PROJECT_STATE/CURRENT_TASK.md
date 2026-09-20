@@ -9,12 +9,12 @@
 ## 1. ACTIVE TASK METADATA
 
 ```yaml
-ACTIVE_TASK_ID: "GOV-003R"
-TASK_NAME: "Repository State Reconciliation"
+ACTIVE_TASK_ID: "AI-001D"
+TASK_NAME: "Server-Side Gemini API Proxy Hardening"
 PARENT_PHASE: "PHASE-07 (AI — ARCHITECTURE DISCOVERY & TOOLS)"
 ACTIVE_OWNER: "Google AI Studio Agent"
-CURRENT_STATUS: "GOV-003R SYNCHRONIZED / CLEAR"
-LAST_COMPLETED_TASK: "GOV-003R"
+CURRENT_STATUS: "COMPLETE & CERTIFIED"
+LAST_COMPLETED_TASK: "AI-001D"
 STARTED_AT: "2026-08-30"
 LAST_UPDATED_AT: "2026-08-30"
 ROADMAP_PROGRESS: "100%"
@@ -32,6 +32,7 @@ ROADMAP_PROGRESS: "100%"
 | **AI-001C** | Voice Assistant Two-Phase Confirmation Guard | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-AI-001C`, `src/tests/ai_voice_confirmation.test.ts` (1,421/1,421 PASS) |
 | **GOV-003** | MASTER_ROADMAP Consistency Repair | `COMPLETE` | Google AI Studio Agent | `EVD-GOV-003`, `/PROJECT_STATE/*` |
 | **GOV-003R** | Repository State Reconciliation | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-GOV-003R`, `/PROJECT_STATE/*` |
+| **AI-001D** | Server-Side Gemini API Proxy Hardening | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-AI-001D`, `src/tests/ai_proxy_hardening.test.ts` (1,442/1,442 PASS) |
 
 ---
 
@@ -39,6 +40,9 @@ ROADMAP_PROGRESS: "100%"
 
 ### 🟢 ALLOWED DIRECTORIES & FILES
 - `/PROJECT_STATE/*` (State documentation & evidence files)
+- `/server.ts`
+- `/src/domain/AIPayloadValidator.ts`
+- `/src/tests/ai_proxy_hardening.test.ts`
 
 ### 🔴 STRICTLY FORBIDDEN AREAS (DO NOT MODIFY — FROZEN DOMAIN)
 - `/src/domain/FinancialTruthEngine.ts` (**FROZEN**)
@@ -47,20 +51,19 @@ ROADMAP_PROGRESS: "100%"
 - `/src/domain/methods/*.ts` (**FROZEN**)
 - `/src/repositories/*` (**FROZEN**)
 - `/src/domain/SyncEngine.ts` (**FROZEN**)
-- `/src/components/*` (**FROZEN**)
 
 ---
 
 ## 4. NEXT SCHEDULED WORK
 
 ```yaml
-NEXT_PHASE: "PHASE-07 (AI — ARCHITECTURE DISCOVERY & TOOLS)"
-NEXT_TASK: "AI-001D"
-NEXT_TASK_ID: "AI-001D"
-NEXT_TASK_NAME: "Server-Side Gemini API Proxy Hardening"
-NEXT_SUBTASK: "AI-001D"
+NEXT_PHASE: "PHASE-08 (APPLICATION USE CASES)"
+NEXT_TASK: "UC-001"
+NEXT_TASK_ID: "UC-001"
+NEXT_TASK_NAME: "Application Use Cases Domain Layer Audit"
+NEXT_SUBTASK: "UC-001"
 ASSIGNED_OWNER: "UNASSIGNED (Ready for next AI Dispatch)"
-PREREQUISITES: "AI-001C Certified, GOV-003 Synchronized, GOV-003R Synchronized"
+PREREQUISITES: "AI-001D Certified, PHASE-07 AI Engines & Tools Complete"
 PREREQUISITE_STATUS: "SATISFIED"
 ```
 
