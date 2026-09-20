@@ -5,6 +5,37 @@
 
 ---
 
+## [2026-08-30] — UC-001 Application Use Cases Domain Layer Audit & Contract Verification
+- **AI Agent:** Google AI Studio Agent
+- **Task ID:** `UC-001` (Application Use Cases Domain Layer Audit & Contract Verification)
+- **Status Transition:** `IN PROGRESS` → `COMPLETE & CERTIFIED`
+- **Scope & Findings:**
+  - Audited all 31 Application Use Cases across 15 files in `src/usecases/` adhering strictly to Clean Architecture.
+  - Verified input contracts, fail-fast validations, parameter boundaries, and type safety across all use cases.
+  - Confirmed domain boundary adherence: 100% of arithmetic and evaluation logic is delegated strictly to domain engines (`FinancialTruthEngine`, `InvariantEngine`, `BudgetEngine`, `DebtEngine`, `InvestmentEngine`, `SixJarsEngine`, `FIREEngine`, etc.).
+  - Verified Space and Fund isolation: Multi-space and multi-fund integrity enforced across `TransactionUseCases`, `WalletUseCases`, `DebtUseCases`, `SavingsUseCases`, `BudgetUseCases`, `DashboardUseCases`, and `FinancialSnapshotUseCase`.
+  - Confirmed Financial Truth preservation: Soft-delete semantics (`isSoftDeleted: true`, `status: 'soft_deleted'`), exclusion of drafts and soft-deleted items from calculations, and monotonic audit trail growth with versioning verified.
+  - Audited and clarified diagnostic logs in `sprint2_runner.ts` (lines 2915, 3004, 3248): Verified as deliberate negative-case assertions testing fail-fast error rejection and safe HTTP error mapping without corrupting local databases.
+  - Zero modifications to frozen domain architecture (D1, D2, D3, D4, G1/G2, S5-001..S5-012, AI-001D preserved).
+- **Verification Evidence:** `EVD-UC-001` (`/PROJECT_STATE/EVD-UC-001.md`), 1,442/1,442 PASS (16 test suites), 0 Lint Errors, Build Success.
+- **Next Authorized Task:** `VM-001` (ViewModels Contract Verification & Space/Fund Isolation Audit).
+
+---
+
+## [2026-08-30] — AI-001D Server-Side Gemini API Proxy Hardening
+- **AI Agent:** Google AI Studio Agent
+- **Task ID:** `AI-001D` (Server-Side Gemini API Proxy Hardening)
+- **Status Transition:** `IN PROGRESS` → `COMPLETE & CERTIFIED`
+- **Scope & Implementation:**
+  - Created `AIPayloadValidator.ts` providing authoritative calculation grounding, strict space/fund boundary filtering, and non-active transaction elimination.
+  - Hardened server-side Gemini proxy endpoints (`/api/ai/insights`, `/api/ai/ocr-receipt`, `/api/ai/parse-voice`) with strict schema validation and grounded constraints.
+  - Enforced two-phase confirmation (`requiresConfirmation: true`, `status: 'PENDING'`) for all mutation proposals.
+  - Added comprehensive test suite `src/tests/ai_proxy_hardening.test.ts` (21 tests).
+- **Verification Evidence:** `EVD-AI-001D` (`/PROJECT_STATE/EVD-AI-001D.md`), 1,442/1,442 PASS (16 suites), 0 Lint Errors, Build Success.
+- **Next Authorized Task:** `UC-001` (Application Use Cases Domain Layer Audit).
+
+---
+
 ## [2026-08-30] — GOV-003R Repository State Reconciliation
 - **AI Agent:** Google AI Studio Agent
 - **Task ID:** `GOV-003R` (Repository State Reconciliation)

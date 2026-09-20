@@ -57,7 +57,7 @@ The system delivery roadmap strictly follows Clean Architecture dependencies fro
 | **PHASE-05** | **D3 — Financial Invariants Engine** | `COMPLETE & FROZEN` | `100%` | PHASE-03, PHASE-04 | AI Studio | `EVD-D3-003` (134/134 PASS) | None (Sealed) |
 | **PHASE-06** | **D4 — Data Contracts & Local Sync** | `COMPLETE & FROZEN` | `100%` | PHASE-03, PHASE-05 | Google AI Studio Agent | `EVD-D4-003` (15/15 PASS) | None (Sealed) |
 | **PHASE-07** | **AI — Architecture Discovery & Tools** | `COMPLETE & CERTIFIED` | `100%` | PHASE-04 | Google AI Studio Agent | `EVD-AI-001A..001D` (1,442 tests) | `UC-001` (Application Use Cases) |
-| **PHASE-08** | **Use Case Layer Orchestration** | `NOT CONFIRMED` | `0%` | PHASE-03, PHASE-04 | Unassigned | `EVD-UC-01` (791 tests) | `UC-001` (Audit Cycle) |
+| **PHASE-08** | **Use Case Layer Orchestration** | `COMPLETE & CERTIFIED` | `100%` | PHASE-03, PHASE-04 | Google AI Studio Agent | `EVD-UC-001` (1,442 tests) | `VM-001` (ViewModels Layer) |
 | **PHASE-09** | **Repository Implementations** | `NOT STARTED` | `0%` | PHASE-06 | Unassigned | None | `REPO-001` |
 | **PHASE-10** | **Offline-First Database Engine** | `NOT STARTED` | `0%` | PHASE-09 | Unassigned | None | `DB-001` |
 | **PHASE-11** | **Sync, Outbox & Cloud Backup** | `NOT STARTED` | `0%` | PHASE-10 | Unassigned | None | `SYNC-001` |

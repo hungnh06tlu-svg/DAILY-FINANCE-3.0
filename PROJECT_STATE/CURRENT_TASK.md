@@ -9,12 +9,12 @@
 ## 1. ACTIVE TASK METADATA
 
 ```yaml
-ACTIVE_TASK_ID: "AI-001D"
-TASK_NAME: "Server-Side Gemini API Proxy Hardening"
-PARENT_PHASE: "PHASE-07 (AI — ARCHITECTURE DISCOVERY & TOOLS)"
+ACTIVE_TASK_ID: "UC-001"
+TASK_NAME: "Application Use Cases Domain Layer Audit & Contract Verification"
+PARENT_PHASE: "PHASE-08 (APPLICATION USE CASES)"
 ACTIVE_OWNER: "Google AI Studio Agent"
 CURRENT_STATUS: "COMPLETE & CERTIFIED"
-LAST_COMPLETED_TASK: "AI-001D"
+LAST_COMPLETED_TASK: "UC-001"
 STARTED_AT: "2026-08-30"
 LAST_UPDATED_AT: "2026-08-30"
 ROADMAP_PROGRESS: "100%"
@@ -33,6 +33,7 @@ ROADMAP_PROGRESS: "100%"
 | **GOV-003** | MASTER_ROADMAP Consistency Repair | `COMPLETE` | Google AI Studio Agent | `EVD-GOV-003`, `/PROJECT_STATE/*` |
 | **GOV-003R** | Repository State Reconciliation | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-GOV-003R`, `/PROJECT_STATE/*` |
 | **AI-001D** | Server-Side Gemini API Proxy Hardening | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-AI-001D`, `src/tests/ai_proxy_hardening.test.ts` (1,442/1,442 PASS) |
+| **UC-001** | Application Use Cases Domain Layer Audit & Contract Verification | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-UC-001`, `src/usecases/*` (1,442/1,442 PASS) |
 
 ---
 
@@ -40,9 +41,7 @@ ROADMAP_PROGRESS: "100%"
 
 ### 🟢 ALLOWED DIRECTORIES & FILES
 - `/PROJECT_STATE/*` (State documentation & evidence files)
-- `/server.ts`
-- `/src/domain/AIPayloadValidator.ts`
-- `/src/tests/ai_proxy_hardening.test.ts`
+- `/src/usecases/*` (Application use cases layer)
 
 ### 🔴 STRICTLY FORBIDDEN AREAS (DO NOT MODIFY — FROZEN DOMAIN)
 - `/src/domain/FinancialTruthEngine.ts` (**FROZEN**)
@@ -57,13 +56,13 @@ ROADMAP_PROGRESS: "100%"
 ## 4. NEXT SCHEDULED WORK
 
 ```yaml
-NEXT_PHASE: "PHASE-08 (APPLICATION USE CASES)"
-NEXT_TASK: "UC-001"
-NEXT_TASK_ID: "UC-001"
-NEXT_TASK_NAME: "Application Use Cases Domain Layer Audit"
-NEXT_SUBTASK: "UC-001"
+NEXT_PHASE: "PHASE-09 (VIEWMODELS & ADAPTATION)"
+NEXT_TASK: "VM-001"
+NEXT_TASK_ID: "VM-001"
+NEXT_TASK_NAME: "ViewModels Contract Verification & Space/Fund Isolation Audit"
+NEXT_SUBTASK: "VM-001"
 ASSIGNED_OWNER: "UNASSIGNED (Ready for next AI Dispatch)"
-PREREQUISITES: "AI-001D Certified, PHASE-07 AI Engines & Tools Complete"
+PREREQUISITES: "UC-001 Certified, PHASE-08 Application Use Cases Complete"
 PREREQUISITE_STATUS: "SATISFIED"
 ```
 
