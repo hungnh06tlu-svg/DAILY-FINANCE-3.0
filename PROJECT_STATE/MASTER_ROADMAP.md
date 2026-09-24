@@ -56,8 +56,8 @@ The system delivery roadmap strictly follows Clean Architecture dependencies fro
 | **PHASE-04** | **D2 — Financial Truth & 10 Methods** | `COMPLETE & FROZEN` | `100%` | PHASE-03 | AI Studio | `EVD-D2-VER` (20/20 PASS) | None (Sealed) |
 | **PHASE-05** | **D3 — Financial Invariants Engine** | `COMPLETE & FROZEN` | `100%` | PHASE-03, PHASE-04 | AI Studio | `EVD-D3-003` (134/134 PASS) | None (Sealed) |
 | **PHASE-06** | **D4 — Data Contracts & Local Sync** | `COMPLETE & FROZEN` | `100%` | PHASE-03, PHASE-05 | Google AI Studio Agent | `EVD-D4-003` (15/15 PASS) | None (Sealed) |
-| **PHASE-07** | **AI — Architecture Discovery & Tools** | `COMPLETE & CERTIFIED` | `100%` | PHASE-04 | Google AI Studio Agent | `EVD-AI-001A..001D` (1,442 tests) | `UC-001` (Application Use Cases) |
-| **PHASE-08** | **Use Case Layer Orchestration** | `COMPLETE & CERTIFIED` | `100%` | PHASE-03, PHASE-04 | Google AI Studio Agent | `EVD-UC-001` (1,442 tests) | `VM-001` (ViewModels Layer) |
+| **PHASE-07** | **AI — Architecture Discovery & Tools** | `COMPLETE & CERTIFIED` | `100%` | PHASE-04 | Google AI Studio Agent | `EVD-AI-001A..001D` (1,442 tests) | None (Completed) |
+| **PHASE-08** | **Use Case Layer Orchestration** | `COMPLETE & CERTIFIED` | `100%` | PHASE-03, PHASE-04 | Google AI Studio Agent | `EVD-UC-001` (1,442 tests) | `REPO-001` (Repository Implementations) |
 | **PHASE-09** | **Repository Implementations** | `NOT STARTED` | `0%` | PHASE-06 | Unassigned | None | `REPO-001` |
 | **PHASE-10** | **Offline-First Database Engine** | `NOT STARTED` | `0%` | PHASE-09 | Unassigned | None | `DB-001` |
 | **PHASE-11** | **Sync, Outbox & Cloud Backup** | `NOT STARTED` | `0%` | PHASE-10 | Unassigned | None | `SYNC-001` |
@@ -113,9 +113,11 @@ The system delivery roadmap strictly follows Clean Architecture dependencies fro
   - `AI-001D`: Server-Side Gemini API Proxy Payload Validation & Error Normalization (`CERTIFIED`, `EVD-AI-001D`)
 
 ### PHASE-08: Use Case Layer Orchestration
-- **Status:** `NOT CONFIRMED`
-- **Scope:** Formal validation of the 31 Clean Architecture use cases connecting Domain to Repositories.
+- **Status:** `COMPLETE & CERTIFIED (100% — UC-001 CERTIFIED)`
+- **Scope:** Formal audit and contract verification of all 31 Clean Architecture use cases connecting Domain to Repositories (`EVD-UC-001`, 1,442/1,442 tests passing across 16 suites).
+- **Completed Subtasks:**
+  - `UC-001`: Application Use Cases Domain Layer Audit & Contract Verification (`CERTIFIED`, `EVD-UC-001`)
 
 ### PHASE-09 → PHASE-13: Infrastructure, Persistence & QA
 - **Status:** `NOT STARTED / IN PROGRESS`
-- **Scope:** SQLite/Room persistence, delta sync engine, security guards, Vitest suite regression, production compilation.
+- **Scope:** SQLite/Room persistence, delta sync engine, security guards, Vitest suite regression, production compilation. Next planned milestone: `REPO-001` (Phase-09 Repository Implementations).

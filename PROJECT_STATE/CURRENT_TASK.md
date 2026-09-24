@@ -34,6 +34,7 @@ ROADMAP_PROGRESS: "100%"
 | **GOV-003R** | Repository State Reconciliation | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-GOV-003R`, `/PROJECT_STATE/*` |
 | **AI-001D** | Server-Side Gemini API Proxy Hardening | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-AI-001D`, `src/tests/ai_proxy_hardening.test.ts` (1,442/1,442 PASS) |
 | **UC-001** | Application Use Cases Domain Layer Audit & Contract Verification | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-UC-001`, `src/usecases/*` (1,442/1,442 PASS) |
+| **GOV-004** | Post-UC-001 Repository State Synchronization | `COMPLETE & SYNCHRONIZED` | Google AI Studio Agent | `EVD-GOV-004`, `/PROJECT_STATE/*` |
 
 ---
 
@@ -41,7 +42,6 @@ ROADMAP_PROGRESS: "100%"
 
 ### 🟢 ALLOWED DIRECTORIES & FILES
 - `/PROJECT_STATE/*` (State documentation & evidence files)
-- `/src/usecases/*` (Application use cases layer)
 
 ### 🔴 STRICTLY FORBIDDEN AREAS (DO NOT MODIFY — FROZEN DOMAIN)
 - `/src/domain/FinancialTruthEngine.ts` (**FROZEN**)
@@ -50,19 +50,21 @@ ROADMAP_PROGRESS: "100%"
 - `/src/domain/methods/*.ts` (**FROZEN**)
 - `/src/repositories/*` (**FROZEN**)
 - `/src/domain/SyncEngine.ts` (**FROZEN**)
+- `/src/usecases/*` (**FROZEN / AUDITED**)
 
 ---
 
 ## 4. NEXT SCHEDULED WORK
 
 ```yaml
-NEXT_PHASE: "PHASE-09 (VIEWMODELS & ADAPTATION)"
-NEXT_TASK: "VM-001"
-NEXT_TASK_ID: "VM-001"
-NEXT_TASK_NAME: "ViewModels Contract Verification & Space/Fund Isolation Audit"
-NEXT_SUBTASK: "VM-001"
+NEXT_PHASE: "PHASE-09 (REPOSITORY IMPLEMENTATIONS)"
+NEXT_TASK: "REPO-001"
+NEXT_TASK_ID: "REPO-001"
+NEXT_TASK_NAME: "Domain Repository Implementation Audit & Verification"
+NEXT_SUBTASK: "REPO-001"
 ASSIGNED_OWNER: "UNASSIGNED (Ready for next AI Dispatch)"
-PREREQUISITES: "UC-001 Certified, PHASE-08 Application Use Cases Complete"
+PREREQUISITES: "UC-001 Certified, PHASE-08 Application Use Cases Complete, GOV-004 Synchronized"
 PREREQUISITE_STATUS: "SATISFIED"
+BLOCKERS: "NONE"
 ```
 

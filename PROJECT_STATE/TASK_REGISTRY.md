@@ -73,11 +73,12 @@
 | **AI-001B** | Root | AI | AI Tools & Endpoint Guardrails Implementation | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001A | 2026-08-30 | 2026-08-30 | `EVD-AI-001B` | AI-001C |
 | **AI-001C** | Root | AI | Voice Assistant Two-Phase Confirmation Guard | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001B | 2026-08-30 | 2026-08-30 | `EVD-AI-001C` | AI-001D |
 | **AI-001D** | Root | AI | Server-Side Gemini API Proxy Hardening | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001C | 2026-08-30 | 2026-08-30 | `EVD-AI-001D` | UC-001 |
-| **UC-001** | Root | USE CASE | Application Use Cases Domain Layer Audit & Contract Verification | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001D | 2026-08-30 | 2026-08-30 | `EVD-UC-001` | VM-001 |
+| **UC-001** | Root | USE CASE | Application Use Cases Domain Layer Audit & Contract Verification | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001D | 2026-08-30 | 2026-08-30 | `EVD-UC-001` | GOV-004 |
 | **GOV-001** | Root | GOVERNANCE | D3/Phase-05 Freeze Governance Audit | `COMPLETE` | `100%` | AI Studio | D3-003 | 2026-08-28 | 2026-08-28 | `EVD-GOV-001` | D4-001 |
 | **GOV-002** | Root | GOVERNANCE | AI Phase Repository / PROJECT_STATE Synchronization | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001B | 2026-08-30 | 2026-08-30 | `EVD-GOV-002` | AI-001C |
 | **GOV-003** | Root | GOVERNANCE | MASTER_ROADMAP Consistency Repair | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001C | 2026-08-30 | 2026-08-30 | `EVD-GOV-003` | AI-001D |
 | **GOV-003R** | Root | GOVERNANCE | Repository State Reconciliation | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-003 | 2026-08-30 | 2026-08-30 | `EVD-GOV-003R` | AI-001D |
+| **GOV-004** | Root | GOVERNANCE | Post-UC-001 Repository State Synchronization | `COMPLETE` | `100%` | Google AI Studio Agent | UC-001 | 2026-08-30 | 2026-08-30 | `EVD-GOV-004` | REPO-001 |
 
 ---
 
@@ -85,8 +86,8 @@
 
 | Phase ID | Subsystem | Scope Description | Status | Progress | Owner | Dependencies | Next Task |
 | :--- | :--- | :--- | :---: | :---: | :--- | :--- | :--- |
-| **PHASE-08** | **USE CASE** | 31 Clean Architecture Application Use Cases | `COMPLETE` | `100%` | Google AI Studio Agent | D1, D2, PHASE-07 | `VM-001` |
-| **PHASE-09** | **REPOSITORY** | Domain Repository Implementations | `NOT STARTED` | `0%` | Unassigned | D4-001 | `REPO-001` |
+| **PHASE-08** | **USE CASE** | 31 Clean Architecture Application Use Cases | `COMPLETE` | `100%` | Google AI Studio Agent | D1, D2, PHASE-07 | `REPO-001` |
+| **PHASE-09** | **REPOSITORY** | Domain Repository Implementations | `NOT STARTED` | `0%` | Unassigned | D4-001, PHASE-08 | `REPO-001` |
 | **PHASE-10** | **DATABASE** | Local Persistence / Room SQLite Adapter | `NOT STARTED` | `0%` | Unassigned | PHASE-09 | `DB-001` |
 | **PHASE-11** | **SYNC** | Delta-Sync, Outbox Queue & Cloud Backup | `NOT STARTED` | `0%` | Unassigned | PHASE-10 | `SYNC-001` |
 | **PHASE-12** | **SECURITY** | Role Isolation, Space Guard & Cloud Storage | `NOT STARTED` | `0%` | Unassigned | PHASE-11 | `SEC-001` |
