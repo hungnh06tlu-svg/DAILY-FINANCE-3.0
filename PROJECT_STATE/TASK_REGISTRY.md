@@ -78,7 +78,8 @@
 | **GOV-002** | Root | GOVERNANCE | AI Phase Repository / PROJECT_STATE Synchronization | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001B | 2026-08-30 | 2026-08-30 | `EVD-GOV-002` | AI-001C |
 | **GOV-003** | Root | GOVERNANCE | MASTER_ROADMAP Consistency Repair | `COMPLETE` | `100%` | Google AI Studio Agent | AI-001C | 2026-08-30 | 2026-08-30 | `EVD-GOV-003` | AI-001D |
 | **GOV-003R** | Root | GOVERNANCE | Repository State Reconciliation | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-003 | 2026-08-30 | 2026-08-30 | `EVD-GOV-003R` | AI-001D |
-| **GOV-004** | Root | GOVERNANCE | Post-UC-001 Repository State Synchronization | `COMPLETE` | `100%` | Google AI Studio Agent | UC-001 | 2026-08-30 | 2026-08-30 | `EVD-GOV-004` | REPO-001 |
+| **GOV-004** | Root | GOVERNANCE | Post-UC-001 Repository State Synchronization | `COMPLETE` | `100%` | Google AI Studio Agent | UC-001 | 2026-08-30 | 2026-08-30 | `EVD-GOV-004` | GOV-004R |
+| **GOV-004R** | Root | GOVERNANCE | Repository State Push & Reconciliation | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-004 | 2026-08-30 | 2026-08-30 | `EVD-GOV-004R` | REPO-001 |
 
 ---
 
