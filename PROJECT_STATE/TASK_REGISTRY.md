@@ -2,7 +2,7 @@
 
 > **PROJECT:** DAILY FINANCE 3.0  
 > **SCOPE:** Full Hierarchical Task Breakdown, Granular Subtasks, Ownership & Progress Tracking  
-> **LAST VERIFIED:** 2026-08-30  
+> **LAST VERIFIED:** 2026-10-13  
 
 ---
 
@@ -82,8 +82,9 @@
 | **GOV-004R** | Root | GOVERNANCE | Repository State Push & Reconciliation | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-004 | 2026-08-30 | 2026-08-30 | `EVD-GOV-004R` | REPO-001 |
 | **REPO-001** | Root | REPOSITORY | Domain Repository Implementation Audit & Verification | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-004R | 2026-08-30 | 2026-08-30 | `EVD-REPO-001` | GOV-005 |
 | **GOV-005** | Root | GOVERNANCE | Post-REPO-001 Repository State Reconciliation & Remote Verification | `COMPLETE` | `100%` | Google AI Studio Agent | REPO-001 | 2026-10-13 | 2026-10-13 | Commit `59fdf3a` | GOV-006 |
-| **GOV-006** | Root | GOVERNANCE | Post-REPO-001 Remediation Roadmap Authorization & Registration | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-005 | 2026-10-13 | 2026-10-13 | `EVD-GOV-006` | REPO-002 |
-| **REPO-002** | Root | REPOSITORY | Repository Layer Consolidation & Unification (F-01, F-02, F-03) | `AUTHORIZED` | `0%` | Google AI Studio Agent | GOV-006 | 2026-10-13 | — | Pending | REPO-003 |
+| **GOV-006** | Root | GOVERNANCE | Post-REPO-001 Remediation Roadmap Authorization & Registration | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-005 | 2026-10-13 | 2026-10-13 | `EVD-GOV-006` | GOV-006R3 |
+| **GOV-006R3** | Root | GOVERNANCE | Authoritative Remote State Repair & Consistency Verification | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-006 | 2026-10-13 | 2026-10-13 | `EVD-GOV-006R3` | REPO-002 |
+| **REPO-002** | Root | REPOSITORY | Repository Layer Consolidation & Unification (F-01, F-02, F-03) | `AUTHORIZED` | `0%` | Google AI Studio Agent | GOV-006R3 | 2026-10-13 | — | Pending | REPO-003 |
 | **REPO-003** | Root | REPOSITORY | LocalDataSource Persistence & Space CRUD Hardening (F-04, F-07, F-08) | `PLANNED` | `0%` | Unassigned | REPO-002 | — | — | None | REPO-004 |
 | **REPO-004** | Root | REPOSITORY | Dashboard & Report Projection Grounding & Backup Restore (F-05, F-06, F-09) | `PLANNED` | `0%` | Unassigned | REPO-003 | — | — | None | PHASE-10 |
 

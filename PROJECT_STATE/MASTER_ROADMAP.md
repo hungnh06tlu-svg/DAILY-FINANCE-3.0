@@ -3,7 +3,7 @@
 > **PROJECT:** DAILY FINANCE 3.0  
 > **SCOPE:** Comprehensive End-to-End Architectural Roadmap & Phase Delivery Tracking  
 > **GOVERNING PRINCIPLE:** Clean Architecture + MVI + Deterministic Financial Truth  
-> **LAST VERIFIED:** 2026-08-30  
+> **LAST VERIFIED:** 2026-10-13  
 
 ---
 
@@ -124,7 +124,8 @@ The system delivery roadmap strictly follows Clean Architecture dependencies fro
 - **Subtasks & Remediation Sequence:**
   - `REPO-001`: Domain Repository Implementation Audit & Verification (`COMPLETE & AUDITED`, `EVD-REPO-001`, 9 findings classified).
   - `GOV-005`: Post-REPO-001 Repository State Reconciliation & Remote Verification (`COMPLETE & RECONCILED`, Commit `59fdf3a`).
-  - `GOV-006`: Post-REPO-001 Remediation Roadmap Authorization & Governance Registration (`COMPLETE & CERTIFIED`, `EVD-GOV-006`).
+  - `GOV-006`: Post-REPO-001 Remediation Roadmap Authorization & Governance Registration (`COMPLETE & CERTIFIED`, `EVD-GOV-006`, Commit `21c5a34`).
+  - `GOV-006R3`: Authoritative Remote State Repair & Consistency Verification (`COMPLETE & SYNCHRONIZED`, `EVD-GOV-006R3`).
   - `REPO-002`: Repository Layer Consolidation & Unification (`AUTHORIZED / NEXT`, targets F-01, F-02, F-03).
   - `REPO-003`: LocalDataSource Persistence & Space CRUD Hardening (`PLANNED`, targets F-04, F-07, F-08).
   - `REPO-004`: Dashboard & Report Projection Grounding & Backup Restore (`PLANNED`, targets F-05, F-06, F-09).
