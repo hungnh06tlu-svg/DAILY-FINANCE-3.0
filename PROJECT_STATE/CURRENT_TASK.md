@@ -2,24 +2,24 @@
 
 > **PROJECT:** DAILY FINANCE 3.0  
 > **SCOPE:** Real-time Execution Dashboard, Active Subtask & Boundary Rules for the Active AI Agent  
-> **LAST UPDATED:** 2026-08-30  
+> **LAST UPDATED:** 2026-10-13  
 
 ---
 
 ## 1. ACTIVE TASK METADATA
 
 ```yaml
-ACTIVE_TASK_ID: "REPO-001"
-TASK_NAME: "Domain Repository Implementation Audit & Contract Verification"
+ACTIVE_TASK_ID: "GOV-006"
+TASK_NAME: "Post-REPO-001 Remediation Roadmap Authorization & Governance Registration"
 PARENT_PHASE: "PHASE-09 (REPOSITORY IMPLEMENTATIONS)"
 ACTIVE_OWNER: "Google AI Studio Agent"
-CURRENT_STATUS: "COMPLETE & AUDITED"
-CURRENT_POSITION: "Phase-09 Repository layer audit complete; awaiting governed remediation dispatch"
-LAST_COMPLETED_TASK: "REPO-001"
-LAST_COMPLETED_STATUS: "COMPLETE & AUDITED (EVD-REPO-001)"
+CURRENT_STATUS: "COMPLETE & CERTIFIED"
+CURRENT_POSITION: "Phase-09 Remediation Roadmap Authorized & Registered; REPO-002 dispatched as next task"
+LAST_COMPLETED_TASK: "GOV-006"
+LAST_COMPLETED_STATUS: "COMPLETE & CERTIFIED (EVD-GOV-006)"
 NEXT_TASK: "REPO-002"
-STARTED_AT: "2026-08-30"
-LAST_UPDATED_AT: "2026-08-30"
+STARTED_AT: "2026-10-13"
+LAST_UPDATED_AT: "2026-10-13"
 ROADMAP_PROGRESS: "90%"
 ```
 
@@ -40,22 +40,27 @@ ROADMAP_PROGRESS: "90%"
 | **GOV-004** | Post-UC-001 Repository State Synchronization | `COMPLETE & SYNCHRONIZED` | Google AI Studio Agent | `EVD-GOV-004`, `/PROJECT_STATE/*` |
 | **GOV-004R** | Repository State Push & Reconciliation | `COMPLETE & SYNCHRONIZED` | Google AI Studio Agent | `EVD-GOV-004R`, `/PROJECT_STATE/*` |
 | **REPO-001** | Domain Repository Implementation Audit & Contract Verification | `COMPLETE & AUDITED` | Google AI Studio Agent | `EVD-REPO-001`, `src/repositories/*` (1,442/1,442 PASS) |
+| **GOV-005** | Post-REPO-001 Repository State Reconciliation & Remote Verification | `COMPLETE & RECONCILED` | Google AI Studio Agent | Commit `59fdf3a`, GitHub origin/main verification |
+| **GOV-006** | Post-REPO-001 Remediation Roadmap Authorization & Governance Registration | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-GOV-006`, `/PROJECT_STATE/*` (1,442/1,442 PASS) |
 
 ---
 
 ## 3. ACTIVE EXECUTION BOUNDARIES
 
-### 🟢 ALLOWED DIRECTORIES & FILES
+### 🟢 ALLOWED DIRECTORIES & FILES (FOR NEXT TASK: REPO-002)
+- `/src/repositories/local/LocalTransactionRepository.ts`
+- `/src/repositories/implementations.ts` (`LocalTransactionRepository` unification)
+- `/src/di/CompositionRoot.ts`
 - `/PROJECT_STATE/*` (State documentation & evidence files)
 
-### 🔴 STRICTLY FORBIDDEN AREAS (DO NOT MODIFY — FROZEN DOMAIN)
+### 🔴 STRICTLY FORBIDDEN AREAS (DO NOT MODIFY — FROZEN DOMAIN & CERTIFIED USE CASES)
 - `/src/domain/FinancialTruthEngine.ts` (**FROZEN**)
 - `/src/domain/CanonicalFinancialModel.ts` (**FROZEN**)
 - `/src/domain/InvariantEngine.ts` (**FROZEN**)
 - `/src/domain/methods/*.ts` (**FROZEN**)
-- `/src/repositories/*` (**FROZEN / AUDITED**)
 - `/src/domain/SyncEngine.ts` (**FROZEN**)
-- `/src/usecases/*` (**FROZEN / AUDITED**)
+- `/src/usecases/*` (**FROZEN / CERTIFIED UC-001**)
+- Presentation Views `src/views/*` (**FROZEN S5-001..S5-012, G1, G2**)
 
 ---
 
@@ -68,8 +73,9 @@ NEXT_TASK_ID: "REPO-002"
 NEXT_TASK_NAME: "Repository Layer Consolidation & Unification"
 NEXT_SUBTASK: "REPO-002"
 ASSIGNED_OWNER: "UNASSIGNED (Ready for next AI Dispatch)"
-PREREQUISITES: "REPO-001 Audited & Certified, EVD-REPO-001 Recorded"
+PREREQUISITES: "REPO-001 Audited & Recorded (EVD-REPO-001), GOV-006 Remediation Roadmap Authorized (EVD-GOV-006)"
 PREREQUISITE_STATUS: "SATISFIED"
-BLOCKERS: "NONE (Audit Complete - 9 findings classified; awaiting governed remediation)"
+BLOCKERS: "NONE (Remediation Roadmap Authorized; 9 findings F-01..F-09 mapped; REPO-002 ready for execution)"
+MAPPED_FINDINGS: "F-01 (Cross-space transfer dropping), F-02 (Hard delete in DataSource / broken restore), F-03 (Dual LocalTransactionRepository divergence)"
 ```
 

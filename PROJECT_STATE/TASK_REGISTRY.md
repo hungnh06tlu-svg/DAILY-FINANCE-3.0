@@ -80,7 +80,12 @@
 | **GOV-003R** | Root | GOVERNANCE | Repository State Reconciliation | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-003 | 2026-08-30 | 2026-08-30 | `EVD-GOV-003R` | AI-001D |
 | **GOV-004** | Root | GOVERNANCE | Post-UC-001 Repository State Synchronization | `COMPLETE` | `100%` | Google AI Studio Agent | UC-001 | 2026-08-30 | 2026-08-30 | `EVD-GOV-004` | GOV-004R |
 | **GOV-004R** | Root | GOVERNANCE | Repository State Push & Reconciliation | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-004 | 2026-08-30 | 2026-08-30 | `EVD-GOV-004R` | REPO-001 |
-| **REPO-001** | Root | REPOSITORY | Domain Repository Implementation Audit & Verification | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-004R | 2026-08-30 | 2026-08-30 | `EVD-REPO-001` | REPO-002 |
+| **REPO-001** | Root | REPOSITORY | Domain Repository Implementation Audit & Verification | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-004R | 2026-08-30 | 2026-08-30 | `EVD-REPO-001` | GOV-005 |
+| **GOV-005** | Root | GOVERNANCE | Post-REPO-001 Repository State Reconciliation & Remote Verification | `COMPLETE` | `100%` | Google AI Studio Agent | REPO-001 | 2026-10-13 | 2026-10-13 | Commit `59fdf3a` | GOV-006 |
+| **GOV-006** | Root | GOVERNANCE | Post-REPO-001 Remediation Roadmap Authorization & Registration | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-005 | 2026-10-13 | 2026-10-13 | `EVD-GOV-006` | REPO-002 |
+| **REPO-002** | Root | REPOSITORY | Repository Layer Consolidation & Unification (F-01, F-02, F-03) | `AUTHORIZED` | `0%` | Google AI Studio Agent | GOV-006 | 2026-10-13 | — | Pending | REPO-003 |
+| **REPO-003** | Root | REPOSITORY | LocalDataSource Persistence & Space CRUD Hardening (F-04, F-07, F-08) | `PLANNED` | `0%` | Unassigned | REPO-002 | — | — | None | REPO-004 |
+| **REPO-004** | Root | REPOSITORY | Dashboard & Report Projection Grounding & Backup Restore (F-05, F-06, F-09) | `PLANNED` | `0%` | Unassigned | REPO-003 | — | — | None | PHASE-10 |
 
 ---
 
@@ -89,7 +94,7 @@
 | Phase ID | Subsystem | Scope Description | Status | Progress | Owner | Dependencies | Next Task |
 | :--- | :--- | :--- | :---: | :---: | :--- | :--- | :--- |
 | **PHASE-08** | **USE CASE** | 31 Clean Architecture Application Use Cases | `COMPLETE` | `100%` | Google AI Studio Agent | D1, D2, PHASE-07 | `REPO-001` |
-| **PHASE-09** | **REPOSITORY** | Domain Repository Implementations & Remediation | `IN PROGRESS` | `25%` | Google AI Studio Agent | D4-001, PHASE-08 | `REPO-002` |
+| **PHASE-09** | **REPOSITORY** | Domain Repository Implementations & Remediation (REPO-001..004) | `IN PROGRESS` | `25%` | Google AI Studio Agent | D4-001, PHASE-08 | `REPO-002` |
 | **PHASE-10** | **DATABASE** | Local Persistence / Room SQLite Adapter | `NOT STARTED` | `0%` | Unassigned | PHASE-09 | `DB-001` |
 | **PHASE-11** | **SYNC** | Delta-Sync, Outbox Queue & Cloud Backup | `NOT STARTED` | `0%` | Unassigned | PHASE-10 | `SYNC-001` |
 | **PHASE-12** | **SECURITY** | Role Isolation, Space Guard & Cloud Storage | `NOT STARTED` | `0%` | Unassigned | PHASE-11 | `SEC-001` |
