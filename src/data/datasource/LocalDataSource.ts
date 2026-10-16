@@ -48,13 +48,16 @@ export interface DataSource {
   // Wallets
   getWallets(spaceId?: string): Promise<Wallet[]>;
   getWalletById(id: string): Promise<Wallet | null>;
-  addWallet(wallet: Omit<Wallet, 'id'>): Promise<Wallet>;
+  addWallet(wallet: Wallet | Omit<Wallet, 'id'>): Promise<Wallet>;
   updateWallet(wallet: Wallet): Promise<Wallet>;
   deleteWallet(id: string): Promise<boolean>;
 
   // Spaces
   getSpaces(): Promise<FinancialSpace[]>;
   getSpaceById(id: string): Promise<FinancialSpace | null>;
+  addSpace(space: FinancialSpace | Omit<FinancialSpace, 'id'>): Promise<FinancialSpace>;
+  updateSpace(space: FinancialSpace): Promise<FinancialSpace>;
+  deleteSpace(id: string): Promise<boolean>;
 
   // Budgets
   getBudgets(spaceId?: string): Promise<Budget[]>;
@@ -133,12 +136,24 @@ export class LocalDataSource implements DataSource {
       status: 'active'
     }
   ];
-  private budgets: Budget[] = [...INITIAL_BUDGETS];
-  private savingsGoals: SavingsGoal[] = [...INITIAL_SAVINGS_GOALS];
+  private budgets: Budget[] = INITIAL_BUDGETS.map((b) => ({
+    ...b,
+    spaceId: b.spaceId || 'sp_personal'
+  }));
+  private savingsGoals: SavingsGoal[] = INITIAL_SAVINGS_GOALS.map((s) => ({
+    ...s,
+    spaceId: s.spaceId || 'sp_personal'
+  }));
   private creditCards: CreditCard[] = [...INITIAL_CREDIT_CARDS];
-  private debtsAndLoans: DebtItem[] = [...INITIAL_DEBTS];
+  private debtsAndLoans: DebtItem[] = INITIAL_DEBTS.map((d) => ({
+    ...d,
+    spaceId: d.spaceId || 'sp_personal'
+  }));
   private installments: Installment[] = [...INITIAL_INSTALLMENTS];
-  private sixJars: SixJar[] = [...INITIAL_SIX_JARS];
+  private sixJars: SixJar[] = INITIAL_SIX_JARS.map((j) => ({
+    ...j,
+    spaceId: j.spaceId || 'sp_personal'
+  }));
   private fireConfig: FireConfig = { ...INITIAL_FIRE_CONFIG };
   private featureConfig: FeatureModulesState = { ...DEFAULT_FEATURE_MODULES };
   private investments: Investment[] = [
@@ -221,18 +236,19 @@ export class LocalDataSource implements DataSource {
 
   // Wallets
   async getWallets(spaceId?: string): Promise<Wallet[]> {
-    if (!spaceId) return [...this.wallets];
-    return this.wallets.filter((w) => w.spaceId === spaceId);
+    const active = this.wallets.filter((w) => !w.isDeleted && w.status !== 'archived');
+    if (!spaceId) return [...active];
+    return active.filter((w) => w.spaceId === spaceId);
   }
 
   async getWalletById(id: string): Promise<Wallet | null> {
     return this.wallets.find((w) => w.id === id) || null;
   }
 
-  async addWallet(wallet: Omit<Wallet, 'id'>): Promise<Wallet> {
+  async addWallet(wallet: Wallet | Omit<Wallet, 'id'>): Promise<Wallet> {
     const newWallet: Wallet = {
       ...wallet,
-      id: IdGenerator.generateWalletId()
+      id: ('id' in wallet && wallet.id) ? wallet.id : IdGenerator.generateWalletId()
     };
     this.wallets.push(newWallet);
     return newWallet;
@@ -240,19 +256,44 @@ export class LocalDataSource implements DataSource {
 
   async updateWallet(wallet: Wallet): Promise<Wallet> {
     const index = this.wallets.findIndex((w) => w.id === wallet.id);
+    const updated: Wallet = {
+      ...wallet,
+      updatedAt: new Date().toISOString(),
+      version: (wallet.version || 1) + 1
+    };
     if (index !== -1) {
-      this.wallets[index] = { ...wallet };
+      this.wallets[index] = updated;
     }
-    return wallet;
+    return updated;
   }
 
   async deleteWallet(id: string): Promise<boolean> {
+    const wallet = this.wallets.find((w) => w.id === id);
+    if (!wallet) return false;
+
+    // Check for referencing transactions to protect relational integrity (F-08)
+    const hasTransactions = this.transactions.some(
+      (tx) => tx.walletId === id || tx.targetWalletId === id || tx.accountId === id
+    );
+
+    const now = new Date().toISOString();
+    if (hasTransactions) {
+      // Soft-delete and archive to prevent dangling transaction references
+      wallet.isDeleted = true;
+      wallet.status = 'archived';
+      wallet.deletedAt = now;
+      wallet.updatedAt = now;
+      wallet.version = (wallet.version || 1) + 1;
+      return true;
+    }
+
+    // No transactions reference this wallet: safe to physically remove
     const initialLen = this.wallets.length;
     this.wallets = this.wallets.filter((w) => w.id !== id);
     return this.wallets.length < initialLen;
   }
 
-  // Spaces
+  // Spaces (F-04)
   async getSpaces(): Promise<FinancialSpace[]> {
     return [...this.spaces];
   }
@@ -261,15 +302,56 @@ export class LocalDataSource implements DataSource {
     return this.spaces.find((s) => s.id === id) || null;
   }
 
-  // Budgets
+  async addSpace(space: FinancialSpace | Omit<FinancialSpace, 'id'>): Promise<FinancialSpace> {
+    const newSpace: FinancialSpace = {
+      id: ('id' in space && space.id) ? space.id : IdGenerator.generateId('sp'),
+      name: space.name,
+      type: space.type || 'personal',
+      balance: space.balance || 0,
+      currency: space.currency || 'VND',
+      cardColor: space.cardColor || '#3B82F6',
+      iconName: space.iconName || 'Wallet',
+      ownerName: space.ownerName || 'User',
+      membersCount: space.membersCount || 1,
+      createdAt: space.createdAt || new Date().toISOString(),
+      updatedAt: space.updatedAt || new Date().toISOString(),
+      version: space.version || 1
+    };
+    this.spaces.push(newSpace);
+    return { ...newSpace };
+  }
+
+  async updateSpace(space: FinancialSpace): Promise<FinancialSpace> {
+    const index = this.spaces.findIndex((s) => s.id === space.id);
+    const updated: FinancialSpace = {
+      ...space,
+      updatedAt: new Date().toISOString(),
+      version: (space.version || 1) + 1
+    };
+    if (index !== -1) {
+      this.spaces[index] = updated;
+    } else {
+      this.spaces.push(updated);
+    }
+    return { ...updated };
+  }
+
+  async deleteSpace(id: string): Promise<boolean> {
+    const initialLen = this.spaces.length;
+    this.spaces = this.spaces.filter((s) => s.id !== id);
+    return this.spaces.length < initialLen;
+  }
+
+  // Budgets (F-07)
   async getBudgets(spaceId?: string): Promise<Budget[]> {
     if (!spaceId) return [...this.budgets];
-    return this.budgets.filter((b) => !b.spaceId || b.spaceId === spaceId);
+    return this.budgets.filter((b) => b.spaceId === spaceId);
   }
 
   async addBudget(budget: Omit<Budget, 'id'>): Promise<Budget> {
     const newBudget: Budget = {
       ...budget,
+      spaceId: budget.spaceId || 'sp_personal',
       id: IdGenerator.generateBudgetId()
     };
     this.budgets.push(newBudget);
@@ -290,15 +372,16 @@ export class LocalDataSource implements DataSource {
     return this.budgets.length < initialLen;
   }
 
-  // Savings Goals
+  // Savings Goals (F-07)
   async getSavingsGoals(spaceId?: string): Promise<SavingsGoal[]> {
     if (!spaceId) return [...this.savingsGoals];
-    return this.savingsGoals.filter((s) => !s.spaceId || s.spaceId === spaceId);
+    return this.savingsGoals.filter((s) => s.spaceId === spaceId);
   }
 
   async addSavingsGoal(goal: Omit<SavingsGoal, 'id'>): Promise<SavingsGoal> {
     const newGoal: SavingsGoal = {
       ...goal,
+      spaceId: goal.spaceId || 'sp_personal',
       id: IdGenerator.generateSavingsGoalId()
     };
     this.savingsGoals.push(newGoal);
@@ -348,15 +431,16 @@ export class LocalDataSource implements DataSource {
     return this.investments.length < initialLen;
   }
 
-  // Debts & Loans
+  // Debts & Loans (F-07)
   async getDebtsAndLoans(spaceId?: string): Promise<DebtItem[]> {
     if (!spaceId) return [...this.debtsAndLoans];
-    return this.debtsAndLoans.filter((d) => !d.spaceId || d.spaceId === spaceId);
+    return this.debtsAndLoans.filter((d) => d.spaceId === spaceId);
   }
 
   async addDebtOrLoan(item: Omit<DebtItem, 'id'>): Promise<DebtItem> {
     const newItem: DebtItem = {
       ...item,
+      spaceId: item.spaceId || 'sp_personal',
       id: IdGenerator.generateDebtId()
     };
     this.debtsAndLoans.push(newItem);
@@ -377,15 +461,16 @@ export class LocalDataSource implements DataSource {
     return this.debtsAndLoans.length < initialLen;
   }
 
-  // Six Jars
+  // Six Jars (F-07)
   async getSixJars(spaceId?: string): Promise<SixJar[]> {
     if (!spaceId) return [...this.sixJars];
-    return this.sixJars.filter((j) => !j.spaceId || j.spaceId === spaceId);
+    return this.sixJars.filter((j) => j.spaceId === spaceId);
   }
 
   async addSixJar(jar: Omit<SixJar, 'id'>): Promise<SixJar> {
     const newJar: SixJar = {
       ...jar,
+      spaceId: jar.spaceId || 'sp_personal',
       id: IdGenerator.generateId('jar')
     };
     this.sixJars.push(newJar);
@@ -420,7 +505,7 @@ export class LocalDataSource implements DataSource {
   async backupData(spaceId?: string): Promise<BackupInfo> {
     const filterBySpace = <T extends { spaceId?: string }>(items: T[]) => {
       if (!spaceId) return items;
-      return items.filter(item => !item.spaceId || item.spaceId === spaceId);
+      return items.filter(item => item.spaceId === spaceId);
     };
 
     const pkg = await BackupAndSyncEngine.createBackupPackage(

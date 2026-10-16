@@ -9,18 +9,18 @@
 ## 1. ACTIVE TASK METADATA
 
 ```yaml
-ACTIVE_TASK_ID: "REPO-002"
-TASK_NAME: "Repository Layer Consolidation & Unification"
+ACTIVE_TASK_ID: "REPO-004"
+TASK_NAME: "Dashboard & Report Projection Grounding & Backup Restore"
 PARENT_PHASE: "PHASE-09 (REPOSITORY IMPLEMENTATIONS)"
 ACTIVE_OWNER: "Google AI Studio Agent"
 CURRENT_STATUS: "COMPLETE & VERIFIED"
-CURRENT_POSITION: "LocalTransactionRepository unified and soft-delete/transfer queries verified; REPO-003 next"
-LAST_COMPLETED_TASK: "REPO-002"
-LAST_COMPLETED_STATUS: "COMPLETE & VERIFIED (EVD-REPO-002)"
-NEXT_TASK: "REPO-003"
+CURRENT_POSITION: "REPO-003 complete (F-04, F-07, F-08); REPO-004 next"
+LAST_COMPLETED_TASK: "REPO-003"
+LAST_COMPLETED_STATUS: "COMPLETE & CERTIFIED (EVD-REPO-003)"
+NEXT_TASK: "REPO-004"
 STARTED_AT: "2026-10-16"
 LAST_UPDATED_AT: "2026-10-16"
-ROADMAP_PROGRESS: "92%"
+ROADMAP_PROGRESS: "95%"
 ```
 
 ---
@@ -44,14 +44,15 @@ ROADMAP_PROGRESS: "92%"
 | **GOV-006** | Post-REPO-001 Remediation Roadmap Authorization & Governance Registration | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-GOV-006`, `/PROJECT_STATE/*` (1,442/1,442 PASS) |
 | **GOV-006R3** | Authoritative Remote State Repair & Consistency Verification | `COMPLETE & SYNCHRONIZED` | Google AI Studio Agent | `EVD-GOV-006R3`, `/PROJECT_STATE/*` (1,442/1,442 PASS) |
 | **REPO-002** | Repository Layer Consolidation & Unification (F-01, F-02, F-03) | `COMPLETE & VERIFIED` | Google AI Studio Agent | `EVD-REPO-002`, `src/repositories/*` (1,442/1,442 PASS) |
+| **REPO-003** | LocalDataSource Persistence & Space CRUD Hardening (F-04, F-07, F-08) | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-REPO-003`, `src/data/datasource/LocalDataSource.ts` (1,442/1,442 PASS) |
 
 ---
 
 ## 3. ACTIVE EXECUTION BOUNDARIES
 
-### 🟢 ALLOWED DIRECTORIES & FILES (FOR NEXT TASK: REPO-003)
-- `/src/data/datasource/LocalDataSource.ts`
-- `/src/repositories/implementations.ts` (`LocalSpaceRepository`, `LocalWalletRepository`)
+### 🟢 ALLOWED DIRECTORIES & FILES (FOR NEXT TASK: REPO-004)
+- `/src/repositories/implementations.ts` (`LocalDashboardRepository`, `LocalReportRepository`, `LocalBackupRepository`, `LocalAIRepository`)
+- `/src/data/datasource/LocalDataSource.ts` (`restoreData`)
 - `/PROJECT_STATE/*` (State documentation & evidence files)
 
 ### 🔴 STRICTLY FORBIDDEN AREAS (DO NOT MODIFY — FROZEN DOMAIN & CERTIFIED USE CASES)
@@ -69,13 +70,13 @@ ROADMAP_PROGRESS: "92%"
 
 ```yaml
 NEXT_PHASE: "PHASE-09 (REPOSITORY IMPLEMENTATIONS)"
-NEXT_TASK: "REPO-003"
-NEXT_TASK_ID: "REPO-003"
-NEXT_TASK_NAME: "LocalDataSource Persistence & Space CRUD Hardening"
-NEXT_SUBTASK: "REPO-003"
+NEXT_TASK: "REPO-004"
+NEXT_TASK_ID: "REPO-004"
+NEXT_TASK_NAME: "Dashboard & Report Projection Grounding & Backup Restore"
+NEXT_SUBTASK: "REPO-004"
 ASSIGNED_OWNER: "UNASSIGNED (Ready for next AI Dispatch)"
-PREREQUISITES: "REPO-002 Consolidated & Verified (EVD-REPO-002)"
+PREREQUISITES: "REPO-003 Completed & Certified (EVD-REPO-003)"
 PREREQUISITE_STATUS: "SATISFIED"
-BLOCKERS: "NONE (REPO-002 complete; 3 findings F-04, F-07, F-08 mapped; REPO-003 ready for execution)"
-MAPPED_FINDINGS: "F-04 (Non-persistent LocalSpaceRepository stubs), F-07 (Permissive !spaceId isolation leaks), F-08 (Physical deleteWallet integrity)"
+BLOCKERS: "NONE (REPO-003 complete; 3 findings F-05, F-06, F-09 mapped; REPO-004 ready for execution)"
+MAPPED_FINDINGS: "F-05 (Incomplete Net Worth / hardcoded reports), F-06 (Non-functional backup restore), F-09 (Static AI repository)"
 ```

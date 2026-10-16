@@ -80,22 +80,7 @@ export class LocalSpaceRepository implements SpaceRepository {
   ) {}
 
   async createSpace(space: FinancialSpace | Omit<FinancialSpace, 'id'>): Promise<FinancialSpace> {
-    const existing = await this.dataSource.getSpaces();
-    const created: FinancialSpace = {
-      id: ('id' in space && space.id) ? space.id : `sp_${Date.now()}`,
-      name: space.name,
-      type: space.type || 'personal',
-      balance: space.balance || 0,
-      currency: space.currency || 'VND',
-      cardColor: space.cardColor || '#3B82F6',
-      iconName: space.iconName || 'Wallet',
-      ownerName: space.ownerName || 'User',
-      membersCount: space.membersCount || 1,
-      createdAt: space.createdAt || new Date().toISOString(),
-      updatedAt: space.updatedAt || new Date().toISOString(),
-      version: space.version || 1
-    };
-    return created;
+    return this.dataSource.addSpace(space);
   }
 
   async getSpaceById(id: string): Promise<FinancialSpace | null> {
@@ -103,11 +88,11 @@ export class LocalSpaceRepository implements SpaceRepository {
   }
 
   async updateSpace(space: FinancialSpace): Promise<FinancialSpace> {
-    return space;
+    return this.dataSource.updateSpace(space);
   }
 
-  async deleteSpace(_id: string): Promise<boolean> {
-    return true;
+  async deleteSpace(id: string): Promise<boolean> {
+    return this.dataSource.deleteSpace(id);
   }
 
   async getUserSpaces(_userId?: string): Promise<FinancialSpace[]> {
