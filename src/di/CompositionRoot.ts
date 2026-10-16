@@ -11,8 +11,8 @@
  * - Single Source of Truth for DI wiring.
  */
 
+import { LocalTransactionRepository } from '../repositories/local/LocalTransactionRepository';
 import {
-  LocalTransactionRepository,
   LocalWalletRepository,
   LocalBudgetRepository,
   LocalSavingRepository,

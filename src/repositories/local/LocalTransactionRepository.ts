@@ -7,14 +7,16 @@
 import { TransactionRepository, TransactionFilters } from '../contracts';
 import { Transaction, TransactionStatus } from '../../types';
 import { IdGenerator } from '../../services/IdGenerator';
+import { INITIAL_TRANSACTIONS } from '../../data/initialData';
 
 export class LocalTransactionRepository implements TransactionRepository {
   private transactions: Map<string, Transaction> = new Map();
   private isInitialized = false;
 
   constructor(initialData?: Transaction[]) {
-    if (initialData && Array.isArray(initialData)) {
-      for (const tx of initialData) {
+    const seed = initialData !== undefined ? initialData : INITIAL_TRANSACTIONS;
+    if (seed && Array.isArray(seed)) {
+      for (const tx of seed) {
         if (tx && tx.id) {
           this.transactions.set(tx.id, { ...tx });
         }
@@ -169,22 +171,24 @@ export class LocalTransactionRepository implements TransactionRepository {
 
   /**
    * Gets active transactions for a space (or all non-deleted if spaceId omitted).
+   * Includes transactions where spaceId === spaceId or targetSpaceId === spaceId.
    */
   async getTransactions(spaceId?: string): Promise<Transaction[]> {
     await this.init();
     const all = Array.from(this.transactions.values()).filter(t => !t.isDeleted && t.status !== 'soft_deleted');
     if (spaceId) {
-      return all.filter(t => t.spaceId === spaceId).map(t => ({ ...t }));
+      return all.filter(t => t.spaceId === spaceId || t.targetSpaceId === spaceId).map(t => ({ ...t }));
     }
     return all.map(t => ({ ...t }));
   }
 
   /**
    * Gets transactions filtered by spaceId and comprehensive query filters.
+   * Includes transactions where spaceId === spaceId or targetSpaceId === spaceId.
    */
   async getTransactionsBySpace(spaceId: string, filters?: TransactionFilters): Promise<Transaction[]> {
     await this.init();
-    let result = Array.from(this.transactions.values()).filter(t => t.spaceId === spaceId);
+    let result = Array.from(this.transactions.values()).filter(t => t.spaceId === spaceId || t.targetSpaceId === spaceId);
 
     if (filters) {
       if (filters.status) {
@@ -203,7 +207,7 @@ export class LocalTransactionRepository implements TransactionRepository {
       }
 
       if (filters.walletId) {
-        result = result.filter(t => t.walletId === filters.walletId || (t as any).sourceWalletId === filters.walletId || (t as any).destinationWalletId === filters.walletId);
+        result = result.filter(t => t.walletId === filters.walletId || (t as any).sourceWalletId === filters.walletId || (t as any).destinationWalletId === filters.walletId || (t as any).targetWalletId === filters.walletId);
       }
 
       if (filters.minAmount !== undefined) {

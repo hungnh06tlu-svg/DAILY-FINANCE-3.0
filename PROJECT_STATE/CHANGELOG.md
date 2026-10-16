@@ -3,6 +3,24 @@
 > **PROJECT:** DAILY FINANCE 3.0  
 > **SCOPE:** Immutable Audit Log of Project State Transitions, AI Handoffs & Governance Updates  
 
+## [2026-10-16] — REPO-002 Repository Layer Consolidation & Unification
+- **AI Agent:** Google AI Studio Agent
+- **Task ID:** `REPO-002` (Repository Layer Consolidation & Unification)
+- **Predecessors:** `REPO-001` (Audit), `GOV-006` (Roadmap Authorization), `GOV-006R3` (Remote State Repair)
+- **Status Transition:** `AUTHORIZED` → `COMPLETE & VERIFIED`
+- **Assigned Findings Remediated:**
+  - **F-01 (Cross-space transfer query dropping):** Fixed `getTransactions` and `getTransactionsBySpace` in `LocalTransactionRepository.ts` to include transactions where `t.spaceId === spaceId || t.targetSpaceId === spaceId`. Added `targetWalletId` support in wallet query filtering.
+  - **F-02 (Hard delete in DataSource / broken restore):** Replaced hard-delete delegation with true soft-delete semantics in `LocalTransactionRepository` (`isDeleted: true`, `status: 'soft_deleted'`, `deletedAt: ISO`, version increment, and audit trail). Made `restoreTransaction` idempotent and verified restoration of soft-deleted items.
+  - **F-03 (Dual LocalTransactionRepository divergence):** Eliminated the duplicate divergent class in `src/repositories/implementations.ts`. `implementations.ts` now directly imports and re-exports the canonical `LocalTransactionRepository` from `src/repositories/local/LocalTransactionRepository.ts`.
+  - **DI Integration:** `src/di/CompositionRoot.ts` explicitly wired to the unified `LocalTransactionRepository`.
+  - **Freeze Re-Certification:** Re-certified `LocalTransactionRepository.ts` and `implementations.ts` as `🔒 RE-FROZEN` in `src/repositories/FROZEN.md`.
+- **Verification Evidence:** `EVD-REPO-002.md`, 1,442/1,442 tests passing across 16 test suites (100%), clean lint (`tsc --noEmit`), clean build.
+- **Confirmed Repository Status:**
+  - `REPO-002 = COMPLETE & VERIFIED`
+  - `NEXT TASK = REPO-003 (LocalDataSource Persistence & Space CRUD Hardening)`
+
+---
+
 ## [2026-10-13] — GOV-006R3 Authoritative Remote State Repair & Consistency Verification
 - **AI Agent:** Google AI Studio Agent
 - **Task ID:** `GOV-006R3` (Authoritative Remote State Repair & Consistency Verification)

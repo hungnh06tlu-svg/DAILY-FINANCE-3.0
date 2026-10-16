@@ -2,25 +2,25 @@
 
 > **PROJECT:** DAILY FINANCE 3.0  
 > **SCOPE:** Real-time Execution Dashboard, Active Subtask & Boundary Rules for the Active AI Agent  
-> **LAST UPDATED:** 2026-10-13  
+> **LAST UPDATED:** 2026-10-16  
 
 ---
 
 ## 1. ACTIVE TASK METADATA
 
 ```yaml
-ACTIVE_TASK_ID: "GOV-006R3"
-TASK_NAME: "Authoritative Remote State Repair & Consistency Verification"
+ACTIVE_TASK_ID: "REPO-002"
+TASK_NAME: "Repository Layer Consolidation & Unification"
 PARENT_PHASE: "PHASE-09 (REPOSITORY IMPLEMENTATIONS)"
 ACTIVE_OWNER: "Google AI Studio Agent"
-CURRENT_STATUS: "COMPLETE & SYNCHRONIZED"
-CURRENT_POSITION: "Remote governance state reconciled and verified consistent; REPO-002 authorized as next task"
-LAST_COMPLETED_TASK: "GOV-006R3"
-LAST_COMPLETED_STATUS: "COMPLETE & SYNCHRONIZED (EVD-GOV-006R3)"
-NEXT_TASK: "REPO-002"
-STARTED_AT: "2026-10-13"
-LAST_UPDATED_AT: "2026-10-13"
-ROADMAP_PROGRESS: "90%"
+CURRENT_STATUS: "COMPLETE & VERIFIED"
+CURRENT_POSITION: "LocalTransactionRepository unified and soft-delete/transfer queries verified; REPO-003 next"
+LAST_COMPLETED_TASK: "REPO-002"
+LAST_COMPLETED_STATUS: "COMPLETE & VERIFIED (EVD-REPO-002)"
+NEXT_TASK: "REPO-003"
+STARTED_AT: "2026-10-16"
+LAST_UPDATED_AT: "2026-10-16"
+ROADMAP_PROGRESS: "92%"
 ```
 
 ---
@@ -43,15 +43,15 @@ ROADMAP_PROGRESS: "90%"
 | **GOV-005** | Post-REPO-001 Repository State Reconciliation & Remote Verification | `COMPLETE & RECONCILED` | Google AI Studio Agent | Commit `59fdf3a`, GitHub origin/main verification |
 | **GOV-006** | Post-REPO-001 Remediation Roadmap Authorization & Governance Registration | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-GOV-006`, `/PROJECT_STATE/*` (1,442/1,442 PASS) |
 | **GOV-006R3** | Authoritative Remote State Repair & Consistency Verification | `COMPLETE & SYNCHRONIZED` | Google AI Studio Agent | `EVD-GOV-006R3`, `/PROJECT_STATE/*` (1,442/1,442 PASS) |
+| **REPO-002** | Repository Layer Consolidation & Unification (F-01, F-02, F-03) | `COMPLETE & VERIFIED` | Google AI Studio Agent | `EVD-REPO-002`, `src/repositories/*` (1,442/1,442 PASS) |
 
 ---
 
 ## 3. ACTIVE EXECUTION BOUNDARIES
 
-### 🟢 ALLOWED DIRECTORIES & FILES (FOR NEXT TASK: REPO-002)
-- `/src/repositories/local/LocalTransactionRepository.ts`
-- `/src/repositories/implementations.ts` (`LocalTransactionRepository` unification)
-- `/src/di/CompositionRoot.ts`
+### 🟢 ALLOWED DIRECTORIES & FILES (FOR NEXT TASK: REPO-003)
+- `/src/data/datasource/LocalDataSource.ts`
+- `/src/repositories/implementations.ts` (`LocalSpaceRepository`, `LocalWalletRepository`)
 - `/PROJECT_STATE/*` (State documentation & evidence files)
 
 ### 🔴 STRICTLY FORBIDDEN AREAS (DO NOT MODIFY — FROZEN DOMAIN & CERTIFIED USE CASES)
@@ -69,14 +69,13 @@ ROADMAP_PROGRESS: "90%"
 
 ```yaml
 NEXT_PHASE: "PHASE-09 (REPOSITORY IMPLEMENTATIONS)"
-NEXT_TASK: "REPO-002"
-NEXT_TASK_ID: "REPO-002"
-NEXT_TASK_NAME: "Repository Layer Consolidation & Unification"
-NEXT_SUBTASK: "REPO-002"
+NEXT_TASK: "REPO-003"
+NEXT_TASK_ID: "REPO-003"
+NEXT_TASK_NAME: "LocalDataSource Persistence & Space CRUD Hardening"
+NEXT_SUBTASK: "REPO-003"
 ASSIGNED_OWNER: "UNASSIGNED (Ready for next AI Dispatch)"
-PREREQUISITES: "REPO-001 Audited & Recorded (EVD-REPO-001), GOV-006 Remediation Roadmap Authorized (EVD-GOV-006)"
+PREREQUISITES: "REPO-002 Consolidated & Verified (EVD-REPO-002)"
 PREREQUISITE_STATUS: "SATISFIED"
-BLOCKERS: "NONE (Remediation Roadmap Authorized; 9 findings F-01..F-09 mapped; REPO-002 ready for execution)"
-MAPPED_FINDINGS: "F-01 (Cross-space transfer dropping), F-02 (Hard delete in DataSource / broken restore), F-03 (Dual LocalTransactionRepository divergence)"
+BLOCKERS: "NONE (REPO-002 complete; 3 findings F-04, F-07, F-08 mapped; REPO-003 ready for execution)"
+MAPPED_FINDINGS: "F-04 (Non-persistent LocalSpaceRepository stubs), F-07 (Permissive !spaceId isolation leaks), F-08 (Physical deleteWallet integrity)"
 ```
-
