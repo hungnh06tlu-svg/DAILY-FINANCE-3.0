@@ -35,7 +35,7 @@ import {
 } from '../initialData';
 
 import { IdGenerator } from '../../services/IdGenerator';
-import { BackupAndSyncEngine } from '../../domain/BackupAndSyncEngine';
+import { BackupAndSyncEngine, BackupPackage } from '../../domain/BackupAndSyncEngine';
 
 export interface DataSource {
   // Transactions
@@ -89,13 +89,17 @@ export interface DataSource {
   updateSixJar(jar: SixJar): Promise<SixJar>;
   deleteSixJar(id: string): Promise<boolean>;
 
+  // Credit Cards
+  getCreditCards(spaceId?: string): Promise<CreditCard[]>;
+
   // User Preferences
   getUserPreferences(): Promise<UserPreference>;
   updateUserPreferences(prefs: Partial<UserPreference>): Promise<UserPreference>;
 
   // Backup & Restore
   backupData(spaceId?: string): Promise<BackupInfo>;
-  restoreData(backupId: string): Promise<boolean>;
+  restoreData(backupId: string, targetSpaceId?: string): Promise<boolean>;
+  getBackupPackage?(backupId: string): Promise<BackupPackage | null>;
 }
 
 export class LocalDataSource implements DataSource {
@@ -144,7 +148,11 @@ export class LocalDataSource implements DataSource {
     ...s,
     spaceId: s.spaceId || 'sp_personal'
   }));
-  private creditCards: CreditCard[] = [...INITIAL_CREDIT_CARDS];
+  private creditCards: CreditCard[] = INITIAL_CREDIT_CARDS.map((c) => ({
+    ...c,
+    spaceId: c.spaceId || 'sp_personal'
+  }));
+  private backupPackages: Map<string, BackupPackage> = new Map();
   private debtsAndLoans: DebtItem[] = INITIAL_DEBTS.map((d) => ({
     ...d,
     spaceId: d.spaceId || 'sp_personal'
@@ -501,6 +509,12 @@ export class LocalDataSource implements DataSource {
     return { ...this.userPreferences };
   }
 
+  // Credit Cards
+  async getCreditCards(spaceId?: string): Promise<CreditCard[]> {
+    if (!spaceId) return [...this.creditCards];
+    return this.creditCards.filter((c) => c.spaceId === spaceId);
+  }
+
   // Backup & Restore
   async backupData(spaceId?: string): Promise<BackupInfo> {
     const filterBySpace = <T extends { spaceId?: string }>(items: T[]) => {
@@ -517,15 +531,20 @@ export class LocalDataSource implements DataSource {
         budgets: filterBySpace(this.budgets) as any,
         savingsGoals: filterBySpace(this.savingsGoals) as any,
         debtsAndLoans: filterBySpace(this.debtsAndLoans) as any,
-        investments: filterBySpace(this.investments) as any
+        investments: filterBySpace(this.investments) as any,
+        creditCards: filterBySpace(this.creditCards) as any,
+        sixJars: filterBySpace(this.sixJars) as any
       },
       spaceId
     );
 
+    const backupId = IdGenerator.generateBackupId();
+    this.backupPackages.set(backupId, pkg);
+
     const size = JSON.stringify(pkg).length;
 
     return {
-      id: IdGenerator.generateBackupId(),
+      id: backupId,
       timestamp: pkg.metadata.timestamp,
       sizeBytes: size,
       version: pkg.metadata.appVersion,
@@ -534,10 +553,115 @@ export class LocalDataSource implements DataSource {
     };
   }
 
-  async restoreData(backupId: string): Promise<boolean> {
+  async getBackupPackage(backupId: string): Promise<BackupPackage | null> {
+    if (!backupId || backupId.trim() === '') return null;
+    return this.ensureBackupPackage(backupId);
+  }
+
+  private async ensureBackupPackage(backupId: string): Promise<BackupPackage | null> {
+    if (this.backupPackages.has(backupId)) {
+      return this.backupPackages.get(backupId)!;
+    }
+    if (backupId === 'bk_20260812') {
+      const pkg = await BackupAndSyncEngine.createBackupPackage(
+        this.userPreferences.userId || 'usr_default',
+        'device_local_01',
+        {
+          transactions: this.transactions.filter(t => t.spaceId === 'sp_personal') as any,
+          wallets: this.wallets.filter(w => w.spaceId === 'sp_personal') as any,
+          budgets: this.budgets.filter(b => b.spaceId === 'sp_personal') as any,
+          savingsGoals: this.savingsGoals.filter(s => s.spaceId === 'sp_personal') as any,
+          debtsAndLoans: this.debtsAndLoans.filter(d => d.spaceId === 'sp_personal') as any,
+          investments: this.investments.filter(i => i.spaceId === 'sp_personal') as any,
+          creditCards: this.creditCards.filter(c => c.spaceId === 'sp_personal') as any,
+          sixJars: this.sixJars.filter(j => j.spaceId === 'sp_personal') as any
+        },
+        'sp_personal'
+      );
+      this.backupPackages.set('bk_20260812', pkg);
+      return pkg;
+    }
+    return null;
+  }
+
+  async restoreData(backupId: string, targetSpaceId?: string): Promise<boolean> {
     if (!backupId || backupId.trim() === '') {
       throw new Error('Invalid backup identifier provided for restore');
     }
+
+    const pkg = await this.ensureBackupPackage(backupId);
+    if (!pkg) {
+      throw new Error(`Backup payload not found for identifier: ${backupId}`);
+    }
+
+    const validation = await BackupAndSyncEngine.validateBackupPackage(pkg, targetSpaceId);
+    if (!validation.isValid) {
+      throw new Error(`Backup validation failed: ${validation.errors.join('; ')}`);
+    }
+
+    const targetSpace = targetSpaceId || pkg.metadata.spaceId;
+    if (targetSpace) {
+      // Space-scoped restore: rehydrate entities for targetSpace while preserving other spaces
+      if (Array.isArray(pkg.data.transactions)) {
+        this.transactions = [
+          ...this.transactions.filter(t => t.spaceId !== targetSpace),
+          ...pkg.data.transactions.map((t: any) => ({ ...t, spaceId: targetSpace }))
+        ];
+      }
+      if (Array.isArray(pkg.data.wallets)) {
+        this.wallets = [
+          ...this.wallets.filter(w => w.spaceId !== targetSpace),
+          ...pkg.data.wallets.map((w: any) => ({ ...w, spaceId: targetSpace }))
+        ];
+      }
+      if (Array.isArray(pkg.data.budgets)) {
+        this.budgets = [
+          ...this.budgets.filter(b => b.spaceId !== targetSpace),
+          ...pkg.data.budgets.map((b: any) => ({ ...b, spaceId: targetSpace }))
+        ];
+      }
+      if (Array.isArray(pkg.data.savingsGoals)) {
+        this.savingsGoals = [
+          ...this.savingsGoals.filter(s => s.spaceId !== targetSpace),
+          ...pkg.data.savingsGoals.map((s: any) => ({ ...s, spaceId: targetSpace }))
+        ];
+      }
+      if (Array.isArray(pkg.data.debtsAndLoans)) {
+        this.debtsAndLoans = [
+          ...this.debtsAndLoans.filter(d => d.spaceId !== targetSpace),
+          ...pkg.data.debtsAndLoans.map((d: any) => ({ ...d, spaceId: targetSpace }))
+        ];
+      }
+      if (Array.isArray(pkg.data.investments)) {
+        this.investments = [
+          ...this.investments.filter(i => i.spaceId !== targetSpace),
+          ...pkg.data.investments.map((i: any) => ({ ...i, spaceId: targetSpace }))
+        ];
+      }
+      if (Array.isArray(pkg.data.creditCards)) {
+        this.creditCards = [
+          ...this.creditCards.filter(c => c.spaceId !== targetSpace),
+          ...pkg.data.creditCards.map((c: any) => ({ ...c, spaceId: targetSpace }))
+        ];
+      }
+      if (Array.isArray(pkg.data.sixJars)) {
+        this.sixJars = [
+          ...this.sixJars.filter(j => j.spaceId !== targetSpace),
+          ...pkg.data.sixJars.map((j: any) => ({ ...j, spaceId: targetSpace }))
+        ];
+      }
+    } else {
+      // Global restore: rehydrate all supported collections
+      if (Array.isArray(pkg.data.transactions)) this.transactions = [...pkg.data.transactions as any];
+      if (Array.isArray(pkg.data.wallets)) this.wallets = [...pkg.data.wallets as any];
+      if (Array.isArray(pkg.data.budgets)) this.budgets = [...pkg.data.budgets as any];
+      if (Array.isArray(pkg.data.savingsGoals)) this.savingsGoals = [...pkg.data.savingsGoals as any];
+      if (Array.isArray(pkg.data.debtsAndLoans)) this.debtsAndLoans = [...pkg.data.debtsAndLoans as any];
+      if (Array.isArray(pkg.data.investments)) this.investments = [...pkg.data.investments as any];
+      if (Array.isArray(pkg.data.creditCards)) this.creditCards = [...pkg.data.creditCards as any];
+      if (Array.isArray(pkg.data.sixJars)) this.sixJars = [...pkg.data.sixJars as any];
+    }
+
     return true;
   }
 }

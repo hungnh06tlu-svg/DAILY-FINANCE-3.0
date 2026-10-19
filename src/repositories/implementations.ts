@@ -28,6 +28,7 @@ import {
   SavingsGoal,
   Investment,
   DebtItem,
+  CreditCard,
   Jar,
   Report,
   Dashboard,
@@ -39,6 +40,7 @@ import {
 
 import { DataSource, LocalDataSource } from '../data/datasource/LocalDataSource';
 import { FinancialTruthEngine } from '../domain/FinancialTruthEngine';
+import { SpaceIsolationGuard, MoneyUtils } from '../domain/CanonicalFinancialModel';
 import { FeatureToggleRegistry } from '../domain/FeatureToggleRegistry';
 
 import { LocalTransactionRepository } from './local/LocalTransactionRepository';
@@ -220,25 +222,61 @@ export class LocalReportRepository implements ReportRepository {
   ) {}
 
   async getReport(spaceId: string, period: string): Promise<Report> {
-    const txs = await this.txRepo.getTransactions(spaceId);
-    const totalIncome = FinancialTruthEngine.calculateIncome(txs, undefined, undefined, spaceId);
-    const totalExpense = FinancialTruthEngine.calculateExpense(txs, undefined, undefined, spaceId);
+    const validSpaceId = SpaceIsolationGuard.validateSpaceId(spaceId);
+    const txs = await this.txRepo.getTransactions(validSpaceId);
+
+    // Lifecycle filtering: active & confirmed transactions
+    const activeTxs = txs.filter((t) => FinancialTruthEngine.isActiveConfirmedTransaction(t));
+
+    // Optional period filtering if period specifies calendar month (e.g. YYYY-MM) or this_month
+    let periodTxs = activeTxs;
+    if (/^\d{4}-\d{2}$/.test(period)) {
+      const [year, month] = period.split('-').map(Number);
+      const start = new Date(Date.UTC(year, month - 1, 1)).toISOString();
+      const end = new Date(Date.UTC(year, month, 0, 23, 59, 59, 999)).toISOString();
+      periodTxs = activeTxs.filter((t) => t.date >= start && t.date <= end);
+    } else if (period === 'this_month') {
+      const now = new Date();
+      const start = new Date(Date.UTC(now.getFullYear(), now.getMonth(), 1)).toISOString();
+      const end = new Date(Date.UTC(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999)).toISOString();
+      const matching = activeTxs.filter((t) => t.date >= start && t.date <= end);
+      if (matching.length > 0) {
+        periodTxs = matching;
+      }
+    }
+
+    const totalIncome = FinancialTruthEngine.calculateIncome(periodTxs, undefined, undefined, validSpaceId);
+    const totalExpense = FinancialTruthEngine.calculateExpense(periodTxs, undefined, undefined, validSpaceId);
     const netCashFlow = FinancialTruthEngine.calculateCashFlow(totalIncome, totalExpense);
 
-    const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpense) / totalIncome) * 100 : 0;
+    const savingsRate = totalIncome > 0 ? MoneyUtils.round(((totalIncome - totalExpense) / totalIncome) * 100, 1) : 0;
+
+    // Grounded top expense categories from actual transactions
+    const expenseTxs = periodTxs.filter((t) => t.type === 'expense' && (t.amount || 0) > 0);
+    const categoryTotals = new Map<string, number>();
+    for (const t of expenseTxs) {
+      const cat = t.category || t.categoryId || 'Khác';
+      categoryTotals.set(cat, (categoryTotals.get(cat) || 0) + Math.abs(t.amount || 0));
+    }
+
+    const topExpenseCategories = Array.from(categoryTotals.entries())
+      .map(([category, amount]) => {
+        const roundedAmount = MoneyUtils.round(amount, 2);
+        const percent = totalExpense > 0 ? MoneyUtils.round((roundedAmount / totalExpense) * 100, 1) : 0;
+        return { category, amount: roundedAmount, percent };
+      })
+      .sort((a, b) => b.amount - a.amount)
+      .slice(0, 5);
 
     return {
-      id: `rep_${spaceId}_${period}`,
-      spaceId,
+      id: `rep_${validSpaceId}_${period}`,
+      spaceId: validSpaceId,
       period,
       totalIncome,
       totalExpense,
       netCashFlow,
-      savingsRate: Math.round(savingsRate * 10) / 10,
-      topExpenseCategories: [
-        { category: 'Ăn uống (Food & Dining)', amount: 1450000, percent: 33.7 },
-        { category: 'Mua sắm (Shopping)', amount: 2850000, percent: 66.3 }
-      ]
+      savingsRate,
+      topExpenseCategories
     };
   }
 }
@@ -251,36 +289,144 @@ export class LocalDashboardRepository implements DashboardRepository {
   ) {}
 
   async getDashboard(spaceId: string): Promise<Dashboard> {
-    const txs = await this.txRepo.getTransactions(spaceId);
-    const wallets = await this.walletRepo.getWallets(spaceId);
-    const space = await this.dataSource.getSpaceById(spaceId);
+    const validSpaceId = SpaceIsolationGuard.validateSpaceId(spaceId);
+    const txs = await this.txRepo.getTransactions(validSpaceId);
+    const wallets = await this.walletRepo.getWallets(validSpaceId);
+    const space = await this.dataSource.getSpaceById(validSpaceId);
+    const investments = await this.dataSource.getInvestments(validSpaceId);
+    const debts = await this.dataSource.getDebtsAndLoans(validSpaceId);
+    const creditCards = (this.dataSource as any).getCreditCards
+      ? await (this.dataSource as any).getCreditCards(validSpaceId)
+      : [];
+    const budgets = await this.dataSource.getBudgets(validSpaceId);
 
-    const monthlyIncome = FinancialTruthEngine.calculateIncome(txs, undefined, undefined, spaceId);
-    const monthlyExpense = FinancialTruthEngine.calculateExpense(txs, undefined, undefined, spaceId);
+    const monthlyIncome = FinancialTruthEngine.calculateIncome(txs, undefined, undefined, validSpaceId);
+    const monthlyExpense = FinancialTruthEngine.calculateExpense(txs, undefined, undefined, validSpaceId);
 
-    const walletBalance = wallets.reduce((sum, w) => sum + (w.status === 'active' && !w.isDeleted ? (w.currentBalance || 0) : 0), 0);
-    const totalBalance = space ? space.balance : walletBalance;
-    const netWorth = FinancialTruthEngine.calculateNetWorth(wallets, [], [], [], spaceId);
+    const activeWallets = wallets.filter(
+      (w) => FinancialTruthEngine.isActiveEntity(w) && (w.status === 'active' || w.status === undefined)
+    );
+    const walletBalance = activeWallets.reduce((sum, w) => sum + (w.currentBalance || 0), 0);
+    const totalBalance = space && typeof space.balance === 'number' && space.balance !== 0
+      ? space.balance
+      : walletBalance;
+
+    const netWorth = FinancialTruthEngine.calculateNetWorth(
+      activeWallets,
+      investments,
+      debts,
+      creditCards,
+      validSpaceId
+    );
+
+    // Grounded budget progress calculation
+    const activeBudgets = budgets.filter((b) => FinancialTruthEngine.isActiveEntity(b));
+    const totalAllocated = activeBudgets.reduce((sum, b) => sum + (b.allocatedAmount || 0), 0);
+    const totalSpent = activeBudgets.reduce((sum, b) => sum + (b.spentAmount || 0), 0);
+    const budgetProgress = totalAllocated > 0
+      ? Math.min(100, MoneyUtils.round((totalSpent / totalAllocated) * 100, 1))
+      : 0;
+
+    const recentTransactions = txs
+      .filter((t) => FinancialTruthEngine.isActiveConfirmedTransaction(t))
+      .slice(0, 5);
 
     return {
-      spaceId,
+      spaceId: validSpaceId,
       totalBalance,
       monthlyIncome,
       monthlyExpense,
-      netWorth: netWorth > 0 ? netWorth : totalBalance,
-      budgetProgress: 0,
-      recentTransactions: txs.slice(0, 5)
+      netWorth,
+      budgetProgress,
+      recentTransactions
     };
   }
 }
 
 export class LocalAIRepository implements AIRepository {
+  constructor(
+    private txRepo: TransactionRepository = new LocalTransactionRepository(),
+    private walletRepo: WalletRepository = new LocalWalletRepository(),
+    private dataSource: DataSource = LocalDataSource.getInstance()
+  ) {}
+
   async getInsights(spaceId: string): Promise<string[]> {
-    return [
-      'Tỷ lệ tiết kiệm tháng này đạt 35%, cao hơn 5% so với mục tiêu đề ra.',
-      'Chi tiêu Ăn uống tăng nhẹ 8% vào cuối tuần, đề xuất đặt hạn mức cảnh báo 500k/ngày.',
-      'Danh mục đầu tư VN30 ETF đang sinh lời +20.4%, đóng góp tích cực vào Net Worth.'
-    ];
+    const validSpaceId = SpaceIsolationGuard.validateSpaceId(spaceId);
+    const txs = await this.txRepo.getTransactions(validSpaceId);
+    const wallets = await this.walletRepo.getWallets(validSpaceId);
+    const investments = await this.dataSource.getInvestments(validSpaceId);
+    const debts = await this.dataSource.getDebtsAndLoans(validSpaceId);
+
+    const activeTxs = txs.filter((t) => FinancialTruthEngine.isActiveConfirmedTransaction(t));
+    if (activeTxs.length === 0 && wallets.length === 0) {
+      return ['Chưa có đủ dữ liệu giao dịch trong không gian này để phân tích thông tin tài chính.'];
+    }
+
+    const insights: string[] = [];
+    const totalIncome = FinancialTruthEngine.calculateIncome(activeTxs, undefined, undefined, validSpaceId);
+    const totalExpense = FinancialTruthEngine.calculateExpense(activeTxs, undefined, undefined, validSpaceId);
+    const netCashFlow = FinancialTruthEngine.calculateCashFlow(totalIncome, totalExpense);
+
+    if (totalIncome > 0) {
+      const savingsRate = MoneyUtils.round(((totalIncome - totalExpense) / totalIncome) * 100, 1);
+      if (savingsRate >= 20) {
+        insights.push(`Tỷ lệ tiết kiệm hiện tại đạt ${savingsRate}%, phản ánh dòng tiền thặng dư tích cực trong không gian này.`);
+      } else if (savingsRate > 0) {
+        insights.push(`Tỷ lệ tiết kiệm hiện tại là ${savingsRate}%. Có thể tối ưu thêm chi tiêu để gia tăng tích lũy.`);
+      } else {
+        const formattedDeficit = new Intl.NumberFormat('vi-VN').format(Math.abs(netCashFlow));
+        insights.push(`Dòng tiền đang thâm hụt (${formattedDeficit} VND). Đề xuất rà soát các khoản chi tiêu không thiết yếu.`);
+      }
+    }
+
+    const expenseTxs = activeTxs.filter((t) => t.type === 'expense' && (t.amount || 0) > 0);
+    if (expenseTxs.length > 0 && totalExpense > 0) {
+      const categoryMap = new Map<string, number>();
+      for (const t of expenseTxs) {
+        const cat = t.category || t.categoryId || 'Khác';
+        categoryMap.set(cat, (categoryMap.get(cat) || 0) + Math.abs(t.amount || 0));
+      }
+      let topCat = '';
+      let topAmount = 0;
+      for (const [cat, amt] of categoryMap.entries()) {
+        if (amt > topAmount) {
+          topAmount = amt;
+          topCat = cat;
+        }
+      }
+      if (topCat && topAmount > 0) {
+        const catPercent = MoneyUtils.round((topAmount / totalExpense) * 100, 1);
+        const formattedAmount = new Intl.NumberFormat('vi-VN').format(topAmount);
+        insights.push(`Danh mục chi tiêu lớn nhất là "${topCat}" với ${formattedAmount} VND (${catPercent}% tổng chi tiêu).`);
+      }
+    }
+
+    const activeInvestments = investments.filter((inv) => FinancialTruthEngine.isActiveEntity(inv));
+    if (activeInvestments.length > 0) {
+      const totalInvValue = activeInvestments.reduce((sum, inv) => sum + ((inv.quantity || 0) * (inv.currentPrice || 0)), 0);
+      const totalInvCost = activeInvestments.reduce((sum, inv) => sum + ((inv.quantity || 0) * (inv.purchasePrice || 0)), 0);
+      if (totalInvCost > 0) {
+        const returnPct = MoneyUtils.round(((totalInvValue - totalInvCost) / totalInvCost) * 100, 1);
+        const sign = returnPct >= 0 ? '+' : '';
+        insights.push(`Danh mục đầu tư (${activeInvestments.length} khoản) có hiệu suất ${sign}${returnPct}% so với giá vốn.`);
+      } else {
+        const formattedValue = new Intl.NumberFormat('vi-VN').format(totalInvValue);
+        insights.push(`Danh mục đầu tư hiện có tổng giá trị thị trường là ${formattedValue} VND.`);
+      }
+    }
+
+    const activeDebts = debts.filter((d) => FinancialTruthEngine.isActiveEntity(d) && d.type === 'debt' && (d.remainingAmount || 0) > 0);
+    if (activeDebts.length > 0) {
+      const totalDebtOwed = activeDebts.reduce((sum, d) => sum + (d.remainingAmount || 0), 0);
+      const formattedDebt = new Intl.NumberFormat('vi-VN').format(totalDebtOwed);
+      insights.push(`Tổng dư nợ cần thanh toán trong không gian là ${formattedDebt} VND trên ${activeDebts.length} khoản nợ.`);
+    }
+
+    if (insights.length === 0) {
+      insights.push('Chưa có đủ biến động thu chi hoặc danh mục đầu tư để đưa ra khuyến nghị chi tiết.');
+    }
+
+    return insights;
   }
 }
 
@@ -313,7 +459,7 @@ export class LocalBackupRepository implements BackupRepository {
     if (existingBackup && existingBackup.spaceId && targetSpaceId && existingBackup.spaceId !== targetSpaceId) {
       throw new Error(`Backup space mismatch: Backup ${backupId} belongs to space '${existingBackup.spaceId}' but restore target is '${targetSpaceId}'`);
     }
-    return this.dataSource.restoreData(backupId);
+    return this.dataSource.restoreData(backupId, targetSpaceId);
   }
 
   async getBackups(spaceId?: string): Promise<BackupInfo[]> {

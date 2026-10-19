@@ -3,6 +3,23 @@
 > **PROJECT:** DAILY FINANCE 3.0  
 > **SCOPE:** Immutable Audit Log of Project State Transitions, AI Handoffs & Governance Updates  
 
+## [2026-10-19] — REPO-004 Dashboard & Report Projection Grounding & Backup Restore
+- **AI Agent:** Google AI Studio Agent
+- **Task ID:** `REPO-004` (Dashboard & Report Projection Grounding & Backup Restore)
+- **Predecessors:** `REPO-003` (COMPLETE & CERTIFIED), `GOV-REPO-003G` (Remote State Reconciliation)
+- **Status Transition:** `AUTHORIZED` → `COMPLETE & CERTIFIED`
+- **Assigned Findings Remediated:**
+  - **F-05 (Net Worth correctness & data-grounded Dashboard/Report projections):** Eliminated static expense categories (`Ăn uống: 1,450,000`, `Mua sắm: 2,850,000`) in `LocalReportRepository`. Computed dynamic top categories with precise percentage distribution and period filtering. Grounded `LocalDashboardRepository` by computing Net Worth from actual assets and liabilities (wallets, investments, debts, credit cards) without substituting `totalBalance` on non-positive net worth, grounding budget progress, and applying lifecycle filtering.
+  - **F-06 (Functional backup restoration & data rehydration):** Retained backup packages in `LocalDataSource`'s internal memory store indexed by backup ID. Implemented full `restoreData(backupId, targetSpaceId)` with checksum/schema validation via `BackupAndSyncEngine.validateBackupPackage` and in-memory rehydration of all supported collections (`transactions`, `wallets`, `budgets`, `savingsGoals`, `debtsAndLoans`, `investments`, `creditCards`, `sixJars`). Enforced safe validation rejection for invalid or cross-space backup IDs without data corruption.
+  - **F-09 (Dynamic AI insights grounding):** Replaced hardcoded insight strings with dynamic financial insights derived from actual scoped data (savings rate, top expense category, investment portfolio return, outstanding debt obligations). Honestly reports insufficient data when a space is empty.
+- **Verification Evidence:** `EVD-REPO-004.md`, 1,442/1,442 tests passing across 16 test suites (100%), clean lint (`tsc --noEmit`), clean production build (`npm run build`).
+- **Confirmed Repository Status:**
+  - `REPO-004 = COMPLETE & CERTIFIED`
+  - `PHASE-09 = COMPLETE & CERTIFIED (100%)`
+  - `NEXT PHASE = PHASE-10 (Offline-First Database Engine — Pending Governance Authorization)`
+
+---
+
 ## [2026-10-16] — REPO-003 LocalDataSource Persistence & Space CRUD Hardening
 - **AI Agent:** Google AI Studio Agent
 - **Task ID:** `REPO-003` (LocalDataSource Persistence & Space CRUD Hardening)

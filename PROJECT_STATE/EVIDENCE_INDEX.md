@@ -45,7 +45,8 @@
 | **EVD-GOV-006R3** | GOV-006R3 | Authoritative Remote State Repair & Consistency Verification | Governance Audit | 1,442/1,442 PASS (16 suites) | Clean (0 err) | Success (Build OK) | `/PROJECT_STATE/*`, `EVD-GOV-006R3.md` | `SYNCHRONIZED & CERTIFIED` | 2026-10-13 |
 | **EVD-REPO-002** | REPO-002 | Repository Layer Consolidation & Unification (F-01, F-02, F-03) | Repository Remediation | 1,442/1,442 PASS (16 suites) | Clean (0 err) | Success (Build OK) | `src/repositories/*`, `CompositionRoot.ts`, `EVD-REPO-002.md` | `COMPLETE & VERIFIED` | 2026-10-16 |
 | **EVD-REPO-003** | REPO-003 | LocalDataSource Persistence & Space CRUD Hardening (F-04, F-07, F-08) | Repository Remediation | 1,442/1,442 PASS (16 suites) | Clean (0 err) | Success (Build OK) | `src/data/datasource/LocalDataSource.ts`, `src/repositories/implementations.ts`, `EVD-REPO-003.md` | `COMPLETE & CERTIFIED` | 2026-10-16 |
-| **EVD-REG-01** | QA | Full Suite Regression & Complexity Benchmarks | Vitest Runner | 1,442/1,442 PASS | 0 errors | Success | All 16 Test Suites | `VERIFIED` | 2026-10-16 |
+| **EVD-REPO-004** | REPO-004 | Dashboard & Report Projection Grounding & Backup Restore (F-05, F-06, F-09) | Repository Remediation | 1,442/1,442 PASS (16 suites) | Clean (0 err) | Success (Build OK) | `src/repositories/implementations.ts`, `src/data/datasource/LocalDataSource.ts`, `EVD-REPO-004.md` | `COMPLETE & CERTIFIED` | 2026-10-19 |
+| **EVD-REG-01** | QA | Full Suite Regression & Complexity Benchmarks | Vitest Runner | 1,442/1,442 PASS | 0 errors | Success | All 16 Test Suites | `VERIFIED` | 2026-10-19 |
 
 ---
 
