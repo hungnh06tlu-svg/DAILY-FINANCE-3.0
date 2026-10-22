@@ -32,7 +32,7 @@ LAST VERIFIED AT:     2026-10-19
 
 ```text
 OVERALL PROJECT ROADMAP
-███████████████████░  96%
+███████████████████░  95%
 
 PRESENTATION (G1, G2, S5-001 → S5-012)
 ████████████████████ 100% [COMPLETE & FROZEN]
