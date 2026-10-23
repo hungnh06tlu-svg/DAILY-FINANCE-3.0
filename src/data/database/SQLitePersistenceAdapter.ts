@@ -1,18 +1,48 @@
 /**
- * Daily Finance 3.0 - SQLitePersistenceAdapter (DB-001)
- * Standard: Clean Architecture / Offline-First Durable Persistence Adapter
- * Provides native SQLite 3 persistence in Node.js/Vitest via node:sqlite (DatabaseSync)
- * with a durable transactional web storage engine for client browser runtimes.
+ * Daily Finance 3.0 - Persistence Architecture (DB-001 / DB-001R)
+ * Standard: Clean Architecture / Offline-First Persistence
+ *
+ * ARCHITECTURAL DISCLOSURE (Strategy B - Honest Browser Architecture):
+ * 1. Node.js Environment (Vitest / Server):
+ *    Uses genuine SQLite 3 engine via native `node:sqlite` (DatabaseSync) with WAL mode,
+ *    foreign key constraints, and atomic ACID transactions.
+ * 2. Browser Environment:
+ *    Genuine SQLite WASM/OPFS is not supported under the current iframe sandbox and dependency
+ *    policy. The browser environment uses `BrowserStoragePersistenceAdapter` — an honest,
+ *    non-SQLite relational persistence adapter providing table partitioning, atomic transaction
+ *    staging with rollback, versioned migrations, corruption quarantine, and quota safety.
  */
 
-import { DatabaseAdapter, TransactionContext, DatabaseConfig } from './DatabaseAdapter';
+import {
+  DatabaseAdapter,
+  TransactionContext,
+  DatabaseConfig,
+  DatabaseInitializationError,
+  StorageQuotaExceededError,
+  StorageCorruptError,
+  TransactionAbortedError
+} from './DatabaseAdapter';
 import { MIGRATIONS, CURRENT_SCHEMA_VERSION } from './SchemaMigrations';
 
-// Dynamic resolver for node:sqlite to prevent bundler errors in browser Vite builds
+export type {
+  DatabaseAdapter,
+  TransactionContext,
+  DatabaseConfig
+};
+
+export {
+  DatabaseInitializationError,
+  StorageQuotaExceededError,
+  StorageCorruptError,
+  TransactionAbortedError
+};
+
+/**
+ * Dynamic resolver for node:sqlite to isolate Node.js runtime from browser Vite bundle.
+ */
 function getNodeSQLite(): any {
   if (typeof process !== 'undefined' && process.versions && process.versions.node) {
     try {
-      // Dynamic import/require check
       const req = typeof require !== 'undefined' ? require : null;
       if (req) {
         return req('node:sqlite');
@@ -25,57 +55,108 @@ function getNodeSQLite(): any {
 }
 
 /**
- * Universal in-memory & WebStorage relational driver for browser environments
+ * Honest Browser-Compatible Relational Storage Adapter (Strategy B)
+ * Does NOT represent itself as SQLite.
  */
-class WebRelationalDriver implements DatabaseAdapter {
+export class BrowserStoragePersistenceAdapter implements DatabaseAdapter {
   private openState = false;
   private tables: Map<string, Map<string, any>> = new Map();
   private storageKey: string;
   private inMemory: boolean;
+  private storageDriver: { getItem(k: string): string | null; setItem(k: string, v: string): void; removeItem(k: string): void } | null;
+  private corruptionFlag = false;
+  private corruptionDetails: { rawPayload: string; error: string } | null = null;
 
   constructor(config?: DatabaseConfig) {
     this.inMemory = !!config?.inMemory;
-    this.storageKey = `df3_sqlite_${config?.databaseName || 'daily_finance'}`;
+    this.storageKey = `df3_relational_${config?.databaseName || 'daily_finance'}`;
+
+    if (config?.storageDriver) {
+      this.storageDriver = config.storageDriver;
+    } else if (typeof window !== 'undefined' && window.localStorage) {
+      this.storageDriver = window.localStorage;
+    } else {
+      this.storageDriver = null;
+    }
+  }
+
+  getBackendType(): 'browser-relational-storage' {
+    return 'browser-relational-storage';
+  }
+
+  isCorrupted(): boolean {
+    return this.corruptionFlag;
+  }
+
+  getCorruptionDetails(): { rawPayload: string; error: string } | null {
+    return this.corruptionDetails;
   }
 
   async open(): Promise<void> {
     if (this.openState) return;
-    this.openState = true;
 
-    // Load from storage if not strictly inMemory
-    if (!this.inMemory && typeof window !== 'undefined' && window.localStorage) {
-      try {
-        const serialized = window.localStorage.getItem(this.storageKey);
-        if (serialized) {
-          const parsed = JSON.parse(serialized);
+    if (!this.inMemory && this.storageDriver) {
+      const raw = this.storageDriver.getItem(this.storageKey);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (typeof parsed !== 'object' || parsed === null) {
+            throw new Error('Stored payload is not a valid JSON object');
+          }
           for (const [table, rows] of Object.entries(parsed)) {
             const tableMap = new Map<string, any>();
             if (Array.isArray(rows)) {
               for (const row of rows) {
-                if (row && row.id) {
-                  tableMap.set(String(row.id), row);
-                } else if (row && row.userId) {
-                  tableMap.set(String(row.userId), row);
-                } else if (row && row.version !== undefined) {
-                  tableMap.set(String(row.version), row);
+                if (row && typeof row === 'object') {
+                  const pk = row.id ?? row.userId ?? row.version;
+                  if (pk !== undefined) {
+                    tableMap.set(String(pk), row);
+                  }
                 }
               }
             }
             this.tables.set(table, tableMap);
           }
+        } catch (parseError) {
+          // DO NOT DESTRUCTIVELY OVERWRITE CORRUPTED DATA!
+          this.corruptionFlag = true;
+          this.corruptionDetails = {
+            rawPayload: raw,
+            error: (parseError as Error).message
+          };
+
+          // Quarantine corrupt data under safe timestamped key for manual/diagnostic recovery
+          const quarantineKey = `${this.storageKey}_corrupt_${Date.now()}`;
+          try {
+            this.storageDriver.setItem(quarantineKey, raw);
+          } catch {
+            // Ignore secondary quarantine failure
+          }
+
+          throw new StorageCorruptError(
+            `Stored database at key "${this.storageKey}" is corrupt and cannot be parsed. Preserved under quarantine key "${quarantineKey}".`,
+            raw,
+            parseError
+          );
         }
-      } catch (err) {
-        console.warn('[WebRelationalDriver] Error loading stored database, initializing fresh:', err);
       }
     }
 
-    await this.runMigrations();
-    this.persist();
+    this.openState = true;
+    try {
+      await this.runMigrations();
+      this.persist();
+    } catch (migErr) {
+      this.openState = false;
+      throw new DatabaseInitializationError('Failed to execute schema migrations on open', migErr);
+    }
   }
 
   async close(): Promise<void> {
-    this.persist();
-    this.openState = false;
+    if (this.openState) {
+      this.persist();
+      this.openState = false;
+    }
   }
 
   isOpen(): boolean {
@@ -83,15 +164,19 @@ class WebRelationalDriver implements DatabaseAdapter {
   }
 
   private persist(): void {
-    if (this.inMemory || typeof window === 'undefined' || !window.localStorage) return;
+    if (this.inMemory || !this.storageDriver) return;
     try {
       const data: Record<string, any[]> = {};
       for (const [tableName, map] of this.tables.entries()) {
         data[tableName] = Array.from(map.values());
       }
-      window.localStorage.setItem(this.storageKey, JSON.stringify(data));
+      this.storageDriver.setItem(this.storageKey, JSON.stringify(data));
     } catch (err) {
-      console.warn('[WebRelationalDriver] Persistence error:', err);
+      const msg = (err as Error)?.message || String(err);
+      if (msg.includes('QuotaExceeded') || msg.includes('quota') || msg.includes('QUOTA_EXCEEDED_ERR')) {
+        throw new StorageQuotaExceededError(`Storage quota exceeded while persisting database to "${this.storageKey}"`, err);
+      }
+      throw new Error(`Durable persistence failed: ${msg}`);
     }
   }
 
@@ -143,10 +228,10 @@ class WebRelationalDriver implements DatabaseAdapter {
       return;
     }
     if (trimmed.startsWith('CREATE INDEX')) {
-      return; // Indexes implicit in memory driver
+      return;
     }
-    if (trimmed.startsWith('INSERT INTO')) {
-      const match = trimmed.match(/INSERT INTO\s+([a-zA-Z0-9_]+)\s*\(([^)]+)\)\s*VALUES/i);
+    if (trimmed.startsWith('INSERT INTO') || trimmed.startsWith('INSERT OR REPLACE INTO')) {
+      const match = trimmed.match(/INSERT(?:\s+OR\s+REPLACE)?\s+INTO\s+([a-zA-Z0-9_]+)\s*\(([^)]+)\)\s*VALUES/i);
       if (match && match[1]) {
         const tableName = match[1];
         const cols = match[2].split(',').map(c => c.trim());
@@ -160,8 +245,8 @@ class WebRelationalDriver implements DatabaseAdapter {
           table.set(String(pk), row);
         }
         this.persist();
+        return;
       }
-      return;
     }
     if (trimmed.startsWith('UPDATE')) {
       const match = trimmed.match(/UPDATE\s+([a-zA-Z0-9_]+)\s+SET\s+(.+?)(?:\s+WHERE\s+(.+))?$/i);
@@ -169,7 +254,6 @@ class WebRelationalDriver implements DatabaseAdapter {
         const tableName = match[1];
         const table = this.tables.get(tableName);
         if (table) {
-          // Find target rows matching WHERE id = ?
           const pk = params[params.length - 1];
           const existing = table.get(String(pk));
           if (existing) {
@@ -182,8 +266,8 @@ class WebRelationalDriver implements DatabaseAdapter {
             this.persist();
           }
         }
+        return;
       }
-      return;
     }
     if (trimmed.startsWith('DELETE FROM')) {
       const match = trimmed.match(/DELETE FROM\s+([a-zA-Z0-9_]+)(?:\s+WHERE\s+(.+))?$/i);
@@ -191,15 +275,23 @@ class WebRelationalDriver implements DatabaseAdapter {
         const tableName = match[1];
         const table = this.tables.get(tableName);
         if (table) {
-          if (params.length > 0) {
+          const whereClause = match[2];
+          if (whereClause && whereClause.includes('spaceId = ?') && params.length >= 1) {
+            const spaceId = params[0];
+            for (const [k, v] of table.entries()) {
+              if (v && v.spaceId === spaceId) {
+                table.delete(k);
+              }
+            }
+          } else if (params.length > 0) {
             table.delete(String(params[0]));
           } else {
             table.clear();
           }
           this.persist();
         }
+        return;
       }
-      return;
     }
   }
 
@@ -219,7 +311,15 @@ class WebRelationalDriver implements DatabaseAdapter {
       if (whereClause.includes('id = ?') && params.length >= 1) {
         rows = rows.filter(r => String(r.id) === String(params[0]));
       } else if (whereClause.includes('spaceId = ?') && params.length >= 1) {
-        rows = rows.filter(r => r.spaceId === params[0] || (r.targetSpaceId && r.targetSpaceId === params[0]));
+        const targetSpace = params[0];
+        // Support legitimate cross-space transfer visibility
+        rows = rows.filter(r => r.spaceId === targetSpace || (r.targetSpaceId && r.targetSpaceId === targetSpace));
+      }
+      if (whereClause.includes('isDeleted = 0')) {
+        rows = rows.filter(r => !r.isDeleted || r.isDeleted === 0);
+      }
+      if (whereClause.includes('isDeleted = 1')) {
+        rows = rows.filter(r => r.isDeleted === 1 || r.isDeleted === true);
       }
     }
 
@@ -232,7 +332,7 @@ class WebRelationalDriver implements DatabaseAdapter {
   }
 
   async transaction<T>(action: (trx: TransactionContext) => Promise<T>): Promise<T> {
-    // Snapshot state for atomic rollback
+    // Staging snapshot for atomic rollback
     const snapshot = new Map<string, Map<string, any>>();
     for (const [name, map] of this.tables.entries()) {
       const copy = new Map<string, any>();
@@ -251,10 +351,9 @@ class WebRelationalDriver implements DatabaseAdapter {
       this.persist();
       return result;
     } catch (err) {
-      // Rollback
+      // Revert in-memory tables to snapshot on failure
       this.tables = snapshot;
-      this.persist();
-      throw err;
+      throw new TransactionAbortedError('Transaction failed and was rolled back safely', err);
     }
   }
 
@@ -290,9 +389,9 @@ class WebRelationalDriver implements DatabaseAdapter {
 }
 
 /**
- * Node.js SQLite driver using native node:sqlite DatabaseSync
+ * Genuine Native SQLite 3 Driver for Node.js (Vitest & Server Runtime)
  */
-class NodeSQLiteDriver implements DatabaseAdapter {
+export class NodeSQLiteDriver implements DatabaseAdapter {
   private db: any = null;
   private openState = false;
   private dbPath: string;
@@ -307,27 +406,41 @@ class NodeSQLiteDriver implements DatabaseAdapter {
     }
   }
 
+  getBackendType(): 'sqlite-node' {
+    return 'sqlite-node';
+  }
+
   async open(): Promise<void> {
     if (this.openState && this.db) return;
     const nodeSqlite = getNodeSQLite();
     if (!nodeSqlite || !nodeSqlite.DatabaseSync) {
-      throw new Error('[NodeSQLiteDriver] Native node:sqlite DatabaseSync is not available in this environment');
+      throw new DatabaseInitializationError(
+        'Native node:sqlite DatabaseSync is not available in this runtime environment.'
+      );
     }
 
-    this.db = new nodeSqlite.DatabaseSync(this.dbPath);
-    this.openState = true;
+    try {
+      this.db = new nodeSqlite.DatabaseSync(this.dbPath);
+      this.openState = true;
 
-    // Enable WAL mode & foreign keys for high performance and integrity
-    if (this.dbPath !== ':memory:') {
-      try {
-        this.db.exec('PRAGMA journal_mode = WAL;');
-      } catch {
-        // Fallback for environments where WAL PRAGMA is restricted
+      if (this.dbPath !== ':memory:') {
+        try {
+          this.db.exec('PRAGMA journal_mode = WAL;');
+        } catch {
+          // WAL may not be allowed on in-memory or some container filesystems
+        }
       }
-    }
-    this.db.exec('PRAGMA foreign_keys = ON;');
+      this.db.exec('PRAGMA foreign_keys = ON;');
 
-    await this.runMigrations();
+      await this.runMigrations();
+    } catch (err) {
+      this.openState = false;
+      this.db = null;
+      throw new DatabaseInitializationError(
+        `Failed to open native SQLite database at "${this.dbPath}": ${(err as Error).message}`,
+        err
+      );
+    }
   }
 
   async close(): Promise<void> {
@@ -336,11 +449,10 @@ class NodeSQLiteDriver implements DatabaseAdapter {
         if (typeof this.db.close === 'function') {
           this.db.close();
         }
-      } catch {
-        // Ignore close error
+      } finally {
+        this.db = null;
+        this.openState = false;
       }
-      this.db = null;
-      this.openState = false;
     }
   }
 
@@ -360,8 +472,8 @@ class NodeSQLiteDriver implements DatabaseAdapter {
         "SELECT MAX(version) as maxVer FROM schema_migrations;"
       ).get();
       return row && row.maxVer ? Number(row.maxVer) : 0;
-    } catch {
-      return 0;
+    } catch (err) {
+      throw new Error(`Failed to query schema version: ${(err as Error).message}`);
     }
   }
 
@@ -382,28 +494,47 @@ class NodeSQLiteDriver implements DatabaseAdapter {
     return pending.length > 0 ? pending[pending.length - 1].version : currentVersion;
   }
 
+  private sanitizeParams(params: any[] = []): any[] {
+    return (params || []).map(p => (p === undefined ? null : p));
+  }
+
   async execute(sql: string, params: any[] = []): Promise<void> {
     if (!this.isOpen()) await this.open();
-    if (!params || params.length === 0) {
-      this.db.exec(sql);
-    } else {
-      const stmt = this.db.prepare(sql);
-      stmt.run(...params);
+    try {
+      const sanitized = this.sanitizeParams(params);
+      if (!sanitized || sanitized.length === 0) {
+        this.db.exec(sql);
+      } else {
+        const stmt = this.db.prepare(sql);
+        stmt.run(...sanitized);
+      }
+    } catch (err) {
+      throw new Error(`SQLite execute error on statement "${sql.substring(0, 60)}...": ${(err as Error).message}`);
     }
   }
 
   async query<T = any>(sql: string, params: any[] = []): Promise<T[]> {
     if (!this.isOpen()) await this.open();
-    const stmt = this.db.prepare(sql);
-    const rows = params.length > 0 ? stmt.all(...params) : stmt.all();
-    return rows as T[];
+    try {
+      const sanitized = this.sanitizeParams(params);
+      const stmt = this.db.prepare(sql);
+      const rows = sanitized.length > 0 ? stmt.all(...sanitized) : stmt.all();
+      return rows as T[];
+    } catch (err) {
+      throw new Error(`SQLite query error on statement "${sql.substring(0, 60)}...": ${(err as Error).message}`);
+    }
   }
 
   async queryOne<T = any>(sql: string, params: any[] = []): Promise<T | null> {
     if (!this.isOpen()) await this.open();
-    const stmt = this.db.prepare(sql);
-    const row = params.length > 0 ? stmt.get(...params) : stmt.get();
-    return (row as T) || null;
+    try {
+      const sanitized = this.sanitizeParams(params);
+      const stmt = this.db.prepare(sql);
+      const row = sanitized.length > 0 ? stmt.get(...sanitized) : stmt.get();
+      return (row as T) || null;
+    } catch (err) {
+      throw new Error(`SQLite queryOne error on statement "${sql.substring(0, 60)}...": ${(err as Error).message}`);
+    }
   }
 
   async transaction<T>(action: (trx: TransactionContext) => Promise<T>): Promise<T> {
@@ -421,9 +552,9 @@ class NodeSQLiteDriver implements DatabaseAdapter {
       try {
         this.db.exec('ROLLBACK;');
       } catch {
-        // Rollback attempt
+        // Rollback failed if transaction was already closed
       }
-      throw err;
+      throw new TransactionAbortedError('SQLite transaction failed and was rolled back', err);
     }
   }
 
@@ -499,7 +630,9 @@ class NodeSQLiteDriver implements DatabaseAdapter {
 }
 
 /**
- * Universal SQLitePersistenceAdapter Facade
+ * Universal Persistence Adapter Facade
+ * Automatically selects genuine SQLite for Node.js environments and honest
+ * BrowserStoragePersistenceAdapter for browser environments.
  */
 export class SQLitePersistenceAdapter implements DatabaseAdapter {
   private static instance: SQLitePersistenceAdapter | null = null;
@@ -510,7 +643,7 @@ export class SQLitePersistenceAdapter implements DatabaseAdapter {
     if (nodeSqlite && nodeSqlite.DatabaseSync) {
       this.driver = new NodeSQLiteDriver(config);
     } else {
-      this.driver = new WebRelationalDriver(config);
+      this.driver = new BrowserStoragePersistenceAdapter(config);
     }
   }
 
@@ -523,6 +656,18 @@ export class SQLitePersistenceAdapter implements DatabaseAdapter {
 
   public static setInstance(customAdapter: SQLitePersistenceAdapter | null): void {
     SQLitePersistenceAdapter.instance = customAdapter;
+  }
+
+  getBackendType(): 'sqlite-node' | 'browser-relational-storage' {
+    return this.driver.getBackendType();
+  }
+
+  isCorrupted(): boolean {
+    return this.driver.isCorrupted ? this.driver.isCorrupted() : false;
+  }
+
+  getCorruptionDetails(): { rawPayload: string; error: string } | null {
+    return this.driver.getCorruptionDetails ? this.driver.getCorruptionDetails() : null;
   }
 
   async open(): Promise<void> {

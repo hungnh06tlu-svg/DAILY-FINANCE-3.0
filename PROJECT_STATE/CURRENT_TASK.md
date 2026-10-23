@@ -9,17 +9,17 @@
 ## 1. ACTIVE TASK METADATA
 
 ```yaml
-ACTIVE_TASK_ID: "DB-001"
-TASK_NAME: "Local Persistence / SQLite Adapter Implementation"
+ACTIVE_TASK_ID: "DB-001R"
+TASK_NAME: "Local Persistence / Persistence Correctness Remediation"
 PARENT_PHASE: "PHASE-10 (OFFLINE-FIRST DATABASE ENGINE)"
 ACTIVE_OWNER: "Google AI Studio Agent"
-CURRENT_STATUS: "COMPLETE & CERTIFIED"
-CURRENT_POSITION: "DB-001 complete & certified (EVD-DB-001); Phase-10 offline-first persistence adapter operational"
-LAST_COMPLETED_TASK: "DB-001"
-LAST_COMPLETED_STATUS: "COMPLETE & CERTIFIED (EVD-DB-001)"
-NEXT_TASK: "PHASE-11 (SYNC-001 - Pending Governance Authorization)"
+CURRENT_STATUS: "IN PROGRESS"
+CURRENT_POSITION: "DB-001R in progress; browser persistence architecture resolved (Strategy B), error handling hardened, and hydration across instances verified"
+LAST_COMPLETED_TASK: "REPO-004"
+LAST_COMPLETED_STATUS: "COMPLETE & CERTIFIED (EVD-REPO-004)"
+NEXT_TASK: "Complete DB-001R verification and governance audit"
 STARTED_AT: "2026-10-22"
-LAST_UPDATED_AT: "2026-10-22"
+LAST_UPDATED_AT: "2026-10-23"
 ROADMAP_PROGRESS: "97%"
 ```
 
@@ -46,7 +46,7 @@ ROADMAP_PROGRESS: "97%"
 | **REPO-002** | Repository Layer Consolidation & Unification (F-01, F-02, F-03) | `COMPLETE & VERIFIED` | Google AI Studio Agent | `EVD-REPO-002`, `src/repositories/*` (1,442/1,442 PASS) |
 | **REPO-003** | LocalDataSource Persistence & Space CRUD Hardening (F-04, F-07, F-08) | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-REPO-003`, `src/data/datasource/LocalDataSource.ts` (1,442/1,442 PASS) |
 | **REPO-004** | Dashboard & Report Projection Grounding & Backup Restore (F-05, F-06, F-09) | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-REPO-004`, `src/repositories/implementations.ts`, `src/data/datasource/LocalDataSource.ts` (1,442/1,442 PASS) |
-| **DB-001** | Local Persistence / SQLite Adapter Implementation | `COMPLETE & CERTIFIED` | Google AI Studio Agent | `EVD-DB-001`, `src/data/database/*`, `src/tests/db_persistence.test.ts` (1,452/1,452 PASS) |
+| **DB-001** | Local Persistence / SQLite Adapter Implementation | `IN PROGRESS` | Google AI Studio Agent | `EVD-DB-001`, `src/data/database/*`, `src/tests/db_persistence.test.ts` (Remediation in progress) |
 
 ---
 

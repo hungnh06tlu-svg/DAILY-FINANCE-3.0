@@ -1,8 +1,36 @@
 /**
- * Daily Finance 3.0 - Database Adapter Abstraction Layer (DB-001)
+ * Daily Finance 3.0 - Database Adapter Abstraction Layer (DB-001 / DB-001R)
  * Standard: Clean Architecture / Offline-First Persistence
  * Provides unified transactional database contract matching Room / SQLite relational semantics.
  */
+
+export class DatabaseInitializationError extends Error {
+  constructor(message: string, public readonly cause?: unknown) {
+    super(`[DatabaseInitializationError]: ${message}`);
+    this.name = 'DatabaseInitializationError';
+  }
+}
+
+export class StorageQuotaExceededError extends Error {
+  constructor(message: string, public readonly cause?: unknown) {
+    super(`[StorageQuotaExceededError]: ${message}`);
+    this.name = 'StorageQuotaExceededError';
+  }
+}
+
+export class StorageCorruptError extends Error {
+  constructor(message: string, public readonly rawPayload?: string, public readonly cause?: unknown) {
+    super(`[StorageCorruptError]: ${message}`);
+    this.name = 'StorageCorruptError';
+  }
+}
+
+export class TransactionAbortedError extends Error {
+  constructor(message: string, public readonly cause?: unknown) {
+    super(`[TransactionAbortedError]: ${message}`);
+    this.name = 'TransactionAbortedError';
+  }
+}
 
 export interface TransactionContext {
   execute(sql: string, params?: any[]): Promise<void>;
@@ -14,9 +42,21 @@ export interface DatabaseConfig {
   databaseName?: string;
   inMemory?: boolean;
   storagePath?: string;
+  storageDriver?: {
+    getItem(key: string): string | null;
+    setItem(key: string, value: string): void;
+    removeItem(key: string): void;
+  };
 }
 
 export interface DatabaseAdapter {
+  /**
+   * Identifies the underlying persistence engine honestly.
+   * 'sqlite-node' = Genuine SQLite 3 engine running on Node.js via node:sqlite.
+   * 'browser-relational-storage' = Browser-safe relational persistence adapter over WebStorage/Memory.
+   */
+  getBackendType(): 'sqlite-node' | 'browser-relational-storage';
+
   /**
    * Initializes and opens the database connection.
    * Runs schema migrations up to latest version.
@@ -29,7 +69,7 @@ export interface DatabaseAdapter {
   close(): Promise<void>;
 
   /**
-   * Returns whether the database connection is currently open.
+   * Returns whether the database connection is currently open and ready.
    */
   isOpen(): boolean;
 
@@ -77,4 +117,15 @@ export interface DatabaseAdapter {
    * Restores state into the database transactionally.
    */
   importState(state: Record<string, any[]>): Promise<void>;
+
+  /**
+   * Returns true if storage corruption was detected during initialization.
+   */
+  isCorrupted?(): boolean;
+
+  /**
+   * Returns details of quarantined corrupt storage for recovery.
+   */
+  getCorruptionDetails?(): { rawPayload: string; error: string } | null;
 }
+

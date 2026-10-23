@@ -48,51 +48,50 @@ export class LocalTransactionRepository implements TransactionRepository {
   }
 
   private async persistTx(tx: Transaction): Promise<void> {
-    if (this.db && this.db.isOpen()) {
-      try {
-        await this.db.execute(`
-          INSERT OR REPLACE INTO transactions (
-            id, spaceId, walletId, accountId, targetSpaceId, targetWalletId,
-            categoryId, category, transactionType, amount, currency, exchangeRate,
-            note, description, transactionDate, date, status, merchant, method,
-            fundId, targetFundId, tags, auditTrail, createdAt, updatedAt, deletedAt,
-            version, isDeleted, syncStatus, deviceId
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-        `, [
-          tx.id,
-          tx.spaceId,
-          tx.walletId || null,
-          (tx as any).accountId || null,
-          tx.targetSpaceId || null,
-          (tx as any).targetWalletId || null,
-          tx.categoryId || tx.category || 'general',
-          tx.category || tx.categoryId || 'General',
-          tx.type,
-          tx.amount,
-          tx.currency || 'VND',
-          (tx as any).exchangeRate || 1,
-          tx.note || null,
-          tx.description || tx.note || null,
-          (tx as any).transactionDate || tx.date || new Date().toISOString(),
-          tx.date || new Date().toISOString().split('T')[0],
-          tx.status || 'draft',
-          tx.merchant || null,
-          (tx as any).method || null,
-          (tx as any).fundId || null,
-          (tx as any).targetFundId || null,
-          JSON.stringify(tx.tags || []),
-          JSON.stringify(tx.auditTrail || []),
-          tx.createdAt || new Date().toISOString(),
-          tx.updatedAt || new Date().toISOString(),
-          tx.deletedAt || null,
-          tx.version || 1,
-          tx.isDeleted ? 1 : 0,
-          tx.syncStatus || 'pending',
-          'local_device'
-        ]);
-      } catch {
-        // Non-blocking fallback
+    if (this.db) {
+      if (!this.db.isOpen()) {
+        await this.db.open();
       }
+      await this.db.execute(`
+        INSERT OR REPLACE INTO transactions (
+          id, spaceId, walletId, accountId, targetSpaceId, targetWalletId,
+          categoryId, category, transactionType, amount, currency, exchangeRate,
+          note, description, transactionDate, date, status, merchant, method,
+          fundId, targetFundId, tags, auditTrail, createdAt, updatedAt, deletedAt,
+          version, isDeleted, syncStatus, deviceId
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      `, [
+        tx.id,
+        tx.spaceId,
+        tx.walletId || null,
+        (tx as any).accountId || null,
+        tx.targetSpaceId || null,
+        (tx as any).targetWalletId || null,
+        tx.categoryId || tx.category || 'general',
+        tx.category || tx.categoryId || 'General',
+        tx.type,
+        tx.amount,
+        tx.currency || 'VND',
+        (tx as any).exchangeRate || 1,
+        tx.note || null,
+        tx.description || tx.note || null,
+        (tx as any).transactionDate || tx.date || new Date().toISOString(),
+        tx.date || new Date().toISOString().split('T')[0],
+        tx.status || 'draft',
+        tx.merchant || null,
+        (tx as any).method || null,
+        (tx as any).fundId || null,
+        (tx as any).targetFundId || null,
+        JSON.stringify(tx.tags || []),
+        JSON.stringify(tx.auditTrail || []),
+        tx.createdAt || new Date().toISOString(),
+        tx.updatedAt || new Date().toISOString(),
+        tx.deletedAt || null,
+        tx.version || 1,
+        tx.isDeleted ? 1 : 0,
+        tx.syncStatus || 'pending',
+        'local_device'
+      ]);
     }
   }
 

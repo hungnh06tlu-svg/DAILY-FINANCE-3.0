@@ -131,10 +131,10 @@ The system delivery roadmap strictly follows Clean Architecture dependencies fro
   - `REPO-004`: Dashboard & Report Projection Grounding & Backup Restore (`COMPLETE & CERTIFIED`, `EVD-REPO-004`, targets F-05, F-06, F-09).
 
 ### PHASE-10: Offline-First Database Engine
-- **Status:** `COMPLETE & CERTIFIED (100% — DB-001 CERTIFIED)`
-- **Scope:** Durable local SQLite persistence adapter matching Room entity contracts, versioned schema migrations, ACID transactions, and multi-space isolation (`EVD-DB-001`, 1,452/1,452 tests passing across 17 suites).
-- **Completed Subtasks:**
-  - `DB-001`: Local Persistence / SQLite Adapter Implementation (`COMPLETE & CERTIFIED`, `EVD-DB-001`).
+- **Status:** `IN PROGRESS (DB-001R Persistence Correctness Remediation)`
+- **Scope:** Durable local SQLite persistence adapter matching Room entity contracts, versioned schema migrations, ACID transactions, and multi-space isolation (`EVD-DB-001`).
+- **Active Subtasks:**
+  - `DB-001`: Local Persistence / SQLite Adapter Implementation (`IN PROGRESS — Remediation DB-001R`).
 
 ### PHASE-11 → PHASE-13: Synchronization, Security & Release
 - **Status:** `NOT STARTED / IN PROGRESS`
