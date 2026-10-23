@@ -2,14 +2,14 @@
 
 > **PROJECT:** DAILY FINANCE 3.0  
 > **SCOPE:** Ground Truth Evidence Records, Test Verifications & Cross-Report Reconciliation  
-> **LAST VERIFIED:** 2026-10-16  
+> **LAST VERIFIED:** 2026-10-22  
 
 ---
 
 ## 1. EVIDENCE REGISTRY TABLE
 
 | Evidence ID | Task ID | Claim | Evidence Type | Automated Test Result | Lint Status | Build Status | Primary Source File(s) | Status | Last Verified |
-| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :--- | :---: | :---: |
+| :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- | :---: | :---: |
 | **EVD-G1-01** | G1 | Navigation restructured (5 mobile, 7 tablet items) | UI Smoke & Spec | 10/10 PASS | Clean | Success | `App.tsx`, `NavigationShell.tsx` | `VERIFIED` | 2026-08-28 |
 | **EVD-G2-01** | G2 | 10 Methods nested under Jars UI | UI Smoke & Spec | 10/10 PASS | Clean | Success | `BudgetingMethodsView.tsx` | `VERIFIED` | 2026-08-28 |
 | **EVD-D1-01** | D1 | Canonical Financial Model types, guards & precision | Unit Tests | 17/17 PASS | Clean | Success | `src/tests/d1_financial_model.test.ts` | `VERIFIED` | 2026-08-28 |
@@ -47,6 +47,7 @@
 | **EVD-REPO-003** | REPO-003 | LocalDataSource Persistence & Space CRUD Hardening (F-04, F-07, F-08) | Repository Remediation | 1,442/1,442 PASS (16 suites) | Clean (0 err) | Success (Build OK) | `src/data/datasource/LocalDataSource.ts`, `src/repositories/implementations.ts`, `EVD-REPO-003.md` | `COMPLETE & CERTIFIED` | 2026-10-16 |
 | **EVD-REPO-004** | REPO-004 | Dashboard & Report Projection Grounding & Backup Restore (F-05, F-06, F-09) | Repository Remediation | 1,442/1,442 PASS (16 suites) | Clean (0 err) | Success (Build OK) | `src/repositories/implementations.ts`, `src/data/datasource/LocalDataSource.ts`, `EVD-REPO-004.md` | `COMPLETE & CERTIFIED` | 2026-10-19 |
 | **EVD-REG-01** | QA | Full Suite Regression & Complexity Benchmarks | Vitest Runner | 1,442/1,442 PASS | 0 errors | Success | All 16 Test Suites | `VERIFIED` | 2026-10-19 |
+| **EVD-DB-001** | DB-001 | Offline-First Relational SQLite Persistence Adapter & Migrations | Database Adapter & Tests | 10/10 PASS (1,452 total) | Clean (0 err) | Success (Build OK) | `src/data/database/*`, `src/tests/db_persistence.test.ts`, `EVD-DB-001.md` | `COMPLETE & CERTIFIED` | 2026-10-22 |
 
 ---
 
@@ -70,9 +71,10 @@ To eliminate confusion across different AI agents quoting different test counts 
 | `src/tests/d1_financial_model.test.ts` | D1 Canonical Financial Model & Guards | **17** | `PASS` |
 | `src/tests/d4_sync_property.test.ts` | D4 Sync Property Tests & Conflict Resolution | **15** | `PASS` |
 | `src/tests/d3_harness.test.ts` | D3 Invariant Execution Harness & Diagnostics | **15** | `PASS` |
+| `src/tests/db_persistence.test.ts` | Phase-10 SQLite Relational Persistence & Durability | **10** | `PASS` |
 | `src/tests/d2_003_ui_smoke.test.ts` | Presentation Integration Smoke Tests | **10** | `PASS` |
 | `src/tests/g5_benchmark.test.ts` | Algorithm Complexity Benchmarks ($O(n)$) | **6** | `PASS` |
-| **TOTAL VITEST RUN** | **16 Test Files** | **1,442** | **100% PASS** |
+| **TOTAL VITEST RUN** | **17 Test Files** | **1,452** | **100% PASS** |
 
 ### Summary of Historical Test Milestones:
 - **"1,335 tests"**: The baseline achieved after D3 Freeze Certification (`EVD-D3-003`, 11 test files).
@@ -81,7 +83,8 @@ To eliminate confusion across different AI agents quoting different test counts 
 - **"1,385 tests"**: Intermediate baseline during AI-001B implementation.
 - **"1,396 tests"**: Baseline following AI-001B Final Verification Gate (+25 tests in `ai_guardrails.test.ts`, 14 test files).
 - **"1,421 tests"**: Baseline following AI-001C Final Verification Gate (+25 tests in `ai_voice_confirmation.test.ts`, 15 test files).
-- **"1,442 tests"**: Current canonical executable test baseline following AI-001D Server Proxy Hardening (+21 tests in `ai_proxy_hardening.test.ts`, 16 test files).
+- **"1,442 tests"**: Baseline following AI-001D Server Proxy Hardening (+21 tests in `ai_proxy_hardening.test.ts`, 16 test files).
+- **"1,452 tests"**: Baseline following DB-001 Offline-First Relational Persistence Adapter (+10 tests in `db_persistence.test.ts`, 17 test files).
 
 ---
 

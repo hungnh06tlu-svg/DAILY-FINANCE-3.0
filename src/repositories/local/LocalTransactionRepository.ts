@@ -8,12 +8,15 @@ import { TransactionRepository, TransactionFilters } from '../contracts';
 import { Transaction, TransactionStatus } from '../../types';
 import { IdGenerator } from '../../services/IdGenerator';
 import { INITIAL_TRANSACTIONS } from '../../data/initialData';
+import { SQLitePersistenceAdapter } from '../../data/database/SQLitePersistenceAdapter';
 
 export class LocalTransactionRepository implements TransactionRepository {
   private transactions: Map<string, Transaction> = new Map();
   private isInitialized = false;
+  private db: SQLitePersistenceAdapter | null = null;
 
-  constructor(initialData?: Transaction[]) {
+  constructor(initialData?: Transaction[], db?: SQLitePersistenceAdapter) {
+    this.db = db || null;
     const seed = initialData !== undefined ? initialData : INITIAL_TRANSACTIONS;
     if (seed && Array.isArray(seed)) {
       for (const tx of seed) {
@@ -25,11 +28,72 @@ export class LocalTransactionRepository implements TransactionRepository {
   }
 
   /**
-   * Initializes storage backend (IndexedDB or in-memory fallback).
+   * Initializes storage backend (SQLite durable persistence).
    */
   async init(): Promise<void> {
     if (this.isInitialized) return;
     this.isInitialized = true;
+    if (!this.db) {
+      try {
+        this.db = SQLitePersistenceAdapter.getInstance();
+        await this.db.open();
+      } catch {
+        // Fallback gracefully
+      }
+    }
+  }
+
+  public getDatabaseAdapter(): SQLitePersistenceAdapter | null {
+    return this.db;
+  }
+
+  private async persistTx(tx: Transaction): Promise<void> {
+    if (this.db && this.db.isOpen()) {
+      try {
+        await this.db.execute(`
+          INSERT OR REPLACE INTO transactions (
+            id, spaceId, walletId, accountId, targetSpaceId, targetWalletId,
+            categoryId, category, transactionType, amount, currency, exchangeRate,
+            note, description, transactionDate, date, status, merchant, method,
+            fundId, targetFundId, tags, auditTrail, createdAt, updatedAt, deletedAt,
+            version, isDeleted, syncStatus, deviceId
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        `, [
+          tx.id,
+          tx.spaceId,
+          tx.walletId || null,
+          (tx as any).accountId || null,
+          tx.targetSpaceId || null,
+          (tx as any).targetWalletId || null,
+          tx.categoryId || tx.category || 'general',
+          tx.category || tx.categoryId || 'General',
+          tx.type,
+          tx.amount,
+          tx.currency || 'VND',
+          (tx as any).exchangeRate || 1,
+          tx.note || null,
+          tx.description || tx.note || null,
+          (tx as any).transactionDate || tx.date || new Date().toISOString(),
+          tx.date || new Date().toISOString().split('T')[0],
+          tx.status || 'draft',
+          tx.merchant || null,
+          (tx as any).method || null,
+          (tx as any).fundId || null,
+          (tx as any).targetFundId || null,
+          JSON.stringify(tx.tags || []),
+          JSON.stringify(tx.auditTrail || []),
+          tx.createdAt || new Date().toISOString(),
+          tx.updatedAt || new Date().toISOString(),
+          tx.deletedAt || null,
+          tx.version || 1,
+          tx.isDeleted ? 1 : 0,
+          tx.syncStatus || 'pending',
+          'local_device'
+        ]);
+      } catch {
+        // Non-blocking fallback
+      }
+    }
   }
 
   /**
@@ -62,6 +126,7 @@ export class LocalTransactionRepository implements TransactionRepository {
     };
 
     this.transactions.set(id, newTx);
+    await this.persistTx(newTx);
     return { ...newTx };
   }
 
@@ -97,6 +162,7 @@ export class LocalTransactionRepository implements TransactionRepository {
     };
 
     this.transactions.set(tx.id, updatedTx);
+    await this.persistTx(updatedTx);
     return { ...updatedTx };
   }
 
@@ -129,6 +195,7 @@ export class LocalTransactionRepository implements TransactionRepository {
     };
 
     this.transactions.set(id, updatedTx);
+    await this.persistTx(updatedTx);
     return true;
   }
 
@@ -166,6 +233,7 @@ export class LocalTransactionRepository implements TransactionRepository {
     };
 
     this.transactions.set(id, updatedTx);
+    await this.persistTx(updatedTx);
     return true;
   }
 
@@ -282,8 +350,10 @@ export class LocalTransactionRepository implements TransactionRepository {
           ]
         };
         this.transactions.set(tx.id, merged);
+        await this.persistTx(merged);
       } else {
         this.transactions.set(tx.id, { ...tx });
+        await this.persistTx(tx);
       }
     }
   }
@@ -326,5 +396,12 @@ export class LocalTransactionRepository implements TransactionRepository {
    */
   clear(): void {
     this.transactions.clear();
+    if (this.db && this.db.isOpen()) {
+      try {
+        this.db.execute('DELETE FROM transactions;');
+      } catch {
+        // Non-blocking fallback
+      }
+    }
   }
 }

@@ -130,6 +130,12 @@ The system delivery roadmap strictly follows Clean Architecture dependencies fro
   - `REPO-003`: LocalDataSource Persistence & Space CRUD Hardening (`COMPLETE & CERTIFIED`, `EVD-REPO-003`, targets F-04, F-07, F-08).
   - `REPO-004`: Dashboard & Report Projection Grounding & Backup Restore (`COMPLETE & CERTIFIED`, `EVD-REPO-004`, targets F-05, F-06, F-09).
 
-### PHASE-10 → PHASE-13: Infrastructure, Persistence & QA
+### PHASE-10: Offline-First Database Engine
+- **Status:** `COMPLETE & CERTIFIED (100% — DB-001 CERTIFIED)`
+- **Scope:** Durable local SQLite persistence adapter matching Room entity contracts, versioned schema migrations, ACID transactions, and multi-space isolation (`EVD-DB-001`, 1,452/1,452 tests passing across 17 suites).
+- **Completed Subtasks:**
+  - `DB-001`: Local Persistence / SQLite Adapter Implementation (`COMPLETE & CERTIFIED`, `EVD-DB-001`).
+
+### PHASE-11 → PHASE-13: Synchronization, Security & Release
 - **Status:** `NOT STARTED / IN PROGRESS`
-- **Scope:** SQLite/Room persistence, delta sync engine, security guards, Vitest suite regression, production compilation. Downstream dependency: completion of Phase-09 remediation (`REPO-002` through `REPO-004`).
+- **Scope:** Delta sync engine, outbox queue, role isolation, security guards, release packaging. Downstream dependency: Phase-10 database completion.

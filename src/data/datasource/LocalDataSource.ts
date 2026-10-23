@@ -36,8 +36,12 @@ import {
 
 import { IdGenerator } from '../../services/IdGenerator';
 import { BackupAndSyncEngine, BackupPackage } from '../../domain/BackupAndSyncEngine';
+import { SQLitePersistenceAdapter } from '../database/SQLitePersistenceAdapter';
 
 export interface DataSource {
+  // Database Adapter
+  getDatabaseAdapter?(): SQLitePersistenceAdapter;
+
   // Transactions
   getTransactions(spaceId?: string): Promise<Transaction[]>;
   getTransactionById(id: string): Promise<Transaction | null>;
@@ -198,11 +202,17 @@ export class LocalDataSource implements DataSource {
     notificationEnabled: true
   };
 
+  private db: SQLitePersistenceAdapter = SQLitePersistenceAdapter.getInstance();
+
   public static getInstance(): LocalDataSource {
     if (!LocalDataSource.instance) {
       LocalDataSource.instance = new LocalDataSource();
     }
     return LocalDataSource.instance;
+  }
+
+  public getDatabaseAdapter(): SQLitePersistenceAdapter {
+    return this.db;
   }
 
   // Transactions
@@ -541,6 +551,17 @@ export class LocalDataSource implements DataSource {
     const backupId = IdGenerator.generateBackupId();
     this.backupPackages.set(backupId, pkg);
 
+    try {
+      if (this.db.isOpen()) {
+        await this.db.execute(
+          'INSERT OR REPLACE INTO backup_packages (id, spaceId, timestamp, payload, checksum) VALUES (?, ?, ?, ?, ?);',
+          [backupId, spaceId || 'sp_personal', pkg.metadata.timestamp, JSON.stringify(pkg), pkg.metadata.checksum]
+        );
+      }
+    } catch (e) {
+      // Non-blocking fallback
+    }
+
     const size = JSON.stringify(pkg).length;
 
     return {
@@ -561,6 +582,22 @@ export class LocalDataSource implements DataSource {
   private async ensureBackupPackage(backupId: string): Promise<BackupPackage | null> {
     if (this.backupPackages.has(backupId)) {
       return this.backupPackages.get(backupId)!;
+    }
+
+    try {
+      if (this.db.isOpen()) {
+        const row = await this.db.queryOne<{ payload: string }>(
+          'SELECT payload FROM backup_packages WHERE id = ?;',
+          [backupId]
+        );
+        if (row && row.payload) {
+          const parsed = JSON.parse(row.payload);
+          this.backupPackages.set(backupId, parsed);
+          return parsed;
+        }
+      }
+    } catch {
+      // Fallback to static resolution
     }
     if (backupId === 'bk_20260812') {
       const pkg = await BackupAndSyncEngine.createBackupPackage(
