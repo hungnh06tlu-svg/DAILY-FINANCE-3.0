@@ -47,7 +47,7 @@
 | **EVD-REPO-003** | REPO-003 | LocalDataSource Persistence & Space CRUD Hardening (F-04, F-07, F-08) | Repository Remediation | 1,442/1,442 PASS (16 suites) | Clean (0 err) | Success (Build OK) | `src/data/datasource/LocalDataSource.ts`, `src/repositories/implementations.ts`, `EVD-REPO-003.md` | `COMPLETE & CERTIFIED` | 2026-10-16 |
 | **EVD-REPO-004** | REPO-004 | Dashboard & Report Projection Grounding & Backup Restore (F-05, F-06, F-09) | Repository Remediation | 1,442/1,442 PASS (16 suites) | Clean (0 err) | Success (Build OK) | `src/repositories/implementations.ts`, `src/data/datasource/LocalDataSource.ts`, `EVD-REPO-004.md` | `COMPLETE & CERTIFIED` | 2026-10-19 |
 | **EVD-REG-01** | QA | Full Suite Regression & Complexity Benchmarks | Vitest Runner | 1,442/1,442 PASS | 0 errors | Success | All 16 Test Suites | `VERIFIED` | 2026-10-19 |
-| **EVD-DB-001** | DB-001 | Offline-First Relational SQLite Persistence Adapter & Migrations | Database Adapter & Tests | 12/12 PASS (1,454 total) | Clean (0 err) | Success (Build OK) | `src/data/database/*`, `src/tests/db_persistence.test.ts`, `EVD-DB-001.md` | `IN PROGRESS (REMEDIATION)` | 2026-10-23 |
+| **EVD-DB-001** | DB-001 | Offline-First Relational SQLite Persistence Adapter & Migrations | Database Adapter & Tests | 14/14 PASS (1,456 total) | Clean (0 err) | Success (Build OK) | `src/data/database/*`, `src/tests/db_persistence.test.ts`, `EVD-DB-001.md` | `COMPLETE & VERIFIED — LOCAL ONLY` | 2026-10-24 |
 
 ---
 
@@ -71,10 +71,10 @@ To eliminate confusion across different AI agents quoting different test counts 
 | `src/tests/d1_financial_model.test.ts` | D1 Canonical Financial Model & Guards | **17** | `PASS` |
 | `src/tests/d4_sync_property.test.ts` | D4 Sync Property Tests & Conflict Resolution | **15** | `PASS` |
 | `src/tests/d3_harness.test.ts` | D3 Invariant Execution Harness & Diagnostics | **15** | `PASS` |
-| `src/tests/db_persistence.test.ts` | Phase-10 SQLite Relational Persistence & Durability | **12** | `PASS` |
+| `src/tests/db_persistence.test.ts` | Phase-10 SQLite Relational Persistence & Durability | **14** | `PASS` |
 | `src/tests/d2_003_ui_smoke.test.ts` | Presentation Integration Smoke Tests | **10** | `PASS` |
 | `src/tests/g5_benchmark.test.ts` | Algorithm Complexity Benchmarks ($O(n)$) | **6** | `PASS` |
-| **TOTAL VITEST RUN** | **17 Test Files** | **1,454** | **100% PASS** |
+| **TOTAL VITEST RUN** | **17 Test Files** | **1,456** | **100% PASS** |
 
 ### Summary of Historical Test Milestones:
 - **"1,335 tests"**: The baseline achieved after D3 Freeze Certification (`EVD-D3-003`, 11 test files).
@@ -85,7 +85,8 @@ To eliminate confusion across different AI agents quoting different test counts 
 - **"1,421 tests"**: Baseline following AI-001C Final Verification Gate (+25 tests in `ai_voice_confirmation.test.ts`, 15 test files).
 - **"1,442 tests"**: Baseline following AI-001D Server Proxy Hardening (+21 tests in `ai_proxy_hardening.test.ts`, 16 test files).
 - **"1,452 tests"**: Initial baseline following DB-001 persistence adapter prototype (+10 tests in `db_persistence.test.ts`, 17 test files).
-- **"1,454 tests"**: Current canonical baseline following DB-001R persistence correctness remediation (+12 tests in `db_persistence.test.ts`, 17 test files).
+- **"1,454 tests"**: Intermediate baseline during DB-001R persistence correctness remediation (+12 tests in `db_persistence.test.ts`, 17 test files).
+- **"1,456 tests"**: Current canonical baseline following DB-001R persistence correctness remediation & full entity coverage (+14 tests in `db_persistence.test.ts`, 17 test files).
 
 ---
 
