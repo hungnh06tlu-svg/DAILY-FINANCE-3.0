@@ -6,3 +6,17 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# SQLite runtime database & journal companions
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite-journal
+*.db
+*.db-wal
+*.db-shm
+
+# Temporary patch & diff export files
+*.patch
+*.diff
+
