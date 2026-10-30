@@ -2,7 +2,7 @@
 
 > **PROJECT:** DAILY FINANCE 3.0  
 > **SCOPE:** Full Hierarchical Task Breakdown, Granular Subtasks, Ownership & Progress Tracking  
-> **LAST VERIFIED:** 2026-10-16  
+> **LAST VERIFIED:** 2026-10-29  
 
 ---
 
@@ -86,7 +86,9 @@
 | **GOV-006R3** | Root | GOVERNANCE | Authoritative Remote State Repair & Consistency Verification | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-006 | 2026-10-13 | 2026-10-13 | `EVD-GOV-006R3` | REPO-002 |
 | **REPO-002** | Root | REPOSITORY | Repository Layer Consolidation & Unification (F-01, F-02, F-03) | `COMPLETE` | `100%` | Google AI Studio Agent | GOV-006R3 | 2026-10-16 | 2026-10-16 | `EVD-REPO-002` | REPO-003 |
 | **REPO-003** | Root | REPOSITORY | LocalDataSource Persistence & Space CRUD Hardening (F-04, F-07, F-08) | `COMPLETE` | `100%` | Google AI Studio Agent | REPO-002 | 2026-10-16 | 2026-10-16 | `EVD-REPO-003` | REPO-004 |
-| **DB-001** | Root | DATABASE | Local Persistence / SQLite Adapter Implementation | `COMPLETE & VERIFIED` | `100%` | Google AI Studio Agent | REPO-004 | 2026-10-22 | 2026-10-23 | `EVD-DB-001` | `SYNC-001` |
+| **DB-001** | Root | DATABASE | Local Persistence / SQLite Adapter Implementation | `COMPLETE` | `100%` | Google AI Studio Agent | REPO-004 | 2026-10-22 | 2026-10-23 | `EVD-DB-001` | `DB-001R` |
+| **DB-001R** | Root | DATABASE | Persistence Correctness Remediation & Evidence Gate | `COMPLETE` | `100%` | Google AI Studio Agent | DB-001 | 2026-10-23 | 2026-10-29 | `EVD-DB-001R` | `GOV-DB-001R-STATE-SYNC` |
+| **GOV-DB-001R-STATE-SYNC** | Root | GOVERNANCE | PROJECT_STATE Final Reconciliation & Alignment | `COMPLETE` | `100%` | Google AI Studio Agent | DB-001R | 2026-10-29 | 2026-10-29 | `EVD-DB-001R` | `SYNC-001` (Pending Auth) |
 
 ---
 
@@ -96,7 +98,7 @@
 | :--- | :--- | :--- | :---: | :---: | :--- | :--- | :--- |
 | **PHASE-08** | **USE CASE** | 31 Clean Architecture Application Use Cases | `COMPLETE` | `100%` | Google AI Studio Agent | D1, D2, PHASE-07 | `REPO-001` |
 | **PHASE-09** | **REPOSITORY** | Domain Repository Implementations & Remediation (REPO-001..004) | `COMPLETE` | `100%` | Google AI Studio Agent | D4-001, PHASE-08 | `DB-001` |
-| **PHASE-10** | **DATABASE** | Local Persistence / Room SQLite Adapter | `COMPLETE & VERIFIED` | `100%` | Google AI Studio Agent | PHASE-09 | `SYNC-001` |
-| **PHASE-11** | **SYNC** | Delta-Sync, Outbox Queue & Cloud Backup | `NOT STARTED` | `0%` | Unassigned | PHASE-10 | `SYNC-001` |
+| **PHASE-10** | **DATABASE** | Local Persistence / Dual Strategy Adapter & Remediation | `COMPLETE & CERTIFIED` | `100%` | Google AI Studio Agent | PHASE-09 | `SYNC-001` (Awaiting Auth) |
+| **PHASE-11** | **SYNC** | Delta-Sync, Outbox Queue & Cloud Backup | `NOT STARTED` | `0%` | Unassigned | PHASE-10 | `SYNC-001` (Awaiting Auth) |
 | **PHASE-12** | **SECURITY** | Role Isolation, Space Guard & Cloud Storage | `NOT STARTED` | `0%` | Unassigned | PHASE-11 | `SEC-001` |
 | **PHASE-13** | **QA / RELEASE** | Vitest Full Suite Regression, Build & Dist | `COMPLETE` | `100%` | Google AI Studio Agent | All | 1,456/1,456 PASS |

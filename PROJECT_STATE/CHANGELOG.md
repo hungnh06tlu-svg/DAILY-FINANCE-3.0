@@ -3,6 +3,27 @@
 > **PROJECT:** DAILY FINANCE 3.0  
 > **SCOPE:** Immutable Audit Log of Project State Transitions, AI Handoffs & Governance Updates  
 
+## [2026-10-29] — GOV-DB-001R-STATE-SYNC & DB-001R Local Persistence Engine & Authoritative Remote Reconciliation
+- **AI Agent:** Google AI Studio Agent
+- **Task ID:** `DB-001R` / `GOV-DB-001R-STATE-SYNC` (Persistence Correctness Remediation & Authoritative Remote Hygiene Reconciliation)
+- **Predecessors:** `DB-001` (SQLite Persistence Adapter), `REPO-004` (Dashboard & Report Grounding)
+- **Status Transition:** `IN PROGRESS` → `COMPLETE & RECONCILED (REMOTE MAIN VERIFIED)`
+- **Scope & Governance Execution:**
+  - **Strategy B Persistence Implementation:** Explicitly separated Node.js native `node:sqlite` (`NodeSQLiteDriver`, `getBackendType(): 'sqlite-node'`) from browser runtime persistence (`BrowserStoragePersistenceAdapter`, `getBackendType(): 'browser-relational-storage'`). Protected browser client bundle from Node module leakage.
+  - **Persistence Correctness Hardened:** Eliminated all silent `catch {}` blocks across database adapters and repository write-through layers. Introduced typed error taxonomy (`DatabaseInitializationError`, `StorageQuotaExceededError`, `StorageCorruptError`, `TransactionAbortedError`). Added non-destructive corruption quarantine and quota exhaustion rollback. Implemented startup hydration across all supported entities.
+  - **Authoritative Remote Tree Sanitization:** Verified commit `4702c7d523bfd9ebf2f2ccd072af76771b8132c5` (parent `d3d73c65a93191666209d1f0c6c62dd2a3e0a642`, tree `bedb37ac05d7bdaea3a5b852c53ca8d6a0852213`) published on remote `main`. Removed all 7 unintended runtime database files and temporary patch exports from Git tracking. Updated `.gitignore` with comprehensive SQLite runtime and patch export exclusions.
+  - **Backup Preservation Proofs:** Verified preserved database backup files at `/tmp/backup_runtime_db_hygiene/daily_finance.sqlite` (724,992 bytes) and `.aistudio/artifacts/brain/3c73673d-7c47-4a9f-8c3c-b5519b929d46/daily_finance_backup.sqlite` (724,992 bytes).
+  - **Quality Gates:** 14/14 tests passing in `src/tests/db_persistence.test.ts`, 1,456/1,456 tests passing in full Vitest suite, clean lint (`tsc --noEmit`), clean build (`npm run build`), successful applet compilation (`compile_applet`).
+  - **Frozen Module Invariance:** Exactly 0 modifications to `FinancialTruthEngine.ts`, `CanonicalFinancialModel.ts`, `InvariantEngine.ts`, `src/usecases/*`, or presentation views.
+- **Verification Evidence:** `EVD-DB-001R.md`, `EVD-DB-001.md`, GitHub API live confirmation of HEAD commit `4702c7d`.
+- **Confirmed Repository Status:**
+  - `DB-001R = COMPLETE & CERTIFIED`
+  - `PHASE-10 = COMPLETE & RECONCILED (100%)`
+  - `NEXT PHASE = PHASE-11 (Sync, Outbox & Cloud Backup)`
+  - `EXPLICIT DIRECTIVE = SYNC-001 NOT STARTED — AWAITING USER AUTHORIZATION`
+
+---
+
 ## [2026-10-19] — REPO-004 Dashboard & Report Projection Grounding & Backup Restore
 - **AI Agent:** Google AI Studio Agent
 - **Task ID:** `REPO-004` (Dashboard & Report Projection Grounding & Backup Restore)

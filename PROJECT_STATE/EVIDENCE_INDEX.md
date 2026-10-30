@@ -2,7 +2,7 @@
 
 > **PROJECT:** DAILY FINANCE 3.0  
 > **SCOPE:** Ground Truth Evidence Records, Test Verifications & Cross-Report Reconciliation  
-> **LAST VERIFIED:** 2026-10-22  
+> **LAST VERIFIED:** 2026-10-29  
 
 ---
 
@@ -48,6 +48,7 @@
 | **EVD-REPO-004** | REPO-004 | Dashboard & Report Projection Grounding & Backup Restore (F-05, F-06, F-09) | Repository Remediation | 1,442/1,442 PASS (16 suites) | Clean (0 err) | Success (Build OK) | `src/repositories/implementations.ts`, `src/data/datasource/LocalDataSource.ts`, `EVD-REPO-004.md` | `COMPLETE & CERTIFIED` | 2026-10-19 |
 | **EVD-REG-01** | QA | Full Suite Regression & Complexity Benchmarks | Vitest Runner | 1,442/1,442 PASS | 0 errors | Success | All 16 Test Suites | `VERIFIED` | 2026-10-19 |
 | **EVD-DB-001** | DB-001 | Offline-First Relational SQLite Persistence Adapter & Migrations | Database Adapter & Tests | 14/14 PASS (1,456 total) | Clean (0 err) | Success (Build OK) | `src/data/database/*`, `src/tests/db_persistence.test.ts`, `EVD-DB-001.md` | `COMPLETE & VERIFIED — LOCAL ONLY` | 2026-10-24 |
+| **EVD-DB-001R** | DB-001R | Persistence Correctness Remediation & Authoritative Remote Hygiene Reconciliation | Evidence Gate & Audit | 14/14 PASS (1,456 total) | Clean (0 err) | Success (Build OK) | `src/data/database/*`, `src/tests/db_persistence.test.ts`, `EVD-DB-001R.md`, Remote Commit `4702c7d` | `COMPLETE & RECONCILED (REMOTE VERIFIED)` | 2026-10-29 |
 
 ---
 
@@ -85,8 +86,8 @@ To eliminate confusion across different AI agents quoting different test counts 
 - **"1,421 tests"**: Baseline following AI-001C Final Verification Gate (+25 tests in `ai_voice_confirmation.test.ts`, 15 test files).
 - **"1,442 tests"**: Baseline following AI-001D Server Proxy Hardening (+21 tests in `ai_proxy_hardening.test.ts`, 16 test files).
 - **"1,452 tests"**: Initial baseline following DB-001 persistence adapter prototype (+10 tests in `db_persistence.test.ts`, 17 test files).
-- **"1,454 tests"**: Intermediate baseline during DB-001R persistence correctness remediation (+12 tests in `db_persistence.test.ts`, 17 test files).
 - **"1,456 tests"**: Current canonical baseline following DB-001R persistence correctness remediation & full entity coverage (+14 tests in `db_persistence.test.ts`, 17 test files).
+- **Remote Reconciliation**: Commit `4702c7d523bfd9ebf2f2ccd072af76771b8132c5` reconciled on remote `main` (hygiene cleanup: removed SQLite runtime files & patch exports; `.gitignore` exclusions active). Verified via `EVD-DB-001R.md`.
 
 ---
 
